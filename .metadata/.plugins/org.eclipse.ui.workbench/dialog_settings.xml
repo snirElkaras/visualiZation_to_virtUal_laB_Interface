@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.internal.QuickAccess">
+		<item value="1025" key="dialogWidth"/>
+		<item value="525" key="dialogHeight"/>
+		<list key="orderedProviders">
+			<item value="org.eclipse.e4.ui.parts"/>
+			<item value="org.eclipse.e4.ui.parts"/>
+		</list>
+		<list key="textArray">
+			<item value="cons"/>
+			<item value="serv"/>
+		</list>
+		<list key="orderedElements">
+			<item value="org.eclipse.ui.console.ConsoleView"/>
+			<item value="org.eclipse.wst.server.ui.ServersView"/>
+		</list>
+		<list key="textEntries">
+			<item value="1"/>
+			<item value="1"/>
+		</list>
+	</section>
+	<section name="WorkbenchPreferenceDialogSettings">
+		<item value="0" key="DIALOG_Y_ORIGIN"/>
+		<item value="-75" key="DIALOG_X_ORIGIN"/>
+	</section>
+</section>
