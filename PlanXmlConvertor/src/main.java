@@ -13,6 +13,7 @@ import reasonable.*;
 
 public class main {
 
+	private static int index = 0;
 	/**
 	 * @param args
 	 */
@@ -23,16 +24,20 @@ public class main {
 		State stateSon2 = new State();
 		stateFather.firstChild = stateSon1;
 		stateFather.secondChild = stateSon2;*/
-		List<State> stateList = XMLReader.checkReasonable("data/XmlFiles/demo.xml");
+		String fileName = "demo";
+		List<State> stateList = XMLReader.checkReasonable("data/XmlFiles/" + fileName + ".xml");
 		List<StateToJson> jsonStateList = new ArrayList<>();
 		for (Iterator iterator = stateList.iterator(); iterator.hasNext();) {
 			State state = (State) iterator.next();
 			jsonStateList.add(convertStateToJsonState(state));
 		}
-		
+		boolean inQuote = false;
 		String s = gson.toJson(jsonStateList);
 		StringBuilder sb = new StringBuilder();
-		int indent = 0;
+		sb.append("{\n");
+		sb.append("\t\"name\": \"Solve Problem\",\n");
+		sb.append("\t\"children\": ");
+		int indent = 1;
 		for (int i = 0; i < s.length(); i++) {
 			switch (s.charAt(i)) {
 			case '{':
@@ -44,6 +49,8 @@ public class main {
 				}
 				break;
 			case ',':
+				if (inQuote) 
+					break;
 				sb.append(s.charAt(i));
 				sb.append("\n");
 				for (int j = 0; j < indent; j++) {
@@ -58,15 +65,17 @@ public class main {
 				}
 				sb.append(s.charAt(i));
 				break;
+			case '"':
+				inQuote = !inQuote;
 			default:
 				sb.append(s.charAt(i));
 				break;
 			}		
 		}
-		
+		sb.append("\n}\n");
 		System.out.println(sb.toString());
 		try {
-			FileWriter fw = new FileWriter(new File("data/JsonFiles/demo.json"));
+			FileWriter fw = new FileWriter(new File("data/JsonFiles/" + fileName + ".json"));
 			fw.write(sb.toString());
 			fw.flush();
 			fw.close();
@@ -89,8 +98,8 @@ public class main {
 		
 		ans.information = state.information;
 		ans.epsilon = state.epsilon;
-		ans.name = "name";
-		
+		ans.name = "name" + index;
+		index++;
 		return ans;		
 	}
 
