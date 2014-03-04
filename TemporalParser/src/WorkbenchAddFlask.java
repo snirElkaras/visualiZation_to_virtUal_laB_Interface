@@ -1,7 +1,6 @@
 
-public class WorkbenchAddFlask {
+public class WorkbenchAddFlask extends VirtualLabAction{
 	private String source_temperature;
-
 	private String recipient_id;
 	private String recipient_temperature;
 	private String volume;

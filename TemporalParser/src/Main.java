@@ -19,10 +19,8 @@ public class Main {
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
 
-		//Get scanner instance
-		Scanner scanner = new Scanner(new File("C:/Users/snir/workspaceNew/TemporalParser/src/virtualLabs1.csv"));
-
-
+		//try to export hard coded path to property file
+		Scanner scanner = new Scanner(new File("C:/Users/snir/Documents/GitHub/visualiZation_to_virtUal_laB_Interface/TemporalParser/src/virtualLabs1.csv"));
 
 		LogObject log;
 		String line;
