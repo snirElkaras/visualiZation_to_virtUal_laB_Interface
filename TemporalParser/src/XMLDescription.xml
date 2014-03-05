@@ -95,6 +95,18 @@
 			<input/>
 		</event_descriptor>
 	</tool_message>
+	
+	<tool_message>
+		<semantic_event id='2' name='FORM_CHECK'>
+			<description>Wrong checking of the student's answer in form lab(attempt 1). The submitted answer is 2 A   2 B   2 C   2 D --> 2 C   3 D. The correct value is 2 A   2 B --> 1 D. The system answers: Remember that a chemical reaction describes a transformation from one/some compound/s to another. Note that no compound should appear in both sides of the equation. Please correct the equation and try again.. <description>
+			<form_check_operation form_id='lab' is_correct='false' error_type='EXCEDENT_AS_PRODUCT_ERROR' submitted='2 A   2 B   2 C   2 D --> 2 C   3 D' expected='2 A   2 B --> 1 D'/>
+		</semantic_event>
+		<event_descriptor>
+			<action/>
+			<selection/>
+			<input/>
+		</event_descriptor>
+	</tool_message>
 
 	<tool_message>
 		<semantic_event id='3' name='FORM_CHECK'>
