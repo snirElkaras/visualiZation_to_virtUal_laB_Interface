@@ -1,6 +1,19 @@
 //hard coded
-var flasks = [ "flask1", "flask1a", "flask2", "flask2a", "flask3", "flask3a",
-               "flask4", "flask4a", "flask5", "flask5a" ];
+var csvAsString;
+$.ajax({
+	url: 'add_flask_ex.csv',
+	type: 'get',
+	async: false,
+	success: function(csv) {
+		csvAsString = csv;
+	}
+});
+var dataCSV = $.csv.toObjects(csvAsString,  {"separator":"\t"});
+var flasks = new Array();
+for(var i = 0; i<dataCSV.length; i++){
+	flasks[i] = dataCSV[i].flask_id;
+}
+
 var flasksCount = flasks.length;
 var startTime;
 var endTime;
@@ -30,10 +43,6 @@ var yAxis = d3.svg.axis().scale(y).ticks(20).tickSubdivide(true).tickSize(6, 3,
 var groups = svg.append("g").attr("transform",
 		"translate(" + margin.l + "," + margin.t + ")");
 
-//array of the regions, used for the legend
-var regions = [ "Asia", "Europe", "Middle East", "N. America", "S. America",
-                "Sub-Saharan Africa" ]
-
 var calcTimePadd = function(startTime, endTime, paddPercent){
 	timeDiff = endTime.getTime()-startTime.getTime();
 	timePadding = timeDiff*paddPercent;
@@ -41,67 +50,84 @@ var calcTimePadd = function(startTime, endTime, paddPercent){
 }
 /***add grid***/
 function make_x_axis() {        
-    return d3.svg.axis()
-        .scale(x)
-         .orient("bottom")
-         .ticks(20);
+	return d3.svg.axis()
+	.scale(x)
+	.orient("bottom")
+	.ticks(20);
 }
 
 function make_y_axis() {        
-    return d3.svg.axis()
-        .scale(y)
-        .orient("left")
-        .ticks(flasksCount);
+	return d3.svg.axis()
+	.scale(y)
+	.orient("left")
+	.ticks(flasksCount);
 }
 
 
-/*************8***/
+/*****************/
 
 
 
 //bring in the data, and do everything that is data-driven
-d3.csv("virtualLabs.csv", function(data) {
-	startTime = new Date(data[0].actionTime);
-	endTime = new Date(data[data.length-1].actionTime);
+d3.tsv("solution_mix_ex.csv", function(data) {
+	startTime = new Date(parseInt(data[0].timestamp));
+	endTime = new Date(parseInt(data[data.length-1].timestamp));
 	timePadding = calcTimePadd(startTime, endTime, 0.1);
 	startTime = startTime.getTime()-timePadding;
 	endTime = endTime.getTime()+timePadding;
 
-	// sort data alphabetically by region, so that the colors match with legend
+	// sort data alphabetically, so that the colors match src and trg
 	data.sort(function(a, b) {
-		return d3.ascending(a.id, b.id);
+		return d3.ascending(a.action_id, b.action_id);
 	});
-	console.log(data);
 
 	var x0 = Math.max(-d3.min(data, function(d) {
-		return d.actionTime;
+		return d.timestamp;
 	}), d3.max(data, function(d) {
-		return d.actionTime;
+		return d.timestamp;
 	}));
-	// x.domain([0, 20]);//start time/end time
 	x.domain([ startTime , endTime ]);
 	y.domain(flasks);
 
-	// style the circles, set their locations based on data
-	var circles = groups.selectAll("circle").data(data).enter()
+	circles = groups.selectAll("trgCircle").data(data).enter()
 	.append("circle").attr("class", "circles").attr({
 		cx : function(d) {
-			return x(new Date(d.actionTime));
+			return x(new Date(parseInt(d.timestamp)));
 		},
 		cy : function(d) {
-			return y(d.id) + (hIndent / flasksCount) / 2;
+			return y(d.trg_id) + (hIndent / flasksCount) / 2;
 		}, // (range/#flasks)/2
 		r : 8,
 		id : function(d) {
-			return d.id;
+			return d.trg_id;
+		},
+		action_id :  function(d) {
+			return d.action_id;
 		}
-	}).style("fill", function(d) {
-		return color(d.isSrc);
-	});
+	}).style("fill", "orange");
+	
+	// style the circles, set their locations based on data
+	circles = groups.selectAll("srcCircle").data(data).enter()
+	.append("circle").attr("class", "circles").attr({
+		cx : function(d) {
+			return x(new Date(parseInt(d.timestamp)));
+		},
+		cy : function(d) {
+			return y(d.src_id) + (hIndent / flasksCount) / 2;
+		}, // (range/#flasks)/2
+		r : 8,
+		id : function(d) {
+			return d.src_id;
+		},
+		action_id :  function(d) {
+			return d.action_id;
+		}
+	}).style("fill", "blue");
+
 
 	// what to do when we mouse over a bubble
 	var mouseOn = function() {
-		
+
 		var circle = d3.select(this);
 		$("#details").text(this.id);
 		// transition to increase size/opacity of bubble
@@ -162,8 +188,8 @@ d3.csv("virtualLabs.csv", function(data) {
 	circles.on("mouseout", mouseOff);
 
 	// tooltips (using jQuery plugin tipsy)
-	circles.append("title").text(function(d) {
-		return d.id;
+	groups.selectAll("circle")[0].forEach(function(circ){
+		return circ.setAttribute("title", circ.getAttribute("id"));
 	})
 
 	$(".circles").tipsy({
