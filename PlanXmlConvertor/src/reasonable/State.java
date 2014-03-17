@@ -7,7 +7,14 @@ public class State {
     public InformationState information;
     public State firstChild;
     public State secondChild;
-    public double epsilon = 0.01;
+    @Override
+	public String toString() {
+		return "State [information=" + information + ", firstChild="
+				+ firstChild + ", secondChild=" + secondChild + ", epsilon="
+				+ epsilon + "]";
+	}
+
+	public double epsilon = 0.01;
 
     State() {
         information = new InformationState();

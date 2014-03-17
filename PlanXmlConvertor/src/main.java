@@ -24,18 +24,27 @@ public class main {
 		State stateSon2 = new State();
 		stateFather.firstChild = stateSon1;
 		stateFather.secondChild = stateSon2;*/
-		String fileName = "demo";
+		String fileName = "demo3";
 		List<State> stateList = XMLReader.checkReasonable("data/XmlFiles/" + fileName + ".xml");
 		List<StateToJson> jsonStateList = new ArrayList<>();
+		int index = 0;
 		for (Iterator iterator = stateList.iterator(); iterator.hasNext();) {
 			State state = (State) iterator.next();
-			jsonStateList.add(convertStateToJsonState(state));
+			String side;
+			if (stateList.size() / 2 > index) {
+				side = "first";
+			} else {
+				side = "second";
+			}
+			
+			jsonStateList.add(convertStateToJsonState(state, side));
+			index++;
 		}
 		boolean inQuote = false;
 		String s = gson.toJson(jsonStateList);
 		StringBuilder sb = new StringBuilder();
 		sb.append("{\n");
-		sb.append("\t\"name\": \"Solve Problem\",\n");
+		sb.append("\t\"name\": \"root\",\n");
 		sb.append("\t\"children\": ");
 		int indent = 1;
 		for (int i = 0; i < s.length(); i++) {
@@ -87,18 +96,19 @@ public class main {
 
 	}
 
-	private static  StateToJson convertStateToJsonState(State state) {
+	private static  StateToJson convertStateToJsonState(State state, String side) {
 		StateToJson ans = new StateToJson();
 		if (state.firstChild != null){
-			ans.children.add(convertStateToJsonState(state.firstChild));
+			ans.children.add(convertStateToJsonState(state.firstChild, "first"));
 		}
 		if (state.secondChild != null){
-			ans.children.add(convertStateToJsonState(state.secondChild));
+			ans.children.add(convertStateToJsonState(state.secondChild, "second"));
 		}
 		
 		ans.information = state.information;
 		ans.epsilon = state.epsilon;
 		ans.name = "name" + index;
+		ans.side = side;
 		index++;
 		return ans;		
 	}

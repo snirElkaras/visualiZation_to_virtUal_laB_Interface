@@ -1,4 +1,4 @@
-treeJSON = d3.json("demo.json", function(error, treeData) {
+treeJSON = d3.json("demo3.json", function(error, treeData) {
 
     // Calculate total nodes, max label length
     var totalNodes = 0;
@@ -16,7 +16,7 @@ treeJSON = d3.json("demo.json", function(error, treeData) {
 
     // size of the diagram
     var viewerWidth = $(document).width();
-    var viewerHeight = $(document).height()-150;
+    var viewerHeight = $(document).height()*0.65;
 
     var tree = d3.layout.tree()
         .size([viewerHeight, viewerWidth]);
@@ -26,9 +26,54 @@ treeJSON = d3.json("demo.json", function(error, treeData) {
         .projection(function(d) {
             return [d.y, d.x];
         });
-
+    
+    // initiate toolbar
+    var toolBarSize = $(document).height()*0.04;
+	//$("#tool-bar").attr("style", "height: " + toolBarSize + "px; background-color:#EEE;");
     // A recursive helper function for performing some setup by walking through all nodes
 
+	$("#expandButton").click(function() {
+		expandTree(root);
+	});
+	
+	var collapseTree = function(node){
+		if(node.children){
+			node.children.forEach(collapseTree);
+		}
+		if(node._children){
+			node._children.forEach(collapseTree);
+		}
+		if (node.children) {
+            node._children = node.children;
+            node.children = null;
+		}
+		if(node.name == "root"){
+			 update(node);
+		     centerNode(node);
+		}
+	}
+	
+	var expandTree = function(node){
+		if(node.children){
+			node.children.forEach(expandTree);
+		}
+		if(node._children){
+			node._children.forEach(expandTree);
+		}
+		if (node._children) {
+			node.children = node._children;
+			node._children = null;
+		}
+		if(node.name == "root"){
+			 update(node);
+		     centerNode(node);
+		}
+	}
+		
+	$("#collapseButton").click(function() {
+		collapseTree(root);
+	});
+	
     function visit(parent, visitFn, childrenFn) {
         if (!parent) return;
 
@@ -147,9 +192,11 @@ treeJSON = d3.json("demo.json", function(error, treeData) {
         .attr("width", viewerWidth)
         .attr("height", viewerHeight)
         .attr("class", "overlay")
+        .attr("id", "mainSVG")
         .call(zoomListener);
-
-
+    
+    //d3.select("#tree-container").select("svg").attr("width", viewerWidth/2);
+    
     // Define the drag listeners for drag/drop behaviour of nodes.
 //    dragListener = d3.behavior.drag()
 //        .on("dragstart", function(d) {
@@ -335,11 +382,26 @@ treeJSON = d3.json("demo.json", function(error, treeData) {
     }
 
     function mouseenter(d) {
-    	$("#details").attr("style", "border:1px solid; background-color: pink");
+    	if (d.name == "root"){
+    		return;
+    	}
+    	var size = $(document).height()*0.25;
+    //	$("#details").attr("style", "border:1px solid; background-color:  pink; " +
+    //			"max-height: " + size + "px; overflow: scroll;");
     	if ($("#detailsP") != null) 
     		$("#detailsP").remove();
-    	$("#details").append("<p id=detailsP> Name: " + d.name + "<BR/>" + 
-    								  "Od attribute: " + d.name + "</p>");
+    	var action = "none";
+    	if (d.children) {
+    		action = "mix";
+    	}
+    	$("#details").append("<p id=detailsP> pos: " + d.information.pos + "<BR/>" + 
+    						 "IDs: " + d.information.ids + "<BR/>" + 
+    					 	 "scd: " + d.information.scdDesc + "<BR/>" + 
+    						 "dcd: " + d.information.dcdDesc + "<BR/>" + 
+    						 "rcd: " + d.information.rcdDesc + "<BR/>" + 
+    						 "vol: " + d.information.totalVol + "<BR/>" + 
+    						 "action: " + action + "<BR/>" + 
+    						 "</p>");
     }
     
     function mouseleave(d){
@@ -363,7 +425,7 @@ treeJSON = d3.json("demo.json", function(error, treeData) {
             }
         };
         childCount(0, root);
-        var newHeight = d3.max(levelWidth) * 25; // 25 pixels per line  
+        var newHeight = d3.max(levelWidth) * 70; // 70 pixels per line  
         tree = tree.size([newHeight, viewerWidth]);
 
         // Compute the new tree layout.
@@ -372,7 +434,7 @@ treeJSON = d3.json("demo.json", function(error, treeData) {
 
         // Set widths between levels based on maxLabelLength.
         nodes.forEach(function(d) {
-            d.y = (d.depth * (maxLabelLength * 6)); //maxLabelLength * 10px
+            d.y = (d.depth * (maxLabelLength + 220)); //maxLabelLength * 10px
             // alternatively to keep a fixed scale one can set a fixed depth per level
             // Normalize for fixed-depth by commenting out below line
             // d.y = (d.depth * 500); //500px per level.
@@ -433,13 +495,67 @@ treeJSON = d3.json("demo.json", function(error, treeData) {
         // Update the text to reflect whether node has children or not.
         node.select('text')
             .attr("x", function(d) {
-                return d.children || d._children ? -10 : 10;
+                return d.children || d._children ? -10 : -10;
+            })
+            .attr("y", function(d) {
+            	if (d.name == "root"){
+            		return 0;
+            	}
+            	return d.side == "first" ? -10 : 10;
             })
             .attr("text-anchor", function(d) {
-                return d.children || d._children ? "end" : "start";
+                return d.children || d._children ? "end" : "end";
             })
             .text(function(d) {
-                return d.name;
+            	if (d.name=="root"){
+            		return "Solve Problem";
+            	}
+            	var nodeName = "";
+            	var hasPlus = false;
+        		if (d.information.amount_A > 0){
+        			nodeName = nodeName + "A+";
+        			hasPlus = true;
+        		}
+        		if (d.information.amount_B > 0){
+        			nodeName = nodeName + "B+";
+        			hasPlus = true;
+        		}           		
+        		if (d.information.amount_C > 0){
+        			nodeName = nodeName + "C+";
+        			hasPlus = true;
+        		}     
+        		if (d.information.amount_D > 0){
+        			nodeName = nodeName + "D+";
+        			hasPlus = true;
+        		}     
+        		if (hasPlus == true) {
+        			nodeName = nodeName.substring(0, nodeName.length-1);
+        		}
+            	if (d.information.hasReaction == true) {
+            		nodeName = "{" + nodeName + "} -> {";
+            		if (d.information.actualAmount_A > 0){
+            			nodeName = nodeName + "A+";
+            			hasPlus = true;
+            		}
+            		if (d.information.actualAmount_B > 0){
+            			nodeName = nodeName + "B+";
+            			hasPlus = true;
+            		}           		
+            		if (d.information.actualAmount_C > 0){
+            			nodeName = nodeName + "C+";
+            			hasPlus = true;
+            		}     
+            		if (d.information.actualAmount_D > 0){
+            			nodeName = nodeName + "D+";
+            			hasPlus = true;
+            		}     
+            		if (hasPlus == true) {
+            			nodeName = nodeName.substring(0, nodeName.length-1);
+            		}      
+            		nodeName = nodeName + "}";
+            	} 
+            	
+                return nodeName;
             });
 
         // Change the circle fill depending on whether it has children and is collapsed
@@ -532,4 +648,8 @@ treeJSON = d3.json("demo.json", function(error, treeData) {
     // Layout the tree initially and center on the root node.
     update(root);
     centerNode(root);
+});
+
+$(document).ready(function () {
+	$('#container').layout();
 });

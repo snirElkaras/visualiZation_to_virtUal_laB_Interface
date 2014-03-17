@@ -10,7 +10,8 @@ public class StateToJson {
 	String name;
     InformationState information; 
     List<StateToJson> children;
-    double epsilon; 
+    double epsilon;
+	String side; 
   
     StateToJson() { 
         children = new ArrayList<>();

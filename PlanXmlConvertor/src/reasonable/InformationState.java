@@ -20,7 +20,24 @@ public class InformationState {
 	
 	int pos;
         
-        String scdDesc;
+        @Override
+	public String toString() {
+		return "InformationState [amount_A=" + amount_A + ", amount_B="
+				+ amount_B + ", amount_C=" + amount_C + ", amount_D="
+				+ amount_D + ", actualAmount_A=" + actualAmount_A
+				+ ", actualAmount_B=" + actualAmount_B + ", actualAmount_C="
+				+ actualAmount_C + ", actualAmount_D=" + actualAmount_D
+				+ ", totalVol=" + totalVol + ", hasReaction=" + hasReaction
+				+ ", isReasonable=" + isReasonable
+				+ ", hasChildrenWithReaction=" + hasChildrenWithReaction
+				+ ", isHigherCompAct=" + isHigherCompAct + ", pos=" + pos
+				+ ", scdDesc=" + scdDesc + ", dcdDesc=" + dcdDesc
+				+ ", rcdDesc=" + rcdDesc + ", ids=" + ids + ", AHasPoured="
+				+ AHasPoured + ", BHasPoured=" + BHasPoured + ", CHasPoured="
+				+ CHasPoured + ", DHasPoured=" + DHasPoured + "]";
+	}
+
+		String scdDesc;
         String dcdDesc;
         String rcdDesc;
         String ids;
