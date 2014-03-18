@@ -89,7 +89,7 @@ d3.tsv("solution_mix_ex.csv", function(data) {
 	x.domain([ startTime , endTime ]);
 	y.domain(flasks);
 
-	circles = groups.selectAll("trgCircle").data(data).enter()
+	groups.selectAll("trgCircle").data(data).enter()
 	.append("circle").attr("class", "circles").attr({
 		cx : function(d) {
 			return x(new Date(parseInt(d.timestamp)));
@@ -104,10 +104,11 @@ d3.tsv("solution_mix_ex.csv", function(data) {
 		action_id :  function(d) {
 			return d.action_id;
 		}
+		
 	}).style("fill", "orange");
 	
 	// style the circles, set their locations based on data
-	circles = groups.selectAll("srcCircle").data(data).enter()
+	groups.selectAll("srcCircle").data(data).enter()
 	.append("circle").attr("class", "circles").attr({
 		cx : function(d) {
 			return x(new Date(parseInt(d.timestamp)));
@@ -123,17 +124,21 @@ d3.tsv("solution_mix_ex.csv", function(data) {
 			return d.action_id;
 		}
 	}).style("fill", "blue");
-
+	
+	var circles = groups.selectAll("circle");
 
 	// what to do when we mouse over a bubble
 	var mouseOn = function() {
+		var pair = "circle[action_id=" + this.getAttribute("action_id") + "]";
+		$(pair).each(function() {
+			// transition to increase size/opacity of bubble
+			var currCircle = d3.select(this);
+			currCircle.transition().duration(800).style("opacity", 1).attr("r", 16)
+			.ease("elastic");
 
+		});
 		var circle = d3.select(this);
 		$("#details").text(this.id);
-		// transition to increase size/opacity of bubble
-		circle.transition().duration(800).style("opacity", 1).attr("r", 16)
-		.ease("elastic");
-
 		// append lines to bubbles that will be used to show the precise data
 		// points.
 		// translate their location based on margins
@@ -170,11 +175,16 @@ d3.tsv("solution_mix_ex.csv", function(data) {
 	};
 	// what happens when we leave a bubble?
 	var mouseOff = function() {
+		var pair = "circle[action_id=" + this.getAttribute("action_id") + "]";
+		$(pair).each(function() {
+			// transition to increase size/opacity of bubble
+			var currCircle = d3.select(this);
+			// go back to original size and opacity
+			currCircle.transition().duration(800).style("opacity", .5).attr("r", 8)
+			.ease("elastic");
+		});
 		var circle = d3.select(this);
 		$("#details").text("");
-		// go back to original size and opacity
-		circle.transition().duration(800).style("opacity", .5).attr("r", 8)
-		.ease("elastic");
 
 		// fade out guide lines, then remove them
 		d3.selectAll(".guide").transition().duration(100).styleTween("opacity",
@@ -207,7 +217,7 @@ d3.tsv("solution_mix_ex.csv", function(data) {
 		width : 25,
 		height : 12
 	}).style("fill", function(d) {
-		return color(d);
+		return d=="source"? "blue" : "orange";
 	});
 
 	// // legend labels
