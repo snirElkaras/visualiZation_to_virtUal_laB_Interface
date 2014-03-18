@@ -1,8 +1,36 @@
 
+
+
 public class WorkbenchAddFlask extends VirtualLabAction{
-	private String source_temperature;
-	private String recipient_id;
-	private String recipient_temperature;
-	private String volume;
-	private String time_ms;
+	private String workbench_id;
+	private Flask flask;
+	private String readable;
+	
+	public WorkbenchAddFlask(String event_id, String user,
+			String event_session, String origin, String timestamp) {
+		this.event_id = event_id;
+		this.user = user;
+		this.event_session = event_session;
+		this.origin = origin;
+		this.timestamp = timestamp;
+	}
+	public String getWorkbench_id() {
+		return workbench_id;
+	}
+	public void setWorkbench_id(String workbench_id) {
+		this.workbench_id = workbench_id;
+	}
+	public Flask getFlask() {
+		return flask;
+	}
+	public void setFlask(Flask flask) {
+		this.flask = flask;
+	}
+	public String getReadable() {
+		return readable;
+	}
+	public void setReadable(String readable) {
+		this.readable = readable;
+	}
+
 }

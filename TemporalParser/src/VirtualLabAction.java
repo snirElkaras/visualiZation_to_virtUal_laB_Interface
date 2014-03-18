@@ -1,6 +1,12 @@
 
+
 public abstract class VirtualLabAction {
-	private String action;
-	private String id;
-	private String description;
+	protected String event_id;
+	protected String user;
+	protected String event_session;
+	protected String origin;
+	protected String timestamp;
+
+
+
 }
