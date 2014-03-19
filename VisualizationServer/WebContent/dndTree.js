@@ -1,3 +1,5 @@
+
+loadTree = function() {
 treeJSON = d3.json("demo3.json", function(error, treeData) {
 
     // Calculate total nodes, max label length
@@ -32,6 +34,10 @@ treeJSON = d3.json("demo3.json", function(error, treeData) {
 	//$("#tool-bar").attr("style", "height: " + toolBarSize + "px; background-color:#EEE;");
     // A recursive helper function for performing some setup by walking through all nodes
 
+    $("#tool-bar").append(
+	 "<button type=\"button\" id=\"expandButton\">Expand Tree</button>" + 
+	 "<button type=\"button\" id=\"collapseButton\">Collapse Tree</button>");
+	
 	$("#expandButton").click(function() {
 		expandTree(root);
 	});
@@ -649,7 +655,7 @@ treeJSON = d3.json("demo3.json", function(error, treeData) {
     update(root);
     centerNode(root);
 });
-
-$(document).ready(function () {
+};
+/*$(document).ready(function () {
 	$('#container').layout();
-});
+});*/
