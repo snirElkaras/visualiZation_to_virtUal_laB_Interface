@@ -1,5 +1,5 @@
-
-
+package temporal.view.parser;
+import org.json.simple.JSONObject;
 
 public class WorkbenchAddFlask extends VirtualLabAction{
 	private String workbench_id;
@@ -31,6 +31,21 @@ public class WorkbenchAddFlask extends VirtualLabAction{
 	}
 	public void setReadable(String readable) {
 		this.readable = readable;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public JSONObject parse() {
+		JSONObject response = new JSONObject();
+		response.put("event_id", event_id);
+		response.put("user", user);
+		response.put("event_session", event_session);
+		response.put("origin", origin);
+		response.put("timestamp", timestamp);
+		response.put("workbench_id", workbench_id);
+		response.put("flask", flask.toJson());
+		response.put("readable", readable);
+		return response;
 	}
 
 }

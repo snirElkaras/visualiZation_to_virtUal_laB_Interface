@@ -1,3 +1,6 @@
+package temporal.view.parser;
+import org.json.simple.JSONObject;
+
 
 public class SolutionMix extends VirtualLabAction{
 	private String volume;
@@ -43,6 +46,22 @@ public class SolutionMix extends VirtualLabAction{
 	}
 	public void setReadable(String readable) {
 		this.readable = readable;
+	}
+	@SuppressWarnings("unchecked")
+	@Override
+	public JSONObject parse() {		
+		JSONObject response = new JSONObject();
+		response.put("event_id", event_id);
+		response.put("user", user);
+		response.put("event_session", event_session);
+		response.put("origin", origin);
+		response.put("timestamp", timestamp);
+		response.put("volume", volume);
+		response.put("source_flask", source.toJson());
+		response.put("recipient_flask", recipient.toJson());
+		response.put("result_flask", result.toJson());
+		response.put("readable", readable);
+		return response;
 	}
 
 }

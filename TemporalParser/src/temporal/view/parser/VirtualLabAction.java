@@ -1,3 +1,6 @@
+package temporal.view.parser;
+import org.json.simple.JSONObject;
+
 
 
 public abstract class VirtualLabAction {
@@ -7,6 +10,7 @@ public abstract class VirtualLabAction {
 	protected String origin;
 	protected String timestamp;
 
+	public abstract JSONObject parse();
 
 
 }

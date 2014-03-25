@@ -1,4 +1,8 @@
+package temporal.view.parser;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.json.simple.JSONObject;
 
 
 public class Flask {
@@ -50,5 +54,21 @@ public class Flask {
 	}
 	public void setSpecies(List<Species> species) {
 		this.species = species;
+	}
+	@SuppressWarnings("unchecked")
+	public JSONObject toJson() {		
+		JSONObject flaskJson = new JSONObject();
+		flaskJson.put("id", id);
+		flaskJson.put("name", name);
+		flaskJson.put("temp", temp);
+		flaskJson.put("volume", volume);
+		flaskJson.put("vesselType", vesselType);
+		flaskJson.put("vesselVolume", vesselVolume);
+		List<JSONObject> speciesArray = new ArrayList<JSONObject>();
+		for (int i = 0; i < species.size(); i++) {			
+			speciesArray.add(species.get(i).toJson());
+		}			
+		flaskJson.put("species", speciesArray);
+		return flaskJson;
 	}
 }
