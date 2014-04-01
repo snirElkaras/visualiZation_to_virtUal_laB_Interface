@@ -1,6 +1,6 @@
 
-loadTree = function() {
-treeJSON = d3.json("demo3.json", function(error, treeData) {
+loadTree = function(data) {
+	var treeData = data;
 
     // Calculate total nodes, max label length
     var totalNodes = 0;
@@ -654,7 +654,7 @@ treeJSON = d3.json("demo3.json", function(error, treeData) {
     // Layout the tree initially and center on the root node.
     update(root);
     centerNode(root);
-});
+//});
 };
 /*$(document).ready(function () {
 	$('#container').layout();
