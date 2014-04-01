@@ -4327,7 +4327,7 @@ $.fn.layout = function (opts) {
 		var	pane = evtPane.call(this, evt_or_pane);
 		
 		if (evt_or_pane == "center") {
-			var height = $("#tree-container").css('height');
+			var height = $("#viewContainer").css('height');
 			var baseSVG = $("#mainSVG").attr("height", height);
 		  //  $("#tree-container").select("svg").attr("height", height);
 		}

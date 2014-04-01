@@ -1,6 +1,10 @@
 <!DOCTYPE html>
+<html>
+<head>
+<title>Plan view</title>
 <meta charset="utf-8">
 <link type="text/css" rel="stylesheet" href="layout-default-latest.css" />
+<link rel="stylesheet" type="text/css" href="temporal.css">
 
 <style type="text/css">
   
@@ -74,6 +78,8 @@
 <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="dndTree.js"></script>
+<script src="temporal.js"></script>
+
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 
@@ -93,7 +99,7 @@
 </script>
 <script>
     window.onload = function() {
-        var dropbox = document.getElementById("tree-container");
+        var dropbox = document.getElementById("viewContainer");
         dropbox.addEventListener("dragenter", noop, false);
         dropbox.addEventListener("dragexit", noop, false);
         dropbox.addEventListener("dragover", noop, false);
@@ -103,7 +109,7 @@
     }
 
     var removeListener = function(){
-    	var dropbox = document.getElementById("tree-container");
+    	var dropbox = document.getElementById("viewContainer");
     	 dropbox.removeEventListener("drop", dropUpload, false);
     	 dropbox.addEventListener("drop", noop, false);
         }
@@ -167,17 +173,22 @@
         document.getElementById("status").innerHTML = event.target.responseText;
     }
 </script>
+<script src="jquery.tipsy.js" type="text/javascript" charset="utf-8"></script>
 
-<title>Plan view</title>
+<link rel="stylesheet"
+	href="http://onehackoranother.com/projects/jquery/tipsy/stylesheets/tipsy.css"
+	type="text/css" title="no title" charset="utf-8" />
+<link rel="stylesheet" type="text/css" href="temporal.css">
+</head>
+
 
 <body>
 <div id="container">
 	<div class="pane ui-layout-north" id="tool-bar">
 	</div>
-    <div class="pane ui-layout-center" id="tree-container"></div>
+    <div class="pane ui-layout-center" id="viewContainer"></div>
 	<div class="pane ui-layout-south" id="details" style="border:1px solid; background-color:pink; overflow:scroll;">
 	</div>
-	<div id="status"></div>
 </div>
 </body>
 </html>

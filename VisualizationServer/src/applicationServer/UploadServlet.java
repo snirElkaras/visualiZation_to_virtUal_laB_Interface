@@ -1,25 +1,26 @@
 package applicationServer;
 // Import required java libraries
-import java.io.*;
-import java.util.*;
-import javax.servlet.ServletConfig;
+import java.io.File;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.swing.undo.StateEdit;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.output.*;
 import org.json.JSONObject;
 
 import parsers.IParse;
 import parsers.planParser.PlanViewParser;
+import parsers.temporalParser.TemporalViewParser;
 
 
 
@@ -79,12 +80,12 @@ public class UploadServlet extends HttpServlet {
 						parser = new PlanViewParser();
 						JSONObject jsonAns = parser.parse(dataAsString);
 						out.println(jsonAns.toString());
-//					}
-//					else if(extension.equals(".log")){
-//						response.setHeader("fileExt", "log");        		
-//					//	parser = new TemporalViewParser();
-//						JSONObject jsonAns = parser.parse(dataAsString);
-//						out.println(jsonAns.toString());
+					}
+					else if(extension.equals(".log")){
+						response.setHeader("fileExt", "log");        		
+						parser = new TemporalViewParser();
+						JSONObject jsonAns = parser.parse(dataAsString);
+						out.println(jsonAns.toString());
 
 					} else { // unknown file extension
 						response.setHeader("fileExt", "unknown");
