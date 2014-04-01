@@ -1,5 +1,6 @@
 package temporal.view.parser;
-import org.json.simple.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class SolutionMix extends VirtualLabAction{
@@ -47,10 +48,10 @@ public class SolutionMix extends VirtualLabAction{
 	public void setReadable(String readable) {
 		this.readable = readable;
 	}
-	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject parse() {		
 		JSONObject response = new JSONObject();
+		try {
 		response.put("event_id", event_id);
 		response.put("user", user);
 		response.put("event_session", event_session);
@@ -61,6 +62,9 @@ public class SolutionMix extends VirtualLabAction{
 		response.put("recipient_flask", recipient.toJson());
 		response.put("result_flask", result.toJson());
 		response.put("readable", readable);
+		} catch (JSONException e) {
+			return null;
+		}
 		return response;
 	}
 

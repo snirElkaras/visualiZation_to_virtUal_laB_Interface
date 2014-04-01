@@ -1,18 +1,13 @@
 package temporal.view.parser;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.jdom2.Document;
-import org.jdom2.Element;
 import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 
 public class SnirMain {
 

@@ -11,7 +11,7 @@
 	<classpathentry kind="lib" path="lib/jdom-2.0.5-junit.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-2.0.5-sources.jar"/>
 	<classpathentry kind="lib" path="lib/jdom-2.0.5.jar"/>
-	<classpathentry kind="lib" path="lib/json-simple-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/opencsv-2.1-1.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/java-json.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

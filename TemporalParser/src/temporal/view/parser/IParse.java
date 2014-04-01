@@ -1,8 +1,6 @@
 package temporal.view.parser;
 
-import java.io.File;
-
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 
 public interface IParse {
 	public JSONObject parse(String fileContent);

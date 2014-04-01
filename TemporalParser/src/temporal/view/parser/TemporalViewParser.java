@@ -9,11 +9,11 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
-import org.json.simple.JSONObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class TemporalViewParser implements IParse{
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject parse(String fileContent) {
 		JSONObject toReturn = new JSONObject();
@@ -72,8 +72,6 @@ public class TemporalViewParser implements IParse{
 					break;
 				}
 			} catch (JDOMException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 				return null;
 			}
 		}
@@ -87,8 +85,12 @@ public class TemporalViewParser implements IParse{
 		for (SolutionMix solMixEvent : solutionMixEventList) {
 			parsedSolMixElements.add(solMixEvent.parse());
 		}
-		toReturn.put("add_flask_list", parsedAddFlaskElements);
-		toReturn.put("solution_mix_list", parsedSolMixElements);
+		try {
+			toReturn.put("add_flask_list", parsedAddFlaskElements);
+			toReturn.put("solution_mix_list", parsedSolMixElements);
+		} catch (JSONException e) {
+			return null;
+		}
 
 		return toReturn;//TODO- return the 2 lists properly
 
