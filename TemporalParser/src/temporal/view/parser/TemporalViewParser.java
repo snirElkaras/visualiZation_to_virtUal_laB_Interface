@@ -1,10 +1,6 @@
 package temporal.view.parser;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,38 +11,25 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.json.simple.JSONObject;
 
-import au.com.bytecode.opencsv.CSVReader;
-
 public class TemporalViewParser implements IParse{
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject parse(File file) {
-		Reader reader = null;
-		try {
-			reader = new FileReader(file);
-//			reader = new FileReader("C:/Users/snir/Documents/GitHub/visualiZation_to_virtUal_laB_Interface/TemporalParser/files/vlab_log_example.txt");
-		} catch (FileNotFoundException e1) {
-			return null;
-		}
-		CSVReader csvReader = new CSVReader(reader,',');
-		try {
-			List<String[]> split = csvReader.readAll();
-			csvReader.close();
-			List<String> xmlElementsAsList = new ArrayList<String>();
-			for (String[] stringList : split) {
-				for (String str : stringList) {
-					if(str!=null && str.startsWith("<event>")){						
-						xmlElementsAsList.add(str);
-					}
-				}
-			}
-			ArrayList<WorkbenchAddFlask> addFlaskEventsList = new ArrayList<WorkbenchAddFlask>();
-			ArrayList<SolutionMix> solutionMixEventList = new ArrayList<SolutionMix>();
-			SAXBuilder builder;
-			for (int i = 0; i < xmlElementsAsList.size(); i++) {	
+	public JSONObject parse(String fileContent) {
+		JSONObject toReturn = new JSONObject();
+		String[] xmlElementsAsList = fileContent.split("(?<=</event>)\n");
+		ArrayList<WorkbenchAddFlask> addFlaskEventsList = new ArrayList<WorkbenchAddFlask>();
+		ArrayList<SolutionMix> solutionMixEventList = new ArrayList<SolutionMix>();
+		SAXBuilder builder;
+		for (int i = 0; i < xmlElementsAsList.length; i++) {	
+			try {
 				builder = new SAXBuilder();
-				String event = xmlElementsAsList.get(i);
-				Document document = (Document) builder.build(new StringReader(event));
+				String event = xmlElementsAsList[i];
+				if(event==null || !event.startsWith("<event>")){						
+					continue;
+				}
+				Document document = null;
+				document = (Document) builder.build(new StringReader(event));
 				Element rootNode = document.getRootElement();
 				String event_id = rootNode.getChildText("id");
 				String user = rootNode.getChildText("user");
@@ -88,23 +71,26 @@ public class TemporalViewParser implements IParse{
 					solutionMixEventList.add(solutionMix);
 					break;
 				}
+			} catch (JDOMException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
 			}
-
-			List<JSONObject> parsedAddFlaskElements = new ArrayList<JSONObject>(); 
-			for (WorkbenchAddFlask addFlaskEvent : addFlaskEventsList) {
-				parsedAddFlaskElements.add(addFlaskEvent.parse());
-			}
-
-			List<JSONObject> parsedSolMixElements = new ArrayList<JSONObject>(); 
-			for (SolutionMix solMixEvent : solutionMixEventList) {
-				parsedSolMixElements.add(solMixEvent.parse());
-			}
-
-
-		} catch (IOException | JDOMException e) {
-			return null;
 		}
-		return null;//TODO- return the 2 lists properly
+
+		List<JSONObject> parsedAddFlaskElements = new ArrayList<JSONObject>(); 
+		for (WorkbenchAddFlask addFlaskEvent : addFlaskEventsList) {
+			parsedAddFlaskElements.add(addFlaskEvent.parse());
+		}
+
+		List<JSONObject> parsedSolMixElements = new ArrayList<JSONObject>(); 
+		for (SolutionMix solMixEvent : solutionMixEventList) {
+			parsedSolMixElements.add(solMixEvent.parse());
+		}
+		toReturn.put("add_flask_list", parsedAddFlaskElements);
+		toReturn.put("solution_mix_list", parsedSolMixElements);
+
+		return toReturn;//TODO- return the 2 lists properly
 
 	}
 
