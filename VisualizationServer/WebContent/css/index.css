@@ -1,0 +1,109 @@
+body {
+	margin:0px;
+}
+
+#title {
+	font-size: 26px;
+	color: lightblue;
+}
+
+#subTitle {
+	font-size: 16px;
+	color: grey;
+	padding: 15px;
+}
+
+#footer {
+	width: 100%;
+	height: 15%;
+	display: none;
+	height: 100%; 
+}
+
+#container {
+	height: 90%;
+	width: 100%;
+	min-width: 700px;
+	overflow: hidden;
+	_width: 700px; /* min-width for IE6 */
+}
+
+#viewContainer{
+	height:435px;
+	margin-bottom:10px ;  	
+}
+
+#details {
+	border: 1px solid lightgray;
+	border-radius: 7px;
+	background-color: white;
+	overflow-y: auto;
+	display: inline-block;
+	height: 100%;
+	width: 90%;
+	min-height: 100px;
+}
+
+hr{
+	color: lightgray;
+	background: lightgray;
+	height: 1px;
+	border: 0px;
+}
+
+#buttons {
+	display: inline-block;
+	width:9%;
+	float: right;
+}
+#btn1, #btn2{
+	display: block;
+	width: auto;
+	width:100%;
+}
+
+.node {
+	cursor: pointer;
+}
+
+.node circle {
+	fill: #fff;
+	stroke: steelblue;
+	stroke-width: 5px;
+}
+
+.node rect {
+	fill: #000;
+	stroke: steelblue;
+	stroke-width: 20px;
+}
+
+.node text {
+	font-size: 17px;
+	font-family: sans-serif;
+}
+
+.link {
+	fill: none;
+	stroke: #ccc;
+	stroke-width: 1.5px;
+}
+
+.templink {
+	fill: none;
+	stroke: red;
+	stroke-width: 3px;
+}
+
+.ghostCircle.show {
+	display: block;
+}
+
+.ghostCircle,.activeDrag .ghostCircle {
+	display: none;
+}
+
+
+.pane {
+	display: none; /* will appear when layout inits */
+}

@@ -24,7 +24,7 @@ var loadTemporal = function (jsonData){
 //	set the stage
 	var margin = {
 			t : 30,
-			r : 20,
+			r : 200,
 			b : 20,
 			l : 40
 	},
@@ -33,9 +33,21 @@ var loadTemporal = function (jsonData){
 			[ hIndent, 0 ]);
 //	colors that will reflect geographical regions
 	color = d3.scale.category10();
-	var svg = d3.select("#viewContainer").append("svg").attr("width",
-			w + margin.l + margin.r).attr("height", h + margin.t + margin.b);
+	
+	
+	function zoom() {
+        svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+    }
+	
+	var zoomListener = d3.behavior.zoom().scaleExtent([0.1, 3]).on("zoom", zoom);
 
+	
+	var svgBase = d3.select("#viewContainer").append("svg").call(zoomListener);
+
+	var svg = svgBase.append("g");
+	
+	svg.attr("transform", "scale(0.85)");
+	
 //	set axes, as well as details on their ticks
 	var xAxis = d3.svg.axis().scale(x).ticks(20).tickSubdivide(false).tickSize(6,
 			3, 0).orient("bottom");
@@ -200,11 +212,6 @@ var loadTemporal = function (jsonData){
 				this.parentNode.appendChild(this);
 			});
 		};
-
-		// skip this functionality for IE9, which doesn't like it
-		if (!$.browser.msie) {
-			circle.moveToFront();
-		}
 	};
 //	what happens when we leave a bubble?
 	var mouseOff = function() {
