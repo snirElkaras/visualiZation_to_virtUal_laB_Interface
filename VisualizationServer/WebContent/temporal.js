@@ -191,19 +191,19 @@ var loadTemporal = function (jsonData){
 				circle.attr("cx")).attr("x2", circle.attr("cx")).attr("y1",
 						+circle.attr("cy") + 26).attr("y2", h - margin.t - margin.b)
 						.attr("transform", "translate(40,20)").style("stroke",
-								circle.style("fill")).transition().delay(200).duration(
-										400).styleTween("opacity", function() {
+								circle.style("fill")).transition().delay(200).duration(400)
+								.styleTween("opacity", function() {
 											return d3.interpolate(0, .5);
-										})
+								})
 
-										svg.append("g").attr("class", "guide").append("line").attr("x1",
-												+circle.attr("cx") - 16).attr("x2", 0).attr("y1",
-														circle.attr("cy")).attr("y2", circle.attr("cy")).attr(
-																"transform", "translate(40,30)").style("stroke",
-																		circle.style("fill")).transition().delay(200).duration(400)
-																		.styleTween("opacity", function() {
-																			return d3.interpolate(0, .5);
-																		});
+		svg.append("g").attr("class", "guide").append("line").attr("x1",
+				+circle.attr("cx") - 16).attr("x2", 0).attr("y1",
+						circle.attr("cy")).attr("y2", circle.attr("cy"))
+						.attr("transform", "translate(40,30)").style("stroke",
+								circle.style("fill")).transition().delay(200).duration(400)
+								.styleTween("opacity", function() {
+											return d3.interpolate(0, .5);
+								});
 
 		// function to move mouseover item to front of SVG stage, in case
 		// another bubble overlaps it

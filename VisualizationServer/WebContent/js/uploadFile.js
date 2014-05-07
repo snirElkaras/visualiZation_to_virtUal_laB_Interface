@@ -37,6 +37,7 @@ function upload(file) {
 		async : false,
 		type: 'POST',
 		success : function(data, textStatus, request){
+			cleanView();
 			var fileExt = request.getResponseHeader('fileExt');
 			switch(fileExt){
 			case "xml":
@@ -62,4 +63,9 @@ function uploadProgress(event) {
 
 function uploadComplete(event) {
 	document.getElementById("status").innerHTML = event.target.responseText;
+}
+
+var cleanView = function (){
+	$("#viewContainer").empty();
+	$("#details").empty();
 }
