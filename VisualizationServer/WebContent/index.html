@@ -23,7 +23,7 @@
 <script type="text/javascript" src="jquery.layout-latest.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('form').submit(function(event){
+		$('form').submit(function(event) {
 			noop(event);
 			var files = $("#chooseFile")[0].files;
 			dropUpload(files);
@@ -36,12 +36,14 @@
 
 
 <body>
-	<div style="margin: 20px; margin-bottom:0px">
+	<div>
 		<div id="title">Virtual Labs Visualization</div>
-		<form enctype="multipart/form-data" name="fileinfo">
-			 	<input type="file" name="file" id="chooseFile" required/> 
-			 	<input type="submit" />
-		</form>
+		<div id="subTitle">
+			<form enctype="multipart/form-data" name="fileinfo">
+				<input type="file" name="file" id="chooseFile" required /> <input
+					type="submit" />
+			</form>
+		</div>
 		<hr id="line">
 		<div id="container">
 			<div id="viewContainer"></div>

@@ -144,7 +144,10 @@ var loadTemporal = function (jsonData){
 		},
 		readable :  function(d) {
 			return d.readable;
-		}
+		},
+		type : function(d){
+			return "trg"; 
+		} 
 
 	}).style("fill", "orange");
 
@@ -166,7 +169,10 @@ var loadTemporal = function (jsonData){
 		},
 		readable :  function(d) {
 			return d.readable;
-		}
+		},
+		type : function(d){
+			return "src"; 
+		} 
 	}).style("fill", "blue");
 
 	var circles = groups.selectAll("circle");
@@ -187,23 +193,62 @@ var loadTemporal = function (jsonData){
 		// append lines to bubbles that will be used to show the precise data
 		// points.
 		// translate their location based on margins
-		svg.append("g").attr("class", "guide").append("line").attr("x1",
-				circle.attr("cx")).attr("x2", circle.attr("cx")).attr("y1",
-						+circle.attr("cy") + 26).attr("y2", h - margin.t - margin.b)
-						.attr("transform", "translate(40,20)").style("stroke",
-								circle.style("fill")).transition().delay(200).duration(400)
-								.styleTween("opacity", function() {
-											return d3.interpolate(0, .5);
-								})
+		svg.append("g")
+		 .append("svg:marker")
+		  .attr("id", "arrow")
+		  .attr("viewBox", "0 0 10 10")
+		  .attr("refX", 27)
+		  .attr("refY", 5)
+		  .attr("markerUnits", "strokeWidth")
+		  .attr("markerWidth", 8)
+		  .attr("markerHeight", 6)
+		  .attr("orient", "auto")
+		  .append("svg:path")
+		  .attr("d", "M 0 0 L 10 5 L 0 10 z")
+		
+		 var cx1, cy1, cx2, cy2; 
+		 var srcLoc, trgLoc;
+		 if($(pair)[0].getAttribute("type")=="src"){
+			 srcLoc = $(pair)[0];
+			 trgLoc = $(pair)[1];
+		 }
+		 else{
+			 srcLoc = $(pair)[1];
+			 trgLoc = $(pair)[0];
+		 }
+		 
+		 cx1 = srcLoc.getAttribute("cx");
+		 cx2 = trgLoc.getAttribute("cx");
+		 cy1 = srcLoc.getAttribute("cy");
+		 cy2 = trgLoc.getAttribute("cy");
+		  
+		svg.append("g").attr("class", "guide")
+		.append("line")
+		.attr("x1", cx1)
+		.attr("x2", cx2)
+		.attr("y1", cy1)
+		.attr("y2", cy2)
 
-		svg.append("g").attr("class", "guide").append("line").attr("x1",
-				+circle.attr("cx") - 16).attr("x2", 0).attr("y1",
-						circle.attr("cy")).attr("y2", circle.attr("cy"))
-						.attr("transform", "translate(40,30)").style("stroke",
-								circle.style("fill")).transition().delay(200).duration(400)
-								.styleTween("opacity", function() {
-											return d3.interpolate(0, .5);
-								});
+//		.attr("x1",	circle.attr("cx"))
+//		.attr("x2", circle.attr("cx"))
+//		.attr("y1",	circle.attr("cy"))
+//		.attr("y2", h - margin.t - margin.b)
+		.attr("transform", "translate(40,20)")
+		.style("stroke", circle.style("fill"))
+		.attr("stroke-width", 3)
+		.attr ("marker-end", "url(\#arrow)")
+		.transition()
+		.delay(200).duration(400)
+		.styleTween("opacity", function() {return d3.interpolate(0, .5);})
+
+//		svg.append("g").attr("class", "guide").append("line").attr("x1",
+//				+circle.attr("cx") - 16).attr("x2", 0).attr("y1",
+//						circle.attr("cy")).attr("y2", circle.attr("cy"))
+//						.attr("transform", "translate(40,30)").style("stroke",
+//								circle.style("fill")).transition().delay(200).duration(400)
+//								.styleTween("opacity", function() {
+//											return d3.interpolate(0, .5);
+//								});
 
 		// function to move mouseover item to front of SVG stage, in case
 		// another bubble overlaps it
@@ -302,4 +347,26 @@ var loadTemporal = function (jsonData){
 			.tickSize(-w, 0, 0)
 			.tickFormat("")
 	)
+	
+//	svg.append("svg:defs")
+//	 .append("svg:marker")
+//	  .attr("id", "arrow")
+//	  .attr("viewBox", "0 0 10 10")
+//	  .attr("refX", 27)
+//	  .attr("refY", 5)
+//	  .attr("markerUnits", "strokeWidth")
+//	  .attr("markerWidth", 8)
+//	  .attr("markerHeight", 6)
+//	  .attr("orient", "auto")
+//	  .append("svg:path")
+//	  .attr("d", "M 0 0 L 10 5 L 0 10 z")
+//
+//	svg.append("line")
+//	 .attr ("x1", 5) 
+//	 .attr ("x2", 50) 
+//	 .attr ("y1", 5)
+//	 .attr ("y2", 50)
+//	 .style ("stroke", "black")
+//	 .attr ("stroke-width", 2)
+//	 .attr ("marker-end", "url(\#arrow)")
 }
