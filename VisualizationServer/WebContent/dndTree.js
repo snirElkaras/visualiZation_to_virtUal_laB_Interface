@@ -445,8 +445,15 @@ loadTree = function(data) {
             // Normalize for fixed-depth by commenting out below line
             // d.y = (d.depth * 500); //500px per level.
         });
+        
+        //Set the color of each node
+        nodes.forEach(function(d){
+        	if(d && d.information && d.information.color == "Green"){
+        		console.info("sdafdf");
+        	}
+        });
 
-        // Update the nodes…
+        // Update the nodesï¿½
         node = svgGroup.selectAll("g.node")
             .data(nodes, function(d) {
                 return d.id || (d.id = ++i);
@@ -581,7 +588,13 @@ loadTree = function(data) {
         // Fade the text in
         nodeUpdate.select("text")
             .style("fill-opacity", 1);
-
+        nodeUpdate.select("text")
+        	        .style("color", function(d){
+            	if(d && d.information && d.information.color == "Green" ){
+            		return "#008000";
+            		
+            	}
+            })
         // Transition exiting nodes to the parent's new position.
         var nodeExit = node.exit().transition()
             .duration(duration)
@@ -596,7 +609,7 @@ loadTree = function(data) {
         nodeExit.select("text")
             .style("fill-opacity", 0);
 
-        // Update the links…
+        // Update the linksï¿½
         var link = svgGroup.selectAll("path.link")
             .data(links, function(d) {
                 return d.target.id;

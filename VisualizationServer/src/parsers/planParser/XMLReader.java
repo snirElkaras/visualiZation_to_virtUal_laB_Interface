@@ -67,6 +67,8 @@ public class XMLReader {
                     //let's check which of the states are reasonable
                     firstReaction = checkReasonableAndReaction(s, firstReaction);
                     if (s.information.hasReaction == true) {
+                    	//The node's color will be green   
+                    	s.information.color = "Green";
                         if (firstReaction == false) {
                             firstReaction = true;
                         }
@@ -85,10 +87,10 @@ public class XMLReader {
 
             //let's print the results:
             //System.out.println("Results: HasReaction, IsFirst, IsReasonable");
-            for (int i = 0; i < listOfStates.size(); i++) {
-                State s = listOfStates.get(i);
-                //System.out.println("State " + (i+1) + ": " + s.information.hasReaction + ", " + s.information.isFirstReaction + ", " + s.information.isReasonable);
-            }
+//            for (int i = 0; i < listOfStates.size(); i++) {
+//                State s = listOfStates.get(i);
+//                //System.out.println("State " + (i+1) + ": " + s.information.hasReaction + ", " + s.information.isFirstReaction + ", " + s.information.isReasonable);
+//            }
 
             /*
              * System.out.println(nodeLstRoot.getLength()); NodeList nodeLst =

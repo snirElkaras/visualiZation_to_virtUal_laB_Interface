@@ -17,7 +17,7 @@ public class InformationState {
 	boolean isReasonable;
 	boolean hasChildrenWithReaction;
 	boolean isHigherCompAct;
-	
+	String color;
 	int pos;
         
         @Override
@@ -30,7 +30,7 @@ public class InformationState {
 				+ ", totalVol=" + totalVol + ", hasReaction=" + hasReaction
 				+ ", isReasonable=" + isReasonable
 				+ ", hasChildrenWithReaction=" + hasChildrenWithReaction
-				+ ", isHigherCompAct=" + isHigherCompAct + ", pos=" + pos
+				+ ", isHigherCompAct=" + isHigherCompAct + ", Color=" + color +  ", pos=" + pos
 				+ ", scdDesc=" + scdDesc + ", dcdDesc=" + dcdDesc
 				+ ", rcdDesc=" + rcdDesc + ", ids=" + ids + ", AHasPoured="
 				+ AHasPoured + ", BHasPoured=" + BHasPoured + ", CHasPoured="
@@ -63,10 +63,11 @@ public class InformationState {
 		isReasonable = false;
 		hasChildrenWithReaction = false;
 		isHigherCompAct = false;
-                scdDesc = "";
-                dcdDesc = "";
-                rcdDesc = "";
-                ids = "";
+        scdDesc = "";
+        dcdDesc = "";
+        rcdDesc = "";
+        ids = "";
+        color = "Black";        
                 
 		
 	}
@@ -94,6 +95,10 @@ public class InformationState {
 	public boolean isHigherComplexAction()
 	{
 		return isHigherCompAct;
+	}
+	
+	public String getColor(){
+		return color;
 	}
 	
 }

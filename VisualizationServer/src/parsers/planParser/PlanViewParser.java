@@ -30,8 +30,6 @@ public class PlanViewParser implements IParse {
 	@Override
 	public JSONObject parse(String fileContent) {
 		Gson gson = new Gson();
-
-		String fileName = "demo3";
 		List<State> stateList = XMLReader.checkReasonable(fileContent);
 		List<StateToJson> jsonStateList = new ArrayList<StateToJson>();
 		int index = 0;
