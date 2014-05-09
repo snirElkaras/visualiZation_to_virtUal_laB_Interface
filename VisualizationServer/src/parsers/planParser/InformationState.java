@@ -11,6 +11,11 @@ public class InformationState {
 	double actualAmount_C;
 	double actualAmount_D;
 	
+	double srcAmount_A;
+	double srcAmount_B;
+	double srcAmount_C;
+	double srcAmount_D;
+	
 	double totalVol;
 	
 	boolean hasReaction;
@@ -18,6 +23,7 @@ public class InformationState {
 	boolean hasChildrenWithReaction;
 	boolean isHigherCompAct;
 	String color;
+	boolean isDirectChildOfRoot;
 	int pos;
         
         @Override
@@ -31,6 +37,7 @@ public class InformationState {
 				+ ", isReasonable=" + isReasonable
 				+ ", hasChildrenWithReaction=" + hasChildrenWithReaction
 				+ ", isHigherCompAct=" + isHigherCompAct + ", Color=" + color +  ", pos=" + pos
+				+ ", isDirectChildOfRoot=" + isDirectChildOfRoot
 				+ ", scdDesc=" + scdDesc + ", dcdDesc=" + dcdDesc
 				+ ", rcdDesc=" + rcdDesc + ", ids=" + ids + ", AHasPoured="
 				+ AHasPoured + ", BHasPoured=" + BHasPoured + ", CHasPoured="
@@ -68,7 +75,7 @@ public class InformationState {
         rcdDesc = "";
         ids = "";
         color = "Black";        
-                
+        isDirectChildOfRoot = false;        
 		
 	}
         

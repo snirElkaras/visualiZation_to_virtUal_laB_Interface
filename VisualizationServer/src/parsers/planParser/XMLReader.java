@@ -67,7 +67,7 @@ public class XMLReader {
 
                     //let's check which of the states are reasonable
                     firstReaction = checkReasonableAndReaction(s, firstReaction);
-                    
+                    s.information.isDirectChildOfRoot = true;
                     paintTreeNodes(s);
                     if (s.information.hasReaction == true) {
                         if (firstReaction == false) {
@@ -578,11 +578,19 @@ public class XMLReader {
                 ans.information.actualAmount_B = ans.firstChild.information.actualAmount_B;
                 ans.information.actualAmount_C = ans.firstChild.information.actualAmount_C;
                 ans.information.actualAmount_D = ans.firstChild.information.actualAmount_D;
+                
+                ans.information.srcAmount_A = ans.firstChild.information.srcAmount_A;
+                ans.information.srcAmount_B = ans.firstChild.information.srcAmount_B;
+                ans.information.srcAmount_C = ans.firstChild.information.srcAmount_C;
+                ans.information.srcAmount_D = ans.firstChild.information.srcAmount_D;
 
                 ans.information.pos = ans.firstChild.information.pos;
                 
                 ans.information.ids = ans.firstChild.information.ids;
-
+                
+                ans.information.scdDesc = ans.firstChild.information.scdDesc;
+                ans.information.dcdDesc = ans.firstChild.information.dcdDesc;
+                ans.information.rcdDesc = ans.firstChild.information.rcdDesc;
 
                 //let's extract the information about this state
                 NamedNodeMap attributeMap = node.getAttributes();
@@ -619,10 +627,19 @@ public class XMLReader {
                     ans.information.actualAmount_B = ans.firstChild.information.actualAmount_B;
                     ans.information.actualAmount_C = ans.firstChild.information.actualAmount_C;
                     ans.information.actualAmount_D = ans.firstChild.information.actualAmount_D;
+                    
+                    ans.information.srcAmount_A = ans.firstChild.information.srcAmount_A;
+                    ans.information.srcAmount_B = ans.firstChild.information.srcAmount_B;
+                    ans.information.srcAmount_C = ans.firstChild.information.srcAmount_C;
+                    ans.information.srcAmount_D = ans.firstChild.information.srcAmount_D;
 
                     ans.information.pos = ans.firstChild.information.pos;
                     
                     ans.information.ids = ans.firstChild.information.ids;
+                    
+                    ans.information.scdDesc = ans.firstChild.information.scdDesc;
+                    ans.information.dcdDesc = ans.firstChild.information.dcdDesc;
+                    ans.information.rcdDesc = ans.firstChild.information.rcdDesc;
                 } else {
                     ans.information.totalVol = ans.secondChild.information.totalVol;
 
@@ -635,11 +652,22 @@ public class XMLReader {
                     ans.information.actualAmount_B = ans.secondChild.information.actualAmount_B;
                     ans.information.actualAmount_C = ans.secondChild.information.actualAmount_C;
                     ans.information.actualAmount_D = ans.secondChild.information.actualAmount_D;
+                    
+                    ans.information.srcAmount_A = ans.secondChild.information.srcAmount_A;
+                    ans.information.srcAmount_B = ans.secondChild.information.srcAmount_B;
+                    ans.information.srcAmount_C = ans.secondChild.information.srcAmount_C;
+                    ans.information.srcAmount_D = ans.secondChild.information.srcAmount_D;
 
                     ans.information.pos = ans.secondChild.information.pos;
                     
                     ans.information.ids = ans.secondChild.information.ids;
+                    
+                    ans.information.scdDesc = ans.secondChild.information.scdDesc;
+                    ans.information.dcdDesc = ans.secondChild.information.dcdDesc;
+                    ans.information.rcdDesc = ans.secondChild.information.rcdDesc;
                 }
+                
+
 
                 //let's extract the information about this state
                 NamedNodeMap attributeMap = node.getAttributes();
@@ -691,6 +719,11 @@ public class XMLReader {
                     ans.information.amount_B = getAmount(attValue, "B");
                     ans.information.amount_C = getAmount(attValue, "C");
                     ans.information.amount_D = getAmount(attValue, "D");
+                    
+                    ans.information.srcAmount_A = ans.information.amount_A;
+                    ans.information.srcAmount_B = ans.information.amount_B;
+                    ans.information.srcAmount_C = ans.information.amount_C;
+                    ans.information.srcAmount_D = ans.information.amount_D;
                     ans.information.scdDesc = attValue;
                 }
 
@@ -711,6 +744,7 @@ public class XMLReader {
                     ans.information.ids = attValue;
                 }
             }
+            
 
             double totalDestVol = destVolA + destVolB + destVolC + destVolD;
             if (totalDestVol != 0) {
