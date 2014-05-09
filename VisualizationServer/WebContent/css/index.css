@@ -55,7 +55,7 @@ body {
 	overflow-y: auto;
 	display: inline-block;
 	height: 100%;
-	width: 86%;
+	width: 80%;
 	min-height: 100px;
 	float: left;
 	margin-left: 20px
@@ -73,7 +73,7 @@ hr {
 	display: none;
 	width: 9%;
 	float: right;
-	padding-right: 30px
+	padding-right: 60px
 }
 
 .buttonStyle {
@@ -87,9 +87,6 @@ hr {
 	margin-top: 12px;
 }
 
-#indexTemporal {
-	display: none;
-}
 
 .circle {
 	width: 20px;
@@ -104,8 +101,8 @@ hr {
 	display: none;
 	width: 9%;
 	float: right;
-	padding-right: 30px;
-	margin-top: 12px;
+	padding-right: 65px;
+	margin-top: 20px;
 }
 
 #srcIcon {
