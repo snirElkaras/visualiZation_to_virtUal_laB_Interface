@@ -144,7 +144,19 @@ var loadTemporal = function (jsonData){
 		},
 		type : function(d){
 			return "trg"; 
-		} 
+		},
+		amountToDisplay : function(d) {
+			return d.readableAmount;
+		},
+		srcToDisplay : function(d) {
+			return d.readableSrc;
+		},
+		trgToDisplay : function(d) {
+			return d.readableRcp;
+		},
+		resToDisplay : function(d) {
+			return d.readableRes;
+		}
 
 	}).style("fill", "orange");
 
@@ -169,7 +181,19 @@ var loadTemporal = function (jsonData){
 		},
 		type : function(d){
 			return "src"; 
-		} 
+		},
+		amountToDisplay : function(d) {
+			return d.readableAmount;
+		},
+		srcToDisplay : function(d) {
+			return d.readableSrc;
+		},
+		trgToDisplay : function(d) {
+			return d.readableRcp;
+		},
+		resToDisplay : function(d) {
+			return d.readableRes;
+		}
 	}).style("fill", "blue");
 
 	var circles = groups.selectAll("circle");
@@ -186,7 +210,7 @@ var loadTemporal = function (jsonData){
 		});
 		var circle = d3.select(this);
 		$("#details").text("");
-		$("#details").text(this.getAttribute("readable"));
+		$("#details").html(displayDetailsOfNode(this));
 		// append lines to bubbles that will be used to show the precise data
 		// points.
 		// translate their location based on margins
@@ -237,7 +261,7 @@ var loadTemporal = function (jsonData){
 		.attr("y1", cy1)
 		.attr("y2", cy2)
 		.attr("transform", "translate(40,20)")
-		.style("stroke", "pink")
+		.style("stroke", "grey")
 		.attr("stroke-width", 3)
 		.attr ("marker-end", "url(\#arrow)")
 		.transition()
@@ -342,4 +366,14 @@ var loadTemporal = function (jsonData){
 			.tickSize(-w, 0, 0)
 			.tickFormat("")
 	)
+	
+	var displayDetailsOfNode = function(node) {
+		var toDisplay = "<div><div id='amountKey'><b>Amount : </b></div><div style='display:inline-block;'>" + node.getAttribute("amountToDisplay") + "</div></div>";
+		toDisplay += "<div><div id='srcKey'><b>Source Flask : </b></div><div style='display:inline-block;'>" + node.getAttribute("srcToDisplay") + "</div></div>";
+		toDisplay += "<div><div id='trgKey'><b>Recipient Flask : </b></div><div style='display:inline-block;'>" + node.getAttribute("trgToDisplay") + "</div></div>";
+		toDisplay += "<div><div id='resKey'><b>Result : </b></div><div style='display:inline-block;'>" + node.getAttribute("resToDisplay") + "</div></div>";
+		return toDisplay;		
+	}
 }
+
+

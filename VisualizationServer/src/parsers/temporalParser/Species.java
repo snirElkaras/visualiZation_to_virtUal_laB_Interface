@@ -41,6 +41,11 @@ public class Species {
 	public void setState(String state) {
 		this.state = state;
 	}
+	
+	public String createReadable() {
+		return this.moles + "g of " + this.name;
+	}
+	
 	public JSONObject toJson() {
 		JSONObject species = new JSONObject();
 		try {

@@ -58,8 +58,29 @@ body {
 	width: 80%;
 	min-height: 100px;
 	float: left;
-	margin-left: 20px
+	margin-left: 20px;
+	padding: 10px
 }
+#amountKey {
+	display: inline-block;
+	color: black;
+}
+
+#srcKey {
+	display: inline-block;
+	color: blue;
+}
+
+#trgKey {
+	display: inline-block;
+	color: orange;
+}
+
+#resKey {
+	display: inline-block;
+	color: green;
+}
+
 
 hr {
 	color: lightgray;

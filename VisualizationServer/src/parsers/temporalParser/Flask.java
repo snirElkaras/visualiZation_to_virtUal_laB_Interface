@@ -56,6 +56,20 @@ public class Flask {
 	public void setSpecies(List<Species> species) {
 		this.species = species;
 	}
+	public String createReadable() {
+		String ans = this.name;
+		StringBuilder sb = new StringBuilder();
+		for (Species currSpecies : this.species) {
+			sb.append(currSpecies.createReadable() + ", ");
+		}
+		String spcs = sb.toString();
+		if(null != spcs && !spcs.equals("")){
+			spcs = sb.toString().substring(0, spcs.length()-2);
+			ans += " (" + this.name + spcs + ")";  
+		}
+		return ans;
+	}
+
 	public JSONObject toJson() {		
 		JSONObject flaskJson = new JSONObject();
 		try {

@@ -62,6 +62,10 @@ public class SolutionMix extends VirtualLabAction{
 		response.put("recipient_flask", recipient.toJson());
 		response.put("result_flask", result.toJson());
 		response.put("readable", readable);
+		response.put("readableAmount", volume + "L");
+		response.put("readableSrc", source.createReadable());
+		response.put("readableRcp", recipient.createReadable());
+		response.put("readableRes", result.createReadable());
 		} catch (JSONException e) {
 			return null;
 		}
