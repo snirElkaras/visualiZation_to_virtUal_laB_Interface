@@ -43,15 +43,16 @@ function upload(file) {
 			case "xml":
 				loadTree(data);
 				removeListener();
+				displayDetailsPlan();
 				break;
 			case "log":
 				loadTemporal(data);
 				removeListener();
+				displayDetailsTemporal();
 				break;
 			default:
 				console.info("unknown file extension");
 			}
-			$("#footer").css("display", "inline-block");
 		},
 		error: function(data, textStatus, errorThrown){
 			uploadFailed(data.getResponseHeader('invalidFile'));
@@ -81,4 +82,20 @@ function uploadComplete(event) {
 var cleanView = function (){
 	$("#viewContainer").empty();
 	$("#details").empty();
+	$("#footer").css("display", "none");
+	$("#buttonsPlan").css("display", "none");
+	$("#indexTemporal").css("display", "none");
+}
+
+var displayDetailsPlan = function(){
+	displayDetails("#buttonsPlan");
+}
+var displayDetailsTemporal = function(){
+	displayDetails("#indexTemporal");
+}
+
+var displayDetails = function(typeID){
+	$("#footer").css("display", "inline-block");
+	$(typeID).css("display", "inline-block");
+	$("#footer").css("display", "inline-block");
 }

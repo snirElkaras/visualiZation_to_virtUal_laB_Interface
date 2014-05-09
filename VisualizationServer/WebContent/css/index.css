@@ -1,10 +1,10 @@
 body {
-	margin:0px;
+	margin: 0px;
 }
 
 #title {
 	font-size: 26px;
-	color: lightblue;
+	color: #428bca;
 	padding: 10px 0px 0px 20px;
 }
 
@@ -14,11 +14,11 @@ body {
 	padding: 10px 0px 0px 20px;
 }
 
-#form{
+#form {
 	display: inline-block;
 }
 
-#errorNotification{
+#errorNotification {
 	color: red;
 	display: none;
 }
@@ -31,7 +31,7 @@ body {
 	bottom: 10px;
 }
 
-#header{
+#header {
 	width: 100%;
 	height: 20%;
 }
@@ -44,8 +44,8 @@ body {
 	_width: 700px; /* min-width for IE6 */
 }
 
-#viewContainer{
-	height:435px; 	
+#viewContainer {
+	height: 435px;
 }
 
 #details {
@@ -55,27 +55,74 @@ body {
 	overflow-y: auto;
 	display: inline-block;
 	height: 100%;
-	width: 80%;
+	width: 86%;
 	min-height: 100px;
 	float: left;
+	margin-left: 20px
 }
 
-hr{
+hr {
 	color: lightgray;
 	background: lightgray;
 	height: 1px;
 	border: 0px;
 }
 
-#buttons {
-	display: inline-block;
-	width:9%;
+
+#buttonsPlan {
+	display: none;
+	width: 9%;
 	float: right;
+	padding-right: 30px
 }
-#btn1, #btn2{
-	display: block;
-	width: auto;
-	width:100%;
+
+.buttonStyle {
+	width: 120px;
+	height: 30px;
+	color: #fff;
+	background-color: #428bca;
+	border-color: #357ebd;
+	border-radius: 4px;
+	margin-bottom: 6px;
+	margin-top: 12px;
+}
+
+#indexTemporal {
+	display: none;
+}
+
+.circle {
+	width: 20px;
+	height: 20px;
+	-webkit-border-radius: 25px;
+	-moz-border-radius: 25px;
+	border-radius: 25px;
+	margin-right: 5px
+}
+
+#indexTemporal{
+	display: none;
+	width: 9%;
+	float: right;
+	padding-right: 30px;
+	margin-top: 12px;
+}
+
+#srcIcon {
+	background-color: blue;
+	display: inline-block;
+}
+
+#trgIcon {
+	background-color: orange;
+	display: inline-block;
+}
+
+.indexTitle {
+	display: inline-block;
+	font-size: 16px;
+	padding-bottom: 10px;
+	vertical-align: middle;
 }
 
 .node {
@@ -118,7 +165,6 @@ hr{
 .ghostCircle,.activeDrag .ghostCircle {
 	display: none;
 }
-
 
 .pane {
 	display: none; /* will appear when layout inits */

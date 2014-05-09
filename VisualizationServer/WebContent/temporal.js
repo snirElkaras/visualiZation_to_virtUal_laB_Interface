@@ -1,12 +1,4 @@
-/*var jsonData;
-$.ajax({
-	url: 'Json.txt',
-	type: 'get',
-	async: false,
-	success: function(data) {
-		jsonData = JSON.parse(data);
-	}
-});*/
+
 var onMouseRadius = 10;
 
 
@@ -24,7 +16,6 @@ var loadTemporal = function (jsonData){
 	var flasksCount = flasks.length;
 	var startTime;
 	var endTime;
-//	set the stage
 	var margin = {
 			t : 30,
 			r : 200,
@@ -32,11 +23,13 @@ var loadTemporal = function (jsonData){
 			l : 40
 	},
 
-	w = 1000 - margin.l - margin.r, h = 500 - margin.t - margin.b, hIndent = h - 60, x = d3.time.scale().rangeRound([ 0, w ]), y = d3.scale.ordinal().rangeBands(
-			[ hIndent, 0 ]);
+	w = 1500 - margin.l - margin.r, 
+	h = 500 - margin.t - margin.b,
+	hIndent = h - 60,
+	x = d3.time.scale().rangeRound([ 0, w ]),
+	y = d3.scale.ordinal().rangeBands([ hIndent, 0 ]);
 //	colors that will reflect geographical regions
 	color = d3.scale.category10();
-
 
 	function zoom() {
 		svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
@@ -49,7 +42,8 @@ var loadTemporal = function (jsonData){
 
 	var svg = svgBase.append("g");
 
-	svg.attr("transform", "scale(0.85)");
+	svg.attr("transform", "scale(0.91)");
+	zoomListener.scale(0.91);
 
 //	set axes, as well as details on their ticks
 	var xAxis = d3.svg.axis().scale(x).ticks(20).tickSubdivide(false).tickSize(6,
@@ -208,16 +202,7 @@ var loadTemporal = function (jsonData){
 			trgLoc = $(pair)[0];
 		}
 
-//src on top		
-//		cx1 = parseInt(srcLoc.getAttribute("cx"));
-//		cx2 = parseInt(trgLoc.getAttribute("cx"));
-//		cy1 = parseInt(srcLoc.getAttribute("cy"))+2*onMouseRadius;
-//		cy2 = parseInt(trgLoc.getAttribute("cy"));
-//trg on top		
-//		cx1 = parseInt(srcLoc.getAttribute("cx"));
-//		cx2 = parseInt(trgLoc.getAttribute("cx"));
-//		cy1 = parseInt(srcLoc.getAttribute("cy"));
-//		cy2 = parseInt(trgLoc.getAttribute("cy"))+2*onMouseRadius;
+
 		
 		cx1 = parseInt(srcLoc.getAttribute("cx"));
 		cx2 = parseInt(trgLoc.getAttribute("cx"));
@@ -251,11 +236,6 @@ var loadTemporal = function (jsonData){
 		.attr("x2", cx2)
 		.attr("y1", cy1)
 		.attr("y2", cy2)
-
-//		.attr("x1",	circle.attr("cx"))
-//		.attr("x2", circle.attr("cx"))
-//		.attr("y1",	circle.attr("cy"))
-//		.attr("y2", h - margin.t - margin.b)
 		.attr("transform", "translate(40,20)")
 		.style("stroke", "pink")
 		.attr("stroke-width", 3)
@@ -264,14 +244,6 @@ var loadTemporal = function (jsonData){
 		.delay(200).duration(400)
 		.styleTween("opacity", function() {return d3.interpolate(0, .5);})
 
-//		svg.append("g").attr("class", "guide").append("line").attr("x1",
-//		+circle.attr("cx") - 16).attr("x2", 0).attr("y1",
-//		circle.attr("cy")).attr("y2", circle.attr("cy"))
-//		.attr("transform", "translate(40,30)").style("stroke",
-//		circle.style("fill")).transition().delay(200).duration(400)
-//		.styleTween("opacity", function() {
-//		return d3.interpolate(0, .5);
-//		});
 
 		// function to move mouseover item to front of SVG stage, in case
 		// another bubble overlaps it
@@ -312,30 +284,30 @@ var loadTemporal = function (jsonData){
 		gravity : 's',
 	});
 
-	var src = [ "source", "target" ];
-//	the legend color guide
-	var legend = svg.selectAll("rect").data(src).enter()
-	.append("rect").attr({
-		x : function(d, i) {
-			return (40 + i * 80);
-		},
-		y : h+20,
-		width : 25,
-		height : 12
-	}).style("fill", function(d) {
-		return d=="source"? "blue" : "orange";
-	});
-
-//	// legend labels
-	svg.selectAll("text").data(src).enter().append("text")
-	.attr({
-		x : function(d, i) {
-			return (40 + i * 80);
-		},
-		y : h +44,
-	}).text(function(d) {
-		return d;
-	});
+//	var src = [ "source", "target" ];
+////	the legend color guide
+//	var legend = svg.selectAll("rect").data(src).enter()
+//	.append("rect").attr({
+//		x : function(d, i) {
+//			return (40 + i * 80);
+//		},
+//		y : h+20,
+//		width : 25,
+//		height : 12
+//	}).style("fill", function(d) {
+//		return d=="source"? "blue" : "orange";
+//	});
+//
+////	// legend labels
+//	svg.selectAll("text").data(src).enter().append("text")
+//	.attr({
+//		x : function(d, i) {
+//			return (40 + i * 80);
+//		},
+//		y : h +44,
+//	}).text(function(d) {
+//		return d;
+//	});
 
 //	draw axes and axis labels
 	svg.append("g").attr("class", "x axis").attr("transform",
@@ -370,26 +342,4 @@ var loadTemporal = function (jsonData){
 			.tickSize(-w, 0, 0)
 			.tickFormat("")
 	)
-
-//	svg.append("svg:defs")
-//	.append("svg:marker")
-//	.attr("id", "arrow")
-//	.attr("viewBox", "0 0 10 10")
-//	.attr("refX", 27)
-//	.attr("refY", 5)
-//	.attr("markerUnits", "strokeWidth")
-//	.attr("markerWidth", 8)
-//	.attr("markerHeight", 6)
-//	.attr("orient", "auto")
-//	.append("svg:path")
-//	.attr("d", "M 0 0 L 10 5 L 0 10 z")
-
-//	svg.append("line")
-//	.attr ("x1", 5) 
-//	.attr ("x2", 50) 
-//	.attr ("y1", 5)
-//	.attr ("y2", 50)
-//	.style ("stroke", "black")
-//	.attr ("stroke-width", 2)
-//	.attr ("marker-end", "url(\#arrow)")
 }
