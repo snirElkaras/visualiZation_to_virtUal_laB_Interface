@@ -7,6 +7,9 @@ $.ajax({
 		jsonData = JSON.parse(data);
 	}
 });*/
+var onMouseRadius = 10;
+
+
 var loadTemporal = function (jsonData){
 
 	var flasksAsJson = jsonData.add_flask_list;
@@ -183,7 +186,7 @@ var loadTemporal = function (jsonData){
 		$(pair).each(function() {
 			// transition to increase size/opacity of bubble
 			var currCircle = d3.select(this);
-			currCircle.transition().duration(800).style("opacity", 1).attr("r", 10)
+			currCircle.transition().duration(800).style("opacity", 1).attr("r", onMouseRadius)
 			.ease("elastic");
 
 		});
@@ -205,24 +208,34 @@ var loadTemporal = function (jsonData){
 			trgLoc = $(pair)[0];
 		}
 
-		cx1 = srcLoc.getAttribute("cx");
-		cx2 = trgLoc.getAttribute("cx");
-		cy1 = srcLoc.getAttribute("cy");
-		cy2 = trgLoc.getAttribute("cy");
-
-		var radius = 8;
-		var arrowPos = (cy1-cy2) ? 10 : 20;
-		// when trg on top - refX is 20
-		// when src on top - refX is 10
-		// todo: define between 2 cases,
-		// narrow the triangle,
-		// shorten the line in both cases
+//src on top		
+//		cx1 = parseInt(srcLoc.getAttribute("cx"));
+//		cx2 = parseInt(trgLoc.getAttribute("cx"));
+//		cy1 = parseInt(srcLoc.getAttribute("cy"))+2*onMouseRadius;
+//		cy2 = parseInt(trgLoc.getAttribute("cy"));
+//trg on top		
+//		cx1 = parseInt(srcLoc.getAttribute("cx"));
+//		cx2 = parseInt(trgLoc.getAttribute("cx"));
+//		cy1 = parseInt(srcLoc.getAttribute("cy"));
+//		cy2 = parseInt(trgLoc.getAttribute("cy"))+2*onMouseRadius;
+		
+		cx1 = parseInt(srcLoc.getAttribute("cx"));
+		cx2 = parseInt(trgLoc.getAttribute("cx"));
+		cy1 = parseInt(srcLoc.getAttribute("cy"));
+		cy2 = parseInt(trgLoc.getAttribute("cy"));
+		
+		if(cy1<cy2){
+			cy1 = cy1+2*onMouseRadius;
+		}
+		else{
+			cy2 = cy2+2*onMouseRadius;
+		}
 		
 		svg.append("g")
 		.append("svg:marker")
 		.attr("id", "arrow")
-		.attr("viewBox", "0 0 10 10")
-		.attr("refX", arrowPos)
+		.attr("viewBox", "0 0 25 10")
+		.attr("refX", 10)
 		.attr("refY", 5)
 		.attr("markerUnits", "strokeWidth")
 		.attr("markerWidth", 8)
