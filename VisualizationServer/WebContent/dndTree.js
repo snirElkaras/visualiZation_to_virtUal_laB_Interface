@@ -367,6 +367,18 @@ loadTree = function(data) {
 		zoomListener.translate([x, y]);
 	}
 
+	function leftNode(source) {
+		scale = zoomListener.scale();
+		x = -source.y0;
+		y = -source.x0;
+		x = x * scale + viewerWidth * 0.1;
+		y = y * scale + viewerHeight / 2;
+		d3.select('g').transition()
+		.duration(duration)
+		.attr("transform", "translate(" + x + "," + y + ")scale(" + scale + ")");
+		zoomListener.scale(scale);
+		zoomListener.translate([x, y]);
+	}
 	// Toggle children function
 
 	function toggleChildren(d) {
@@ -404,13 +416,13 @@ loadTree = function(data) {
 		if (d.children) {
 			action = "mix";
 		}
-		$("#details").append("<p id=detailsP> " +  "pos: ".bold() + d.information.pos + "<BR/>" + 
-				"IDs: ".bold() + d.information.ids + "<BR/>" + 
-				"scd: ".bold() + d.information.scdDesc + "<BR/>" + 
-				"dcd: ".bold() + d.information.dcdDesc + "<BR/>" + 
-				"rcd: ".bold() + d.information.rcdDesc + "<BR/>" + 
-				"vol: ".bold() + d.information.totalVol + "<BR/>" + 
-				"action: ".bold() + action + " <BR/>" + 
+		$("#details").append("<p id=detailsP> " +  "pos: ".bold().fontsize(2.8) + d.information.pos + "<BR/>" + 
+				"IDs: ".bold().fontsize(2.8) + d.information.ids + "<BR/>" + 
+				"scd: ".bold().fontsize(2.8) + d.information.scdDesc + "<BR/>" + 
+				"dcd: ".bold().fontsize(2.8) + d.information.dcdDesc + "<BR/>" + 
+				"rcd: ".bold().fontsize(2.8) + d.information.rcdDesc + "<BR/>" + 
+				"vol: ".bold().fontsize(2.8) + d.information.totalVol + "<BR/>" + 
+				"action: ".bold().fontsize(2.8) + action + " <BR/>" + 
 		"</p>");
 	}
 
@@ -719,9 +731,9 @@ loadTree = function(data) {
 	root.x0 = viewerHeight / 2;
 	root.y0 = 0;
 
-	// Layout the tree initially and center on the root node.
+	// Layout the tree initially and left it on the root node.
 	update(root);
-	centerNode(root);
+	leftNode(root);
 //	});
 };
 /*$(document).ready(function () {
