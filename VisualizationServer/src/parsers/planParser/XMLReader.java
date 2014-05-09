@@ -25,6 +25,7 @@ public class XMLReader {
 
     public static String m_attribute_equation = "equation";
     public static String m_attribute_end_point = "end_point";
+	private static boolean firstReactionOccured = false;
 
     public static ArrayList<State> checkReasonable(String content) {
         try {
@@ -66,9 +67,9 @@ public class XMLReader {
 
                     //let's check which of the states are reasonable
                     firstReaction = checkReasonableAndReaction(s, firstReaction);
+                    
+                    paintTreeNodes(s);
                     if (s.information.hasReaction == true) {
-                    	//The node's color will be green   
-                    	s.information.color = "Green";
                         if (firstReaction == false) {
                             firstReaction = true;
                         }
@@ -385,7 +386,28 @@ public class XMLReader {
 //        }
 //    }
 
-    public static String Get_Decimal_Number(String number_expression) {
+    private static void paintTreeNodes(State s) {
+		
+		
+        if (s.information.hasReaction == true){
+        	s.information.color = "Green";
+        } else
+        if (s.information.hasChildrenWithReaction){
+        	s.information.color = "Orange";
+        } else
+        if (firstReactionOccured) {
+        	s.information.color = "Red";
+        }
+        if (s.hasFirstChild()){
+        	paintTreeNodes(s.getFirstChild());
+        }
+        if (s.hasSecondChild()){
+        	paintTreeNodes(s.getSecondChild());
+        }
+        
+	}
+
+	public static String Get_Decimal_Number(String number_expression) {
         Pattern r = Pattern.compile("(\\d{1,3})(\\.|)(\\d{1,3}|)E(\\-|)(\\d{1,3})");
         Matcher m = r.matcher(number_expression);
         String res = "";
@@ -857,6 +879,9 @@ public class XMLReader {
                     }
                 }
             }
+        }
+        if (ans == true && firstReactionOccured == false){
+        	firstReactionOccured = true;
         }
         return ans;
     }

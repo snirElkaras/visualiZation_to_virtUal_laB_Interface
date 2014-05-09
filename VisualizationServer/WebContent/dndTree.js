@@ -1,7 +1,9 @@
 
 loadTree = function(data) {
 	var treeData = data;
-
+	
+	console.info(data);
+	
     // Calculate total nodes, max label length
     var totalNodes = 0;
     var maxLabelLength = 0;
@@ -477,7 +479,7 @@ loadTree = function(data) {
                 return d._children ? "lightsteelblue" : "#fff";
             });
 
-        nodeEnter.append("text")
+        nodeEnter.append("text") 
             .attr("x", function(d) {
                 return d.children || d._children ? -10 : 10;
             })
@@ -589,11 +591,20 @@ loadTree = function(data) {
         nodeUpdate.select("text")
             .style("fill-opacity", 1);
         nodeUpdate.select("text")
-        	        .style("color", function(d){
-            	if(d && d.information && d.information.color == "Green" ){
-            		return "#008000";
-            		
-            	}
+        	        .style("fill", function(d){
+        	    if (d && d.information){
+        	    	switch(d.information.color){
+        	    	case "Green":
+        	    		return "green";
+        	    	case "Orange":
+        	    		return "orange";
+        	    	case "Red":
+        	    		return "red";
+        	    		
+        	    	default: // default color is black
+        	    		return "black";
+        	    	}
+        	    }
             })
         // Transition exiting nodes to the parent's new position.
         var nodeExit = node.exit().transition()
