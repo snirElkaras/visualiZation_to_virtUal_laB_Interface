@@ -211,20 +211,7 @@ var loadTemporal = function (jsonData){
 		cy2 = trgLoc.getAttribute("cy");
 
 		var radius = 8;
-		/*
-		var d = Math.sqrt(Math.pow(cx2-cx1) + Math.pow(cy2-cy1))
-		var d2 = d - 8;
-
-		var ratio = d2 / d;
-
-		var tmpdx = (cx2 - cx1) * ratio;
-		var tmpdy = (cy2 - cy1) * ratio;
-
-		var refX = cx1 + tmpdx;
-		var refY = cy1 + tmpdy;
-		*/
-		
-		
+		var arrowPos = (cy1-cy2) ? 10 : 20;
 		// when trg on top - refX is 20
 		// when src on top - refX is 10
 		// todo: define between 2 cases,
@@ -235,7 +222,7 @@ var loadTemporal = function (jsonData){
 		.append("svg:marker")
 		.attr("id", "arrow")
 		.attr("viewBox", "0 0 10 10")
-		.attr("refX", 20)
+		.attr("refX", arrowPos)
 		.attr("refY", 5)
 		.attr("markerUnits", "strokeWidth")
 		.attr("markerWidth", 8)
