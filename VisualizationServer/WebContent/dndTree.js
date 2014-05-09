@@ -74,7 +74,7 @@ loadTree = function(data) {
 		}
 		if(node.name == "root"){
 			update(node);
-			centerNode(node);
+			leftNode(node);
 		}
 	}
 
