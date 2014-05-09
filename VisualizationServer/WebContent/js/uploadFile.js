@@ -1,6 +1,4 @@
 
-
-
 var removeListener = function(){
 	var dropbox = document.getElementById("viewContainer");
 	dropbox.removeEventListener("drop", dropUpload, false);
@@ -18,8 +16,11 @@ function dropUpload(files) {
 	}
 }
 
-function upload(file) {
 
+
+function upload(file) {
+	removeErrorNotification();
+	cleanView();
 	var formData = new FormData();
 	formData.append("file", file);
 
@@ -37,7 +38,6 @@ function upload(file) {
 		async : false,
 		type: 'POST',
 		success : function(data, textStatus, request){
-			cleanView();
 			var fileExt = request.getResponseHeader('fileExt');
 			switch(fileExt){
 			case "xml":
@@ -52,7 +52,20 @@ function upload(file) {
 				console.info("unknown file extension");
 			}
 			$("#footer").css("display", "inline-block");
-		}});
+		},
+		error: function(data, textStatus, errorThrown){
+			uploadFailed(data.getResponseHeader('invalidFile'));
+		}
+	});
+}
+
+function uploadFailed(text){
+	$("#errorNotification").text(text);
+	$("#errorNotification").css("display", "inline-block");
+}
+
+function removeErrorNotification(){
+	$("#errorNotification").css("display", "none");
 }
 
 function uploadProgress(event) {

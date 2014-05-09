@@ -33,21 +33,21 @@ var loadTemporal = function (jsonData){
 			[ hIndent, 0 ]);
 //	colors that will reflect geographical regions
 	color = d3.scale.category10();
-	
-	
+
+
 	function zoom() {
-        svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-    }
-	
+		svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+	}
+
 	var zoomListener = d3.behavior.zoom().scaleExtent([0.1, 3]).on("zoom", zoom);
 
-	
+
 	var svgBase = d3.select("#viewContainer").append("svg").call(zoomListener);
 
 	var svg = svgBase.append("g");
-	
+
 	svg.attr("transform", "scale(0.85)");
-	
+
 //	set axes, as well as details on their ticks
 	var xAxis = d3.svg.axis().scale(x).ticks(20).tickSubdivide(false).tickSize(6,
 			3, 0).orient("bottom");
@@ -193,35 +193,58 @@ var loadTemporal = function (jsonData){
 		// append lines to bubbles that will be used to show the precise data
 		// points.
 		// translate their location based on margins
-		svg.append("g")
-		 .append("svg:marker")
-		  .attr("id", "arrow")
-		  .attr("viewBox", "0 0 10 10")
-		  .attr("refX", 27)
-		  .attr("refY", 5)
-		  .attr("markerUnits", "strokeWidth")
-		  .attr("markerWidth", 8)
-		  .attr("markerHeight", 6)
-		  .attr("orient", "auto")
-		  .append("svg:path")
-		  .attr("d", "M 0 0 L 10 5 L 0 10 z")
 		
-		 var cx1, cy1, cx2, cy2; 
-		 var srcLoc, trgLoc;
-		 if($(pair)[0].getAttribute("type")=="src"){
-			 srcLoc = $(pair)[0];
-			 trgLoc = $(pair)[1];
-		 }
-		 else{
-			 srcLoc = $(pair)[1];
-			 trgLoc = $(pair)[0];
-		 }
-		 
-		 cx1 = srcLoc.getAttribute("cx");
-		 cx2 = trgLoc.getAttribute("cx");
-		 cy1 = srcLoc.getAttribute("cy");
-		 cy2 = trgLoc.getAttribute("cy");
-		  
+		var cx1, cy1, cx2, cy2; 
+		var srcLoc, trgLoc;
+		if($(pair)[0].getAttribute("type")=="src"){
+			srcLoc = $(pair)[0];
+			trgLoc = $(pair)[1];
+		}
+		else{
+			srcLoc = $(pair)[1];
+			trgLoc = $(pair)[0];
+		}
+
+		cx1 = srcLoc.getAttribute("cx");
+		cx2 = trgLoc.getAttribute("cx");
+		cy1 = srcLoc.getAttribute("cy");
+		cy2 = trgLoc.getAttribute("cy");
+
+		var radius = 8;
+		/*
+		var d = Math.sqrt(Math.pow(cx2-cx1) + Math.pow(cy2-cy1))
+		var d2 = d - 8;
+
+		var ratio = d2 / d;
+
+		var tmpdx = (cx2 - cx1) * ratio;
+		var tmpdy = (cy2 - cy1) * ratio;
+
+		var refX = cx1 + tmpdx;
+		var refY = cy1 + tmpdy;
+		*/
+		
+		
+		// when trg on top - refX is 20
+		// when src on top - refX is 10
+		// todo: define between 2 cases,
+		// narrow the triangle,
+		// shorten the line in both cases
+		
+		svg.append("g")
+		.append("svg:marker")
+		.attr("id", "arrow")
+		.attr("viewBox", "0 0 10 10")
+		.attr("refX", 20)
+		.attr("refY", 5)
+		.attr("markerUnits", "strokeWidth")
+		.attr("markerWidth", 8)
+		.attr("markerHeight", 6)
+		.attr("orient", "auto")
+		.append("svg:path")
+		.attr("d", "M 0 0 L 10 5 L 0 10 z")
+
+
 		svg.append("g").attr("class", "guide")
 		.append("line")
 		.attr("x1", cx1)
@@ -234,7 +257,7 @@ var loadTemporal = function (jsonData){
 //		.attr("y1",	circle.attr("cy"))
 //		.attr("y2", h - margin.t - margin.b)
 		.attr("transform", "translate(40,20)")
-		.style("stroke", circle.style("fill"))
+		.style("stroke", "pink")
 		.attr("stroke-width", 3)
 		.attr ("marker-end", "url(\#arrow)")
 		.transition()
@@ -242,13 +265,13 @@ var loadTemporal = function (jsonData){
 		.styleTween("opacity", function() {return d3.interpolate(0, .5);})
 
 //		svg.append("g").attr("class", "guide").append("line").attr("x1",
-//				+circle.attr("cx") - 16).attr("x2", 0).attr("y1",
-//						circle.attr("cy")).attr("y2", circle.attr("cy"))
-//						.attr("transform", "translate(40,30)").style("stroke",
-//								circle.style("fill")).transition().delay(200).duration(400)
-//								.styleTween("opacity", function() {
-//											return d3.interpolate(0, .5);
-//								});
+//		+circle.attr("cx") - 16).attr("x2", 0).attr("y1",
+//		circle.attr("cy")).attr("y2", circle.attr("cy"))
+//		.attr("transform", "translate(40,30)").style("stroke",
+//		circle.style("fill")).transition().delay(200).duration(400)
+//		.styleTween("opacity", function() {
+//		return d3.interpolate(0, .5);
+//		});
 
 		// function to move mouseover item to front of SVG stage, in case
 		// another bubble overlaps it
@@ -342,31 +365,31 @@ var loadTemporal = function (jsonData){
 
 	svg.append("g")         
 	.attr("class", "grid")
-	.attr("transform", "translate(" + margin.l + "," + margin.t + ")")
+    .attr("transform", "translate(" + margin.l + "," + margin.t + ")")	
 	.call(make_y_axis()
 			.tickSize(-w, 0, 0)
 			.tickFormat("")
 	)
-	
+
 //	svg.append("svg:defs")
-//	 .append("svg:marker")
-//	  .attr("id", "arrow")
-//	  .attr("viewBox", "0 0 10 10")
-//	  .attr("refX", 27)
-//	  .attr("refY", 5)
-//	  .attr("markerUnits", "strokeWidth")
-//	  .attr("markerWidth", 8)
-//	  .attr("markerHeight", 6)
-//	  .attr("orient", "auto")
-//	  .append("svg:path")
-//	  .attr("d", "M 0 0 L 10 5 L 0 10 z")
-//
+//	.append("svg:marker")
+//	.attr("id", "arrow")
+//	.attr("viewBox", "0 0 10 10")
+//	.attr("refX", 27)
+//	.attr("refY", 5)
+//	.attr("markerUnits", "strokeWidth")
+//	.attr("markerWidth", 8)
+//	.attr("markerHeight", 6)
+//	.attr("orient", "auto")
+//	.append("svg:path")
+//	.attr("d", "M 0 0 L 10 5 L 0 10 z")
+
 //	svg.append("line")
-//	 .attr ("x1", 5) 
-//	 .attr ("x2", 50) 
-//	 .attr ("y1", 5)
-//	 .attr ("y2", 50)
-//	 .style ("stroke", "black")
-//	 .attr ("stroke-width", 2)
-//	 .attr ("marker-end", "url(\#arrow)")
+//	.attr ("x1", 5) 
+//	.attr ("x2", 50) 
+//	.attr ("y1", 5)
+//	.attr ("y2", 50)
+//	.style ("stroke", "black")
+//	.attr ("stroke-width", 2)
+//	.attr ("marker-end", "url(\#arrow)")
 }

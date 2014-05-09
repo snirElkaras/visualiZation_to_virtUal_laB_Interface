@@ -5064,7 +5064,7 @@
 		</source>
 		<recipient>
 			<flask>
-				<id>22</id>
+				<id>3</id>
 				<name><![CDATA[Solution C]]></name>
 				<temp scale="K">298.15</temp>
 				<volume units="L">0.1</volume>
@@ -5104,7 +5104,7 @@
 		</recipient>
 		<result>
 			<flask>
-				<id>22</id>
+				<id>3</id>
 				<name><![CDATA[Solution C]]></name>
 				<temp scale="K">298.15</temp>
 				<volume units="L">0.2</volume>
@@ -5750,7 +5750,7 @@
 		<volume units="L">0.1</volume>
 		<source>
 			<flask>
-				<id>24</id>
+				<id>2</id>
 				<name><![CDATA[Solution A]]></name>
 				<temp scale="K">298.15</temp>
 				<volume units="L">0.1</volume>

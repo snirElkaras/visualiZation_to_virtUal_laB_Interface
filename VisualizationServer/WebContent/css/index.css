@@ -14,6 +14,15 @@ body {
 	padding: 10px 0px 0px 20px;
 }
 
+#form{
+	display: inline-block;
+}
+
+#errorNotification{
+	color: red;
+	display: none;
+}
+
 #footer {
 	width: 100%;
 	height: 15%;

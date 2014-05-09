@@ -88,7 +88,8 @@ public class UploadServlet extends HttpServlet {
 						out.println(jsonAns.toString());
 
 					} else { // unknown file extension
-						response.setHeader("fileExt", "unknown");
+						response.setStatus(400);
+						response.setHeader("invalidFile", "Invalid file type");
 						JSONObject jsonAns = new JSONObject();
 						out.println(jsonAns.toString());						
 					}
@@ -97,7 +98,10 @@ public class UploadServlet extends HttpServlet {
 				}
 			}
 		}catch(Exception ex) {
-			System.out.println(ex);
+			response.setStatus(400);
+			response.setHeader("invalidFile", "Corrupted file");
+			JSONObject jsonAns = new JSONObject();
+			out.println(jsonAns.toString());		
 		}
 	}
 	public void doGet(HttpServletRequest request, 
