@@ -421,7 +421,7 @@ loadTree = function(data) {
 				"scd: ".bold().fontsize(2.8) + d.information.scdDesc + "<BR/>" + 
 				"dcd: ".bold().fontsize(2.8) + d.information.dcdDesc + "<BR/>" + 
 				"rcd: ".bold().fontsize(2.8) + d.information.rcdDesc + "<BR/>" + 
-				"vol: ".bold().fontsize(2.8) + d.information.totalVol + "<BR/>" + 
+				"vol: ".bold().fontsize(2.8) + d.information.volume + "<BR/>" + 
 				"action: ".bold().fontsize(2.8) + action + " <BR/>" + 
 		"</p>");
 	}

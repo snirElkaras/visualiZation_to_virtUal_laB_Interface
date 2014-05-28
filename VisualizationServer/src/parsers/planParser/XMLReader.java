@@ -599,6 +599,9 @@ public class XMLReader {
                     String attName = att.getNodeName();
                     String attValue = att.getNodeValue();
 
+                    if (attName == "vol"){
+                    	ans.information.volume = attValue;
+                    }
                     //if (attName == "pos")
                     //ans.information.pos = Integer.parseInt(attValue);
                 }
@@ -676,6 +679,9 @@ public class XMLReader {
                     String attName = att.getNodeName();
                     String attValue = att.getNodeValue();
 
+                    if (attName == "vol"){
+                    	ans.information.volume = attValue;
+                    }
                     //if (attName == "pos")
                     //ans.information.pos = Integer.parseInt(attValue);
                 }
@@ -702,6 +708,7 @@ public class XMLReader {
 
                 if (attName == "vol") {
                     ans.information.totalVol = Double.parseDouble(attValue.substring(attValue.indexOf("create") + 7));
+                    ans.information.volume = attValue;
                     volFromSource = Double.parseDouble(attValue.substring(0, attValue.indexOf(" /")));
                 }
 

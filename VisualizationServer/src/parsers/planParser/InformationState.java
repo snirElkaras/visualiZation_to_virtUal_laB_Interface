@@ -17,6 +17,7 @@ public class InformationState {
 	double srcAmount_D;
 	
 	double totalVol;
+	String volume;
 	
 	boolean hasReaction;
 	boolean isReasonable;
@@ -75,7 +76,8 @@ public class InformationState {
         rcdDesc = "";
         ids = "";
         color = "Black";        
-        isDirectChildOfRoot = false;        
+        isDirectChildOfRoot = false;   
+        volume = "";
 		
 	}
         
