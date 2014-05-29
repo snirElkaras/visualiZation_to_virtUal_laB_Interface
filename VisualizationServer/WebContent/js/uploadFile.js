@@ -44,11 +44,13 @@ function upload(file) {
 				loadTree(data);
 				removeListener();
 				displayDetailsPlan();
+				styleAfterLoading();
 				break;
 			case "log":
 				loadTemporal(data);
 				removeListener();
 				displayDetailsTemporal();
+				styleAfterLoading();
 				break;
 			default:
 				console.info("unknown file extension");
@@ -95,7 +97,51 @@ var displayDetailsTemporal = function(){
 }
 
 var displayDetails = function(typeID){
+	$("#container").css("display", "inline-block");
 	$("#footer").css("display", "inline-block");
 	$(typeID).css("display", "inline-block");
 	$("#footer").css("display", "inline-block");
+}
+
+var chooseFileButton = function(){
+	removeErrorNotification();
+	$("#chooseFile").click();
+    setInterval(intervalFunc, 1);
+}
+
+var submitFileButton = function(){
+	if($('#chooseFile').val()==""){
+		uploadFailed("Please select a file");
+	}
+	else{
+		$("#submitFile").click();
+	}
+}
+
+var intervalFunc = function () {
+	$('#inputTextFile').html($('#chooseFile').val());
+}
+
+var styleAfterLoading = function(){
+	$("#subTitle")
+		.css('display', 'inline-block')
+		.css('position', 'absolute')
+		.css('padding-top', '18px')
+		.css('padding-left', '31px');
+	$("#mainScreenContainer")
+		.css('display', 'inline')
+		.css('position', 'inherit')
+		.css('margin', '0px')
+		.css('top', '0%')
+		.css('left', '0%');
+	$("#title")
+			.css('display', 'inline-block')
+			.css('margin', '0px')
+			.css('height', '100px');
+	$("#errorNotification")
+			.css('margin-left', '0px')
+			.css('position', 'absolute')
+			.css('padding-top', '80px')
+			.css('padding-left', '31px');
+
 }

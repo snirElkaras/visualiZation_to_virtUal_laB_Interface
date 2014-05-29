@@ -35,34 +35,48 @@
 </head>
 
 
-<body>
-	<div>
-		<div id="title">Virtual Labs Visualization</div>
+<body class="backgroundColor">
+	<div id="mainScreenContainer">
+		<img src="img/flask.png" id="title">
 		<div id="subTitle">
-			<form id="form" enctype="multipart/form-data" name="fileinfo">
-				<input type="file" name="file" id="chooseFile" required /> <input
-					type="submit" />
-			</form>
-			<div id="errorNotification">upload fail</div>
-		</div>
-		<hr id="line">
-		<div id="container">
-			<div id="viewContainer"></div>
-			<div id="footer">
-				<div id="details"></div>
-				<div id="buttonsPlan">
-					<button class="buttonStyle" id="expandButton">Expand All</button>
-					<button class="buttonStyle" id="collapseButton">Collapse All</button>
+			<a href="javascript:void(0)" onclick="chooseFileButton()">
+				<div style="display: inline-block;">
+					<img src="img/folderIcon.png" id="choodeFileIcon" height="42px" width="42px">
+					<div>Choose File</div>
 				</div>
-				<div id="indexTemporal">
-					<div>
-						<div class="circle" id="srcIcon"></div>
-						<div class="indexTitle">Source Flask</div>
-					</div>
-					<div>
-						<div class="circle" id="trgIcon"></div>
-						<div class="indexTitle">Target Flask</div>
-					</div>
+			</a>
+			<a href="javascript:void(0)" onclick="chooseFileButton()">
+				<div id="inputTextFile" class="backgroundColor">No file chosen</div>
+			</a>
+			<a href="javascript:void(0)" onclick="submitFileButton()">
+				<div style="display: inline-block;">
+					<img src="img/submitIcon.png" id="submitIcon" height="42px" width="42px">
+					<div>Submit</div>
+				</div>
+			</a>
+		</div>
+		<div id="errorNotification">upload fail</div>	
+		<form id="form" enctype="multipart/form-data" name="fileinfo">
+				<input type="file" name="file" id="chooseFile" required/> 
+				<input type="submit" id="submitFile"/>
+		</form>
+	</div>
+	<div id="container">
+		<div id="viewContainer"></div>
+		<div id="footer">
+			<div id="details"></div>
+			<div id="buttonsPlan">
+				<button class="buttonStyle" id="expandButton">Expand All</button>
+				<button class="buttonStyle" id="collapseButton">Collapse All</button>
+			</div>
+			<div id="indexTemporal">
+				<div>
+					<div class="circle" id="srcIcon"></div>
+					<div class="indexTitle">Source Flask</div>
+				</div>
+				<div>
+					<div class="circle" id="trgIcon"></div>
+					<div class="indexTitle">Target Flask</div>
 				</div>
 			</div>
 		</div>

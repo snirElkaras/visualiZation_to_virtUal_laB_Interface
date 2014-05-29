@@ -39,9 +39,10 @@ var loadTemporal = function (jsonData){
 
 
 	var svgBase = d3.select("#viewContainer").append("svg").call(zoomListener);
+	svgBase.attr("width", window.innerWidth).attr("height",window.innerHeight)
 
 	var svg = svgBase.append("g");
-
+	
 	svg.attr("transform", "scale(0.91)");
 	zoomListener.scale(0.91);
 
