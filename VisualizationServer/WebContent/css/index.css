@@ -16,7 +16,7 @@ body {
 	height: 200px;
 }
 
-#choodeFileIcon {
+#chooseFileIcon {
 	margin-left: auto;
 	margin-right: auto;
 	display: block
@@ -73,10 +73,10 @@ a {
 
 #footer {
 	width: 100%;
-	height: 15%;
 	display: none;
 	position: absolute;
-	bottom: 10px;
+	background-color: white;
+	height: 10%;
 }
 
 #header {
@@ -95,7 +95,7 @@ a {
 }
 
 #viewContainer {
-	height: 435px;
+	height: 415px;
 }
 
 #details {

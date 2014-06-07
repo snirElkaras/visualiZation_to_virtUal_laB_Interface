@@ -124,24 +124,27 @@ var intervalFunc = function () {
 
 var styleAfterLoading = function(){
 	$("#subTitle")
-		.css('display', 'inline-block')
+		.css('display', 'inline-table')
 		.css('position', 'absolute')
 		.css('padding-top', '18px')
 		.css('padding-left', '31px');
 	$("#mainScreenContainer")
-		.css('display', 'inline')
+		.css('width', '100%')
 		.css('position', 'inherit')
 		.css('margin', '0px')
 		.css('top', '0%')
-		.css('left', '0%');
+		.css('left', '0%')
+		.addClass("backgroundColor");
 	$("#title")
 			.css('display', 'inline-block')
 			.css('margin', '0px')
 			.css('height', '100px');
 	$("#errorNotification")
 			.css('margin-left', '0px')
-			.css('position', 'absolute')
-			.css('padding-top', '80px')
+			.css('position', 'inherit')
+			.css('bottom', '0px')
 			.css('padding-left', '31px');
+	$("body")
+			.removeClass("backgroundColor");
 
 }
