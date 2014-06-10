@@ -114,7 +114,7 @@ loadTree = function(data) {
 		});
 	}
 	// Sort the tree initially incase the JSON isn't in a sorted order.
-	sortTree();
+	//sortTree();
 
 	// TODO: Pan function, can be better implemented.
 
@@ -402,16 +402,19 @@ loadTree = function(data) {
 	}
 
 	function mouseenter(d) {
-		if (d.name == "root"){
-			if ($("#detailsP") != null) 
-				$("#detailsP").remove();
-			return;
-		}
+
 		var size = $(document).height()*0.25;
 		//	$("#details").attr("style", "border:1px solid; background-color:  pink; " +
 		//			"max-height: " + size + "px; overflow: scroll;");
 		if ($("#detailsP") != null) 
 			$("#detailsP").remove();
+		if (d.name == "root"){
+			$("#details").append("<p id=detailsP> " +  
+					"answer: ".bold().fontsize(2.8) + d.answer + "<BR/>" + 
+					"probName: ".bold().fontsize(2.8) + d.probName + "<BR/>" + 
+			"</p>");
+			return;
+		}
 		var action = "none";
 		if (d.children) {
 			action = "mix";

@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.json.JSONObject;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 
 import parsers.IParse;
 
@@ -30,7 +32,10 @@ public class PlanViewParser implements IParse {
 	@Override
 	public JSONObject parse(String fileContent) {
 		Gson gson = new Gson();
-		List<State> stateList = XMLReader.checkReasonable(fileContent);
+		CheckReasonableResult crResult;
+		crResult = 	XMLReader.checkReasonable(fileContent);
+		List<State> stateList = crResult.getListOfStates();
+		Node root = crResult.getRoot();
 		List<StateToJson> jsonStateList = new ArrayList<StateToJson>();
 		int index = 0;
 		for (Iterator iterator = stateList.iterator(); iterator.hasNext();) {
@@ -46,10 +51,18 @@ public class PlanViewParser implements IParse {
 			index++;
 		}
 		boolean inQuote = false;
+
 		String s = gson.toJson(jsonStateList);
 		StringBuilder sb = new StringBuilder();
 		sb.append("{\n");
 		sb.append("\t\"name\": \"root\",\n");
+		NamedNodeMap attributeMap = root.getAttributes();
+		for (int i = 0; i < attributeMap.getLength(); i++) {
+			Node att = attributeMap.item(i);
+			String attName = att.getNodeName();
+			String attValue = att.getNodeValue();
+			sb.append("\t\"" + attName + "\": \"" + attValue + "\",\n");
+		}
 		sb.append("\t\"children\": ");
 		int indent = 1;
 		for (int i = 0; i < s.length(); i++) {
