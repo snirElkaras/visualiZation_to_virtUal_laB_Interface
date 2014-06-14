@@ -66,7 +66,7 @@ public class SolutionMix extends VirtualLabAction{
 		response.put("readableSrc", source.createReadable());
 		response.put("readableRcp", recipient.createReadable());
 		response.put("readableRes", result.createReadable());
-		} catch (JSONException e) {
+		} catch (JSONException | NullPointerException e ) {
 			return null;
 		}
 		return response;

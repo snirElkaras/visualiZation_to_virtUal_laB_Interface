@@ -46,7 +46,7 @@ public class WorkbenchAddFlask extends VirtualLabAction{
 			response.put("workbench_id", workbench_id);
 			response.put("flask", flask.toJson());
 			response.put("readable", readable);
-		} catch (JSONException e) {
+		} catch (JSONException | NullPointerException e) {
 			return null;
 		}
 		return response;
