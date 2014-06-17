@@ -379,6 +379,9 @@ var loadTemporal = function (jsonData){
 			img = "img/cylinder.png"; 
 		} else if (type.indexOf("carboy")>-1){
 			img = "img/carboy.png"; 
+		} else if (type.indexOf("pipet")>-1){
+			img = "img/pipet.png";
+			capacity = "";
 		}
 		
 		return {"capacity" : capacity, "img": img}
