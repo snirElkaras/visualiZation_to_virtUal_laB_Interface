@@ -157,8 +157,13 @@ var loadTemporal = function (jsonData){
 		},
 		resToDisplay : function(d) {
 			return d.readableRes;
+		},
+		srcFlaskType : function(d) {
+			return d.source_flask.vesselType;
+		},
+		trgFlaskType : function(d) {
+			return d.recipient_flask.vesselType;
 		}
-
 	}).style("fill", "orange");
 
 //	style the circles, set their locations based on data
@@ -194,6 +199,12 @@ var loadTemporal = function (jsonData){
 		},
 		resToDisplay : function(d) {
 			return d.readableRes;
+		},
+		srcFlaskType : function(d) {
+			return d.source_flask.vesselType;
+		},
+		trgFlaskType : function(d) {
+			return d.recipient_flask.vesselType;
 		}
 	}).style("fill", "blue");
 
@@ -309,31 +320,6 @@ var loadTemporal = function (jsonData){
 		gravity : 's',
 	});
 
-//	var src = [ "source", "target" ];
-////	the legend color guide
-//	var legend = svg.selectAll("rect").data(src).enter()
-//	.append("rect").attr({
-//		x : function(d, i) {
-//			return (40 + i * 80);
-//		},
-//		y : h+20,
-//		width : 25,
-//		height : 12
-//	}).style("fill", function(d) {
-//		return d=="source"? "blue" : "orange";
-//	});
-//
-////	// legend labels
-//	svg.selectAll("text").data(src).enter().append("text")
-//	.attr({
-//		x : function(d, i) {
-//			return (40 + i * 80);
-//		},
-//		y : h +44,
-//	}).text(function(d) {
-//		return d;
-//	});
-
 //	draw axes and axis labels
 	svg.append("g").attr("class", "x axis").attr("transform",
 			"translate(" + margin.l + "," + (h - 60 + margin.t) + ")").call(
@@ -369,11 +355,28 @@ var loadTemporal = function (jsonData){
 	)
 	
 	var displayDetailsOfNode = function(node) {
-		var toDisplay = "<div><div id='amountKey'><b>Amount : </b></div><div style='display:inline-block;'>" + node.getAttribute("amountToDisplay") + "</div></div>";
-		toDisplay += "<div><div id='srcKey'><b>Source Flask : </b></div><div style='display:inline-block;'>" + node.getAttribute("srcToDisplay") + "</div></div>";
-		toDisplay += "<div><div id='trgKey'><b>Recipient Flask : </b></div><div style='display:inline-block;'>" + node.getAttribute("trgToDisplay") + "</div></div>";
-		toDisplay += "<div><div id='resKey'><b>Result : </b></div><div style='display:inline-block;'>" + node.getAttribute("resToDisplay") + "</div></div>";
-		return toDisplay;		
+		var src = parseFlaskType(node.getAttribute("srcFlaskType"));
+		var trg = parseFlaskType(node.getAttribute("trgFlaskType"));
+		
+		var toDisplay = "<div style='min-height:30px'><div style='width:45px; float:left'><img src='img/amount.png' style='width:20px;'></div><div><div id='amountKey' style='float:left'><b>Amount : </b></div><div>" + node.getAttribute("amountToDisplay") + "</div></div></div>";
+		toDisplay += "<div style='min-height:45px'><div style='width: 45px; height:42px; float:left'><img style='width:20px; margin-left:5px' src='"+src.img+"'><div style='font-size:10px'>"+src.capacity+"</div></div><div><div id='srcKey'><b>Source Flask : </b></div><div>" + node.getAttribute("srcToDisplay") + "</div></div></div>";
+		toDisplay += "<div style='min-height:45px'><div style='width: 45px; height:42px; float:left'><img style='width:20px; margin-left:5px' src='"+trg.img+"'><div style='font-size:10px'>"+trg.capacity+"</div></div><div><div id='trgKey'><b>Recipient Flask : </b></div><div>" + node.getAttribute("trgToDisplay") + "</div></div></div>";
+		toDisplay += "<div style='min-height:45px'><div style='width: 45px; height:42px; float:left'><img style='width:35px;' src='img/result_flask.png'></div><div><div id='resKey'><b>Result : </b></div><div>" + node.getAttribute("resToDisplay") + "</div></div></div>";
+		return toDisplay;	
+		
+	}
+	
+	var parseFlaskType = function(flask){
+		var tokens = flask.split(" ");
+		var capacity = tokens[0];
+		var type = tokens[1].toLowerCase();
+		var img = "img/regular.png"; 
+		if(type.indexOf("beaker")>-1){
+			img = "img/beaker.png"; 
+		} else if (type.indexOf("erlenmeyer")>-1){
+			img = "img/erlenmeyer.png"; 
+		}
+		return {"capacity" : capacity, "img": img}
 	}
 }
 

@@ -42,3 +42,7 @@ body {
 .grid path {
 	stroke-width: 0;
 }
+
+.detailsAlignment{
+	margin-left: 45px
+}
