@@ -375,7 +375,12 @@ var loadTemporal = function (jsonData){
 			img = "img/beaker.png"; 
 		} else if (type.indexOf("erlenmeyer")>-1){
 			img = "img/erlenmeyer.png"; 
+		} else if (type.indexOf("graduated")>-1){
+			img = "img/cylinder.png"; 
+		} else if (type.indexOf("carboy")>-1){
+			img = "img/carboy.png"; 
 		}
+		
 		return {"capacity" : capacity, "img": img}
 	}
 }
