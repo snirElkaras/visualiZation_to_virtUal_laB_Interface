@@ -69,7 +69,7 @@ public class XMLReader {
 					//let's check which of the states are reasonable
 					firstReaction = checkReasonableAndReaction(s, firstReaction);
 					s.information.isDirectChildOfRoot = true;
-					paintTreeNodes(s);
+					
 					if (s.information.hasReaction == true) {
 						if (firstReaction == false) {
 							firstReaction = true;
@@ -144,6 +144,7 @@ public class XMLReader {
 			 *
 			 * }
 			 */
+						
 			return new CheckReasonableResult(root, listOfStates);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -399,12 +400,12 @@ public class XMLReader {
 				if (firstReactionOccured) {
 					s.information.color = "Red";
 				}
-		if (s.hasFirstChild()){
+/*		if (s.hasFirstChild()){
 			paintTreeNodes(s.getFirstChild());
 		}
 		if (s.hasSecondChild()){
 			paintTreeNodes(s.getSecondChild());
-		}
+		} */
 
 	}
 
@@ -608,6 +609,9 @@ public class XMLReader {
 				}
 
 				ans.information.hasReaction = checkReacion(ans);
+				if (ans.information.hasReaction){
+					ans.information.reactionEquation = ans.get_reaction_equation();
+				}
 
 			} else {
 				//there are two children
@@ -688,6 +692,9 @@ public class XMLReader {
 				}
 
 				ans.information.hasReaction = checkReacion(ans);
+				if (ans.information.hasReaction){
+					ans.information.reactionEquation = ans.get_reaction_equation();
+				}
 			}
 		} else {
 			//there is no children
@@ -751,7 +758,11 @@ public class XMLReader {
 
 
 				if (attName == "pos") {
-					ans.information.pos = Integer.parseInt(attValue);
+					if (attValue.equals("")){
+						ans.information.pos = 999;
+					} else {
+						ans.information.pos = Integer.parseInt(attValue);
+					}
 				}
 
 				if (attName == "IDs") {
@@ -775,7 +786,9 @@ public class XMLReader {
 
 			//check if there was a reaction
 			ans.information.hasReaction = checkReacion(ans);
-
+			if (ans.information.hasReaction){
+				ans.information.reactionEquation = ans.get_reaction_equation();
+			}
 			//System.out.println(node.getNodeName());
 		}
 
@@ -796,8 +809,17 @@ public class XMLReader {
 			//System.out.println("amount of" + solType + " is: " + amount);
 
 			//let's evaluate the amount to number
+			int indexOfE = amount.indexOf("E");
+			if (indexOfE == -1){
+				ans = Double.parseDouble(amount.substring(0,amount.indexOf("g")));
+				return ans;
+			}
 			double numAmount = Double.parseDouble(amount.substring(0, amount.indexOf("E")));
-			double numOfZeros = Double.parseDouble(amount.substring(amount.indexOf("E") + 1, amount.indexOf("M")));
+			int indexOfMOrG = amount.indexOf("M");
+			if (indexOfMOrG == -1) {
+				indexOfMOrG = amount.indexOf("g");
+			}
+			double numOfZeros = Double.parseDouble(amount.substring(amount.indexOf("E") + 1, indexOfMOrG));
 			if (-numOfZeros <= 15) {
 				ans = numAmount / (Math.pow(10, -numOfZeros));
 			} else {
@@ -857,7 +879,8 @@ public class XMLReader {
 		return numOfStates;
 	}
 
-	public static boolean checkReasonableAndReaction(State s, boolean firstReactionOccured) {
+	public static boolean checkReasonableAndReaction(State s, boolean firstReaction) {
+		
 		if (!s.hasFirstChild() && !s.hasSecondChild()) {
 			if (s.information.hasReaction) {
 				if (firstReactionOccured == false) {
@@ -877,18 +900,19 @@ public class XMLReader {
 			boolean firsthasChildrenWithReaction = false;
 			boolean secondhasChildrenWithReaction = false;
 			if (s.hasFirstChild()) {
-				firstReactionOccured = checkReasonableAndReaction(s.firstChild, firstReactionOccured);
+				firstReaction = checkReasonableAndReaction(s.firstChild, firstReaction);
 				firstReasonable = s.firstChild.information.isReasonable;
 				firsthasChildrenWithReaction = s.firstChild.information.hasChildrenWithReaction;
 			}
 			if (s.hasSecondChild()) {
-				firstReactionOccured = checkReasonableAndReaction(s.secondChild, firstReactionOccured);
+				firstReaction = checkReasonableAndReaction(s.secondChild, firstReaction);
 				secondReasonable = s.secondChild.information.isReasonable;
 				secondhasChildrenWithReaction = s.secondChild.information.hasChildrenWithReaction;
 			}
 			s.information.isReasonable = firstReasonable || secondReasonable;
 			s.information.hasChildrenWithReaction = firsthasChildrenWithReaction || secondhasChildrenWithReaction;
 		}
+		paintTreeNodes(s);
 		return firstReactionOccured;
 	}
 
@@ -928,9 +952,7 @@ public class XMLReader {
 				}
 			}
 		}
-		if (ans == true && firstReactionOccured == false){
-			firstReactionOccured = true;
-		}
+
 		return ans;
 	}
 

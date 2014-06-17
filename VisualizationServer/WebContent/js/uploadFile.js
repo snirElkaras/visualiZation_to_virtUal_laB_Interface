@@ -119,7 +119,7 @@ var submitFileButton = function(){
 }
 
 var intervalFunc = function () {
-	$('#inputTextFile').html($('#chooseFile').val());
+	$('#inputTextFile').html($('#chooseFile').val().substring(12));
 }
 
 var styleAfterLoading = function(){

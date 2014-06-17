@@ -84,8 +84,8 @@ public class State {
     }
 
     public String get_reaction_equation() {
-        String before_reaction = "{ ";
-        String after_reaction = "{ ";
+        String before_reaction = "( ";
+        String after_reaction = "( ";
         double basic_unit;
         double ratio_A, ratio_B, ratio_C, ratio_D;
         double diff_A, diff_B, diff_C, diff_D;
@@ -125,9 +125,9 @@ public class State {
         } else if (diff_D > 0) {
             after_reaction += get_metrial_ratio_in_reaction_equation(diff_D, basic_unit) + "D + ";
         }
-        before_reaction = before_reaction.substring(0, before_reaction.length() - 2) + "}";
-        after_reaction = after_reaction.substring(0, after_reaction.length() - 2) + "}";
-        return before_reaction + " -> " + after_reaction;
+        before_reaction = before_reaction.substring(0, before_reaction.length() - 2) + ")";
+        after_reaction = after_reaction.substring(0, after_reaction.length() - 2) + ")";
+        return before_reaction + " --> " + after_reaction;
     }
 
     public String getComponent_Actually() {

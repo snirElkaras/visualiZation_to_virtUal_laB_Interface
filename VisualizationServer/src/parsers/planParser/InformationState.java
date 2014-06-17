@@ -26,6 +26,7 @@ public class InformationState {
 	String color;
 	boolean isDirectChildOfRoot;
 	int pos;
+	String reactionEquation;
         
         @Override
 	public String toString() {
@@ -78,6 +79,7 @@ public class InformationState {
         color = "Black";        
         isDirectChildOfRoot = false;   
         volume = "";
+        reactionEquation = "";
 		
 	}
         
@@ -108,6 +110,16 @@ public class InformationState {
 	
 	public String getColor(){
 		return color;
+	}
+
+
+	public String getReactionEquation() {
+		return reactionEquation;
+	}
+
+
+	public void setReactionEquation(String reactionEquation) {
+		this.reactionEquation = reactionEquation;
 	}
 	
 }

@@ -353,6 +353,96 @@ loadTree = function(data) {
 //	};
 
 	// Function to center node when clicked/dropped so node doesn't get lost when collapsing/moving with large amount of children.
+	function getNodeName(d){
+		var nodeName = "";
+		var hasPlus = false;
+		if (d.information.hasReaction) {
+			if (d.information.amount_A > 0){
+				nodeName = nodeName + "A+";
+				hasPlus = true;
+			}
+			if (d.information.amount_B > 0){
+				nodeName = nodeName + "B+";
+				hasPlus = true;
+			}           		
+			if (d.information.amount_C > 0){
+				nodeName = nodeName + "C+";
+				hasPlus = true;
+			}     
+			if (d.information.amount_D > 0){
+				nodeName = nodeName + "D+";
+				hasPlus = true;
+			}     
+			if (hasPlus == true) {
+				nodeName = nodeName.substring(0, nodeName.length-1);
+			}
+			nodeName = "{" + nodeName + "} -> {";
+			if (d.information.actualAmount_A > 0){
+				nodeName = nodeName + "A+";
+				hasPlus = true;
+			}
+			if (d.information.actualAmount_B > 0){
+				nodeName = nodeName + "B+";
+				hasPlus = true;
+			}           		
+			if (d.information.actualAmount_C > 0){
+				nodeName = nodeName + "C+";
+				hasPlus = true;
+			}     
+			if (d.information.actualAmount_D > 0){
+				nodeName = nodeName + "D+";
+				hasPlus = true;
+			}     
+			if (hasPlus == true) {
+				nodeName = nodeName.substring(0, nodeName.length-1);
+			}      
+			nodeName = nodeName + "}";
+
+		} else 
+			if (d.children || d._children){
+				if (d.information.actualAmount_A > 0){
+					nodeName = nodeName + "A+";
+					hasPlus = true;
+				}
+				if (d.information.actualAmount_B > 0){
+					nodeName = nodeName + "B+";
+					hasPlus = true;
+				}           		
+				if (d.information.actualAmount_C > 0){
+					nodeName = nodeName + "C+";
+					hasPlus = true;
+				}     
+				if (d.information.actualAmount_D > 0){
+					nodeName = nodeName + "D+";
+					hasPlus = true;
+				}     
+				if (hasPlus == true) {
+					nodeName = nodeName.substring(0, nodeName.length-1);
+				}
+			} else {
+				if (d.information.srcAmount_A > 0){
+					nodeName = nodeName + "A+";
+					hasPlus = true;
+				}
+				if (d.information.srcAmount_B > 0){
+					nodeName = nodeName + "B+";
+					hasPlus = true;
+				}           		
+				if (d.information.srcAmount_C > 0){
+					nodeName = nodeName + "C+";
+					hasPlus = true;
+				}     
+				if (d.information.srcAmount_D > 0){
+					nodeName = nodeName + "D+";
+					hasPlus = true;
+				}     
+				if (hasPlus == true) {
+					nodeName = nodeName.substring(0, nodeName.length-1);
+				}
+			}
+		
+		return nodeName;
+	}
 
 	function centerNode(source) {
 		scale = zoomListener.scale();
@@ -419,11 +509,19 @@ loadTree = function(data) {
 		if (d.children) {
 			action = "mix";
 		}
-		$("#details").append("<p id=detailsP> " +  "pos: ".bold().fontsize(2.8) + d.information.pos + "<BR/>" + 
+		var equation = "";
+		if (d.information.reactionEquation != "") {
+			equation = 	d.information.reactionEquation.bold().fontsize(3.5);
+		} else {
+			equation = 	getNodeName(d).bold().fontsize(3.5);
+		}
+		$("#details").append("<p id=detailsP> " + 
+				equation + "<BR/>" + 
+				"pos: ".bold().fontsize(2.8) + d.information.pos + "<BR/>" + 
 				"IDs: ".bold().fontsize(2.8) + d.information.ids + "<BR/>" + 
-				"scd: ".bold().fontsize(2.8) + d.information.scdDesc + "<BR/>" + 
-				"dcd: ".bold().fontsize(2.8) + d.information.dcdDesc + "<BR/>" + 
-				"rcd: ".bold().fontsize(2.8) + d.information.rcdDesc + "<BR/>" + 
+				"scd: ".bold().fontsize(2.8).fontcolor("blue") + d.information.scdDesc + "<BR/>" + 
+				"dcd: ".bold().fontsize(2.8).fontcolor("orange") + d.information.dcdDesc + "<BR/>" + 
+				"rcd: ".bold().fontsize(2.8).fontcolor("green") + d.information.rcdDesc + "<BR/>" + 
 				"vol: ".bold().fontsize(2.8) + d.information.volume + "<BR/>" + 
 				"action: ".bold().fontsize(2.8) + action + " <BR/>" + 
 		"</p>");
@@ -433,6 +531,7 @@ loadTree = function(data) {
 
 	}
 
+		
 	function update(source) {
 		// Compute the new height, function counts total children of root node and sets tree height accordingly.
 		// This prevents the layout looking squashed when new nodes are made visible or looking sparse when nodes are removed
@@ -543,91 +642,7 @@ loadTree = function(data) {
 				return "Solve Problem";
 			}
 			var nodeName = "";
-			var hasPlus = false;
-			if (d.information.hasReaction) {
-				if (d.information.amount_A > 0){
-					nodeName = nodeName + "A+";
-					hasPlus = true;
-				}
-				if (d.information.amount_B > 0){
-					nodeName = nodeName + "B+";
-					hasPlus = true;
-				}           		
-				if (d.information.amount_C > 0){
-					nodeName = nodeName + "C+";
-					hasPlus = true;
-				}     
-				if (d.information.amount_D > 0){
-					nodeName = nodeName + "D+";
-					hasPlus = true;
-				}     
-				if (hasPlus == true) {
-					nodeName = nodeName.substring(0, nodeName.length-1);
-				}
-				nodeName = "{" + nodeName + "} -> {";
-				if (d.information.actualAmount_A > 0){
-					nodeName = nodeName + "A+";
-					hasPlus = true;
-				}
-				if (d.information.actualAmount_B > 0){
-					nodeName = nodeName + "B+";
-					hasPlus = true;
-				}           		
-				if (d.information.actualAmount_C > 0){
-					nodeName = nodeName + "C+";
-					hasPlus = true;
-				}     
-				if (d.information.actualAmount_D > 0){
-					nodeName = nodeName + "D+";
-					hasPlus = true;
-				}     
-				if (hasPlus == true) {
-					nodeName = nodeName.substring(0, nodeName.length-1);
-				}      
-				nodeName = nodeName + "}";
-
-			} else 
-				if (d.children || d._children){
-					if (d.information.actualAmount_A > 0){
-						nodeName = nodeName + "A+";
-						hasPlus = true;
-					}
-					if (d.information.actualAmount_B > 0){
-						nodeName = nodeName + "B+";
-						hasPlus = true;
-					}           		
-					if (d.information.actualAmount_C > 0){
-						nodeName = nodeName + "C+";
-						hasPlus = true;
-					}     
-					if (d.information.actualAmount_D > 0){
-						nodeName = nodeName + "D+";
-						hasPlus = true;
-					}     
-					if (hasPlus == true) {
-						nodeName = nodeName.substring(0, nodeName.length-1);
-					}
-				} else {
-					if (d.information.srcAmount_A > 0){
-						nodeName = nodeName + "A+";
-						hasPlus = true;
-					}
-					if (d.information.srcAmount_B > 0){
-						nodeName = nodeName + "B+";
-						hasPlus = true;
-					}           		
-					if (d.information.srcAmount_C > 0){
-						nodeName = nodeName + "C+";
-						hasPlus = true;
-					}     
-					if (d.information.srcAmount_D > 0){
-						nodeName = nodeName + "D+";
-						hasPlus = true;
-					}     
-					if (hasPlus == true) {
-						nodeName = nodeName.substring(0, nodeName.length-1);
-					}
-				}
+			nodeName = getNodeName(d);
 
 			return nodeName;
 		});
