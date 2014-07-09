@@ -43,7 +43,7 @@ public class Species {
 	}
 	
 	public String createReadable() {
-		return this.moles + "g of " + this.name;
+		return this.moles + " moles of " + this.name;
 	}
 	
 	public JSONObject toJson() {

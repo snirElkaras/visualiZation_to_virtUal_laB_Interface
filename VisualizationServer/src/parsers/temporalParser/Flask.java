@@ -65,7 +65,7 @@ public class Flask {
 		String spcs = sb.toString();
 		if(null != spcs && !spcs.equals("")){
 			spcs = sb.toString().substring(0, spcs.length()-2);
-			ans += " (" + this.name + spcs + ")";  
+			ans += " (" + spcs + ")";  
 		}
 		return ans;
 	}

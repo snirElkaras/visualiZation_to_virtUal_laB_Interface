@@ -32,7 +32,7 @@ public class UploadServlet extends HttpServlet {
 	private String filePath;
 	private int maxFileSize = 50 * 1024;
 	private int maxMemSize = 4 * 1024;
-	private File file ;
+	private File file;
 	private IParse parser;
 
 	public void init( ){

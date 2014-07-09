@@ -137,6 +137,12 @@ var loadTemporal = function (jsonData){
 		id : function(d) {
 			return d.recipient_flask.id;
 		},
+		idTrg : function(d) {
+			return d.recipient_flask.id;
+		},
+		idSrc : function(d) {
+			return d.source_flask.id;
+		},
 		event_id :  function(d) {
 			return d.event_id;
 		},
@@ -178,6 +184,12 @@ var loadTemporal = function (jsonData){
 		r : 8,
 		id : function(d) {
 			return d.source_flask.id;
+		},
+		idSrc : function(d) {
+			return d.source_flask.id;
+		},
+		idTrg : function(d) {
+			return d.recipient_flask.id;
 		},
 		event_id :  function(d) {
 			return d.event_id;
@@ -356,12 +368,13 @@ var loadTemporal = function (jsonData){
 	
 	var displayDetailsOfNode = function(node) {
 		var src = parseFlaskType(node.getAttribute("srcFlaskType"));
+		var srcId = parseFlaskType(node.getAttribute("srcFlaskType"));
 		var trg = parseFlaskType(node.getAttribute("trgFlaskType"));
 		
 		var toDisplay = "<div style='min-height:30px'><div style='width:45px; float:left'><img src='img/amount.png' style='width:20px;'></div><div><div id='amountKey' style='float:left'><b>Amount : </b></div><div>" + node.getAttribute("amountToDisplay") + "</div></div></div>";
-		toDisplay += "<div style='min-height:45px'><div style='width: 45px; height:42px; float:left'><img style='width:20px; margin-left:5px' src='"+src.img+"'><div style='font-size:10px'>"+src.capacity+"</div></div><div><div id='srcKey'><b>Source Flask : </b></div><div>" + node.getAttribute("srcToDisplay") + "</div></div></div>";
-		toDisplay += "<div style='min-height:45px'><div style='width: 45px; height:42px; float:left'><img style='width:20px; margin-left:5px' src='"+trg.img+"'><div style='font-size:10px'>"+trg.capacity+"</div></div><div><div id='trgKey'><b>Recipient Flask : </b></div><div>" + node.getAttribute("trgToDisplay") + "</div></div></div>";
-		toDisplay += "<div style='min-height:45px'><div style='width: 45px; height:42px; float:left'><img style='width:35px;' src='img/result_flask.png'></div><div><div id='resKey'><b>Result : </b></div><div>" + node.getAttribute("resToDisplay") + "</div></div></div>";
+		toDisplay += "<div style='min-height:45px'><div style='width: 45px; height:42px; float:left'><img style='width:20px; margin-left:5px' src='"+src.img+"'><div style='font-size:10px'>"+src.capacity+"</div></div><div><div id='srcKey'><b>Source Flask : (ID:"+ node.getAttribute("idSrc")+")</b></div><div>" + node.getAttribute("srcToDisplay") + "</div></div></div>";
+		toDisplay += "<div style='min-height:45px'><div style='width: 45px; height:42px; float:left'><img style='width:20px; margin-left:5px' src='"+trg.img+"'><div style='font-size:10px'>"+trg.capacity+"</div></div><div><div id='trgKey'><b>Recipient Flask : (ID:"+ node.getAttribute("idTrg")+")</b></div><div>" + node.getAttribute("trgToDisplay") + "</div></div></div>";
+		toDisplay += "<div style='min-height:45px'><div style='width: 45px; height:42px; float:left'><img style='width:35px;' src='img/result_flask.png'></div><div><div id='resKey'><b>Result : (ID:"+ node.getAttribute("idTrg")+")</b></div><div>" + node.getAttribute("resToDisplay") + "</div></div></div>";
 		return toDisplay;	
 		
 	}
