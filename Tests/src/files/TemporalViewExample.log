@@ -1,0 +1,167 @@
+<event>
+	<id>18</id>
+	<user>null</user>
+	<session>null</session>
+	<origin>IRYDIUM_VLAB</origin>
+	<timestamp timezone="America/New_York">
+		<date>2014-05-12</date>
+		<time>16:44:55</time>
+		<millis>1399927495536</millis>
+		<NTP>2014-05-12 16:45:19</NTP>
+	</timestamp>
+	<description type="SOLUTION_MIX">
+		<volume units="L">0.01</volume>
+		<source>
+			<flask>
+				<id>1</id>
+				<name><![CDATA[Solution A]]></name>
+				<temp scale="K">298.15</temp>
+				<volume units="L">0.1</volume>
+				<vessel>
+					<type>250mL Erlenmeyer Flask</type>
+					<volume units="L">0.2548</volume>
+				</vessel>
+				<species>
+					<id>0</id>
+					<name><![CDATA[H<sub>2</sub>O]]></name>
+					<moles>0.0</moles>
+					<mass units="g">0.0</mass>
+					<state>l</state>
+				</species>
+				<species>
+					<id>1</id>
+					<name><![CDATA[H<sup>+</sup>]]></name>
+					<moles>1.0048138305734867E-8</moles>
+					<mass units="g">1.0128523412180747E-8</mass>
+					<state>aq</state>
+				</species>
+				<species>
+					<id>2</id>
+					<name><![CDATA[OH<sup>-</sup>]]></name>
+					<moles>1.0048138305734867E-8</moles>
+					<mass units="g">1.708987363039386E-7</mass>
+					<state>aq</state>
+				</species>
+				<species>
+					<id>3</id>
+					<name><![CDATA[A]]></name>
+					<moles>0.1</moles>
+					<mass units="g">5.1000000000000005</mass>
+					<state>aq</state>
+				</species>
+			</flask>
+		</source>
+		<recipient>
+			<flask>
+				<id>3</id>
+				<name><![CDATA[250mL Beaker]]></name>
+				<temp scale="K">298.15</temp>
+				<volume units="L">0.0</volume>
+				<vessel>
+					<type>250mL Beaker</type>
+					<volume units="L">0.25893</volume>
+				</vessel>
+			</flask>
+		</recipient>
+		<result>
+			<flask>
+				<id>3</id>
+				<name><![CDATA[250mL Beaker]]></name>
+				<temp scale="K">298.15</temp>
+				<volume units="L">0.01</volume>
+				<vessel>
+					<type>250mL Beaker</type>
+					<volume units="L">0.25893</volume>
+				</vessel>
+				<species>
+					<id>0</id>
+					<name><![CDATA[H<sub>2</sub>O]]></name>
+					<moles>0.0</moles>
+					<mass units="g">0.0</mass>
+					<state>l</state>
+				</species>
+				<species>
+					<id>1</id>
+					<name><![CDATA[H<sup>+</sup>]]></name>
+					<moles>1.0048138305734869E-9</moles>
+					<mass units="g">1.0128523412180747E-9</mass>
+					<state>aq</state>
+				</species>
+				<species>
+					<id>2</id>
+					<name><![CDATA[OH<sup>-</sup>]]></name>
+					<moles>1.0048138305734869E-9</moles>
+					<mass units="g">1.7089873630393864E-8</mass>
+					<state>aq</state>
+				</species>
+				<species>
+					<id>3</id>
+					<name><![CDATA[A]]></name>
+					<moles>0.01</moles>
+					<mass units="g">0.51</mass>
+					<state>aq</state>
+				</species>
+			</flask>
+		</result>
+		<readable>0.01 L from 250mL Erlenmeyer Flask (ID1) that contains Solution A (0.0g of H<sub>2</sub>O, 1.0048138305734867E-7M of H<sup>+</sup>, 1.0048138305734867E-7M of OH<sup>-</sup>, 1.0M of A; V=0.1 mL,T=298.15K) is poured into 250mL Beaker (ID3) that contains 250mL Beaker (V=0.0 mL,T=298.15K). The resulting solution is 250mL Beaker (ID3) that contains 250mL Beaker (0.0g of H<sub>2</sub>O, 1.0048138305734868E-7M of H<sup>+</sup>, 1.0048138305734868E-7M of OH<sup>-</sup>, 1.0M of A; V=0.01 mL,T=298.15K).</readable>
+	</description>
+</event>
+<event>
+	<id>39</id>
+	<user>null</user>
+	<session>null</session>
+	<origin>IRYDIUM_VLAB</origin>
+	<timestamp timezone="America/New_York">
+		<date>2014-05-12</date>
+		<time>16:45:07</time>
+		<millis>1399927507413</millis>
+		<NTP>2014-05-12 16:45:30</NTP>
+	</timestamp>
+	<description type="WORKBENCH_ADD_COMPONENT">
+		<workbench>
+			<id>1</id>
+		</workbench>
+		<component type="FLASK">
+			<id>13</id>
+			<flask>
+				<id>13</id>
+				<name><![CDATA[Solution A]]></name>
+				<temp scale="K">298.15</temp>
+				<volume units="L">0.1</volume>
+				<vessel>
+					<type>250mL Erlenmeyer Flask</type>
+					<volume units="L">0.2548</volume>
+				</vessel>
+				<species>
+					<id>0</id>
+					<name><![CDATA[H<sub>2</sub>O]]></name>
+					<moles>0.0</moles>
+					<mass units="g">0.0</mass>
+					<state>l</state>
+				</species>
+				<species>
+					<id>1</id>
+					<name><![CDATA[H<sup>+</sup>]]></name>
+					<moles>1.0048138305734867E-8</moles>
+					<mass units="g">1.0128523412180747E-8</mass>
+					<state>aq</state>
+				</species>
+				<species>
+					<id>2</id>
+					<name><![CDATA[OH<sup>-</sup>]]></name>
+					<moles>1.0048138305734867E-8</moles>
+					<mass units="g">1.708987363039386E-7</mass>
+					<state>aq</state>
+				</species>
+				<species>
+					<id>3</id>
+					<name><![CDATA[A]]></name>
+					<moles>0.1</moles>
+					<mass units="g">5.1000000000000005</mass>
+					<state>aq</state>
+				</species>
+			</flask>
+		</component>
+		<readable>A 250mL Erlenmeyer Flask (ID13) is added to the workbench.</readable>
+	</description>
+</event>

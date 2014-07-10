@@ -1,0 +1,20 @@
+<ROOT answer="" probName="Oracle.xml">
+<DC IDs="from ID4 to ID5" dcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 4.84E-1M of A, 1.6E-25M of B, 1.61E-1M of C, 1.94E-1M of D" pos="10" rcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 3.75E-1M of A, 1.29E-25M of B, 1.25E-1M of C, 3.75E-1M of D" scd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 1E0M of D" vol="400.0">
+	<DC IDs="from ID3 to ID5" dcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 5E-1M of A, 3.64E-1M of B, 7.52E-26M of C, 9.09E-2M of D" pos="10" rcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 4.84E-1M of A, 1.6E-25M of B, 1.61E-1M of C, 1.94E-1M of D" scd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 1E0M of C" vol="300.0">
+		<DC IDs="from
+	<SM IDs="from ID8 to ID2" dcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 5E-1M of B, 5E-1M of A" pos="71" rcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 1.38E-25M of B, 5E-1M of A, 1.67E-1M of C, 1.67E-1M of D" scd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 1E0M of C" vol="10 / 90 + 20 create 30"/>
+</DC>
+<DC IDs="from ID13 to ID14" dcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 5E-1M of A, 1.38E-25M of B, 1.67E-1M of C, 1.67E-1M of D" pos="91" rcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 3.75E-1M of A, 2.79E-27M of B, 1.25E-1M of C, 3.75E-1M of D" scd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 1E0M of D" vol="50.0">
+	<DC IDs="from ID12 to ID14" dcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 5E-1M of A, 5E-1M of B" pos="91" rcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 5E-1M of A, 1.38E-25M of B, 1.67E-1M of C, 1.67E-1M of D" scd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 1E0M of C" vol="40.0">
+		<DC IDs="from ID11 to ID14" dcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 1E0M of A" pos="91" rcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 5E-1M of A, 5E-1M of B" scd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 1E0M of B" vol="30.0">
+			<DC IDs="from ID10 to ID14" dcd="Empty" pos="91" rcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 1E0M of A" scd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 1E0M of A" vol="20.0">
+				<SM IDs="from ID10 to ID14" dcd="Empty" pos="91" rcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 1E0M of A" scd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 1E0M of A" vol="10 / 100 + 0 create 10"/>
+				<SM IDs="from ID10 to ID14" dcd="Empty" pos="91" rcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 1E0M of A" scd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 1E0M of A" vol="10 / 100 + 0 create 10"/>
+			</DC>
+			<SM IDs="from ID11 to ID14" dcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 1E0M of A" pos="95" rcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 5E-1M of A, 5E-1M of B" scd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 1E0M of B" vol="10 / 100 + 10 create 20"/>
+		</DC>
+		<SM IDs="from ID12 to ID14" dcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 5E-1M of A, 5E-1M of B" pos="100" rcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 5E-1M of A, 1.38E-25M of B, 1.67E-1M of C, 1.67E-1M of D" scd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 1E0M of C" vol="10 / 100 + 20 create 30"/>
+	</DC>
+	<SM IDs="from ID13 to ID14" dcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 5E-1M of A, 1.38E-25M of B, 1.67E-1M of C, 1.67E-1M of D" pos="105" rcd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 3.75E-1M of A, 2.79E-27M of B, 1.25E-1M of C, 3.75E-1M of D" scd=" 0E0g of H2O, 1E-7M of H+, 1E-7M of OH-, 1E0M of D" vol="10 / 100 + 30 create 40"/>
+</DC>
+</ROOT>
