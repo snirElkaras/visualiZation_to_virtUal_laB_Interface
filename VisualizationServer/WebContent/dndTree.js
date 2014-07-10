@@ -2,8 +2,6 @@
 loadTree = function(data) {
 	var treeData = data;
 
-	console.info(data);
-
 	// Calculate total nodes, max label length
 	var totalNodes = 0;
 	var maxLabelLength = 0;
@@ -562,13 +560,6 @@ loadTree = function(data) {
 			// alternatively to keep a fixed scale one can set a fixed depth per level
 			// Normalize for fixed-depth by commenting out below line
 			// d.y = (d.depth * 500); //500px per level.
-		});
-
-		//Set the color of each node
-		nodes.forEach(function(d){
-			if(d && d.information && d.information.color == "Green"){
-				console.info("sdafdf");
-			}
 		});
 
 		// Update the nodes�
