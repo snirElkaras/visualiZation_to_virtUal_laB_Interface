@@ -1,6 +1,15 @@
 
 loadTree = function(data) {
+	var updateLabels = function(d){
+		d.name = getNodeName(d);
+		if (d.children){
+			d.children.forEach(updateLabels);
+		}
+	}
+
 	var treeData = data;
+	var probName = treeData.probName;
+	treeData.children.forEach(updateLabels);
 
 	// Calculate total nodes, max label length
 	var totalNodes = 0;
@@ -352,52 +361,87 @@ loadTree = function(data) {
 
 	// Function to center node when clicked/dropped so node doesn't get lost when collapsing/moving with large amount of children.
 	function getNodeName(d){
+		if (probName.toLowerCase() === "oracle.xml"){
+			return getOracleNodeName(d);
+		} else 
+			if (probName.toLowerCase() === "unknown acid problem"){
+				return getUnknownAcidNodeName(d);
+			} else
+				return "warning - unknown problem";
+	}
+
+	function getUnknownAcidNodeName(d){
+		return d.name;
+	}
+
+	function getOracleNodeName(d){
 		var nodeName = "";
 		var hasPlus = false;
-		if (d.information.hasReaction) {
-			if (d.information.amount_A > 0){
+		if (!d.children && !d._children){
+			if (d.information.srcAmount_A > 0){
 				nodeName = nodeName + "A+";
 				hasPlus = true;
 			}
-			if (d.information.amount_B > 0){
+			if (d.information.srcAmount_B > 0){
 				nodeName = nodeName + "B+";
 				hasPlus = true;
 			}           		
-			if (d.information.amount_C > 0){
+			if (d.information.srcAmount_C > 0){
 				nodeName = nodeName + "C+";
 				hasPlus = true;
 			}     
-			if (d.information.amount_D > 0){
+			if (d.information.srcAmount_D > 0){
 				nodeName = nodeName + "D+";
 				hasPlus = true;
 			}     
 			if (hasPlus == true) {
 				nodeName = nodeName.substring(0, nodeName.length-1);
 			}
-			nodeName = "{" + nodeName + "} -> {";
-			if (d.information.actualAmount_A > 0){
-				nodeName = nodeName + "A+";
-				hasPlus = true;
-			}
-			if (d.information.actualAmount_B > 0){
-				nodeName = nodeName + "B+";
-				hasPlus = true;
-			}           		
-			if (d.information.actualAmount_C > 0){
-				nodeName = nodeName + "C+";
-				hasPlus = true;
-			}     
-			if (d.information.actualAmount_D > 0){
-				nodeName = nodeName + "D+";
-				hasPlus = true;
-			}     
-			if (hasPlus == true) {
-				nodeName = nodeName.substring(0, nodeName.length-1);
-			}      
-			nodeName = nodeName + "}";
+		} else
+			if (d.information.hasReaction) {
+				if (d.information.amount_A > 0){
+					nodeName = nodeName + "A+";
+					hasPlus = true;
+				}
+				if (d.information.amount_B > 0){
+					nodeName = nodeName + "B+";
+					hasPlus = true;
+				}           		
+				if (d.information.amount_C > 0){
+					nodeName = nodeName + "C+";
+					hasPlus = true;
+				}     
+				if (d.information.amount_D > 0){
+					nodeName = nodeName + "D+";
+					hasPlus = true;
+				}     
+				if (hasPlus == true) {
+					nodeName = nodeName.substring(0, nodeName.length-1);
+				}
+				nodeName = "{" + nodeName + "} -> {";
+				if (d.information.actualAmount_A > 0){
+					nodeName = nodeName + "A+";
+					hasPlus = true;
+				}
+				if (d.information.actualAmount_B > 0){
+					nodeName = nodeName + "B+";
+					hasPlus = true;
+				}           		
+				if (d.information.actualAmount_C > 0){
+					nodeName = nodeName + "C+";
+					hasPlus = true;
+				}     
+				if (d.information.actualAmount_D > 0){
+					nodeName = nodeName + "D+";
+					hasPlus = true;
+				}     
+				if (hasPlus == true) {
+					nodeName = nodeName.substring(0, nodeName.length-1);
+				}      
+				nodeName = nodeName + "}";
 
-		} else 
-			if (d.children || d._children){
+			} else 
+			{
 				if (d.information.actualAmount_A > 0){
 					nodeName = nodeName + "A+";
 					hasPlus = true;
@@ -417,29 +461,11 @@ loadTree = function(data) {
 				if (hasPlus == true) {
 					nodeName = nodeName.substring(0, nodeName.length-1);
 				}
-			} else {
-				if (d.information.srcAmount_A > 0){
-					nodeName = nodeName + "A+";
-					hasPlus = true;
-				}
-				if (d.information.srcAmount_B > 0){
-					nodeName = nodeName + "B+";
-					hasPlus = true;
-				}           		
-				if (d.information.srcAmount_C > 0){
-					nodeName = nodeName + "C+";
-					hasPlus = true;
-				}     
-				if (d.information.srcAmount_D > 0){
-					nodeName = nodeName + "D+";
-					hasPlus = true;
-				}     
-				if (hasPlus == true) {
-					nodeName = nodeName.substring(0, nodeName.length-1);
-				}
-			}
-		
+			} 
+
+
 		return nodeName;
+
 	}
 
 	function centerNode(source) {
@@ -489,8 +515,7 @@ loadTree = function(data) {
 		centerNode(d);
 	}
 
-	function mouseenter(d) {
-
+	function mouseEnterOracle(d){
 		var size = $(document).height()*0.25;
 		//	$("#details").attr("style", "border:1px solid; background-color:  pink; " +
 		//			"max-height: " + size + "px; overflow: scroll;");
@@ -498,13 +523,13 @@ loadTree = function(data) {
 			$("#detailsP").remove();
 		if (d.name == "root"){
 			$("#details").append("<p id=detailsP> " +  
-					"answer: ".bold().fontsize(2.8) + d.answer + "<BR/>" + 
-					"probName: ".bold().fontsize(2.8) + d.probName + "<BR/>" + 
+					"Answer: ".bold().fontsize(2.8) + d.answer + "<BR/>" + 
+					"Problem Name: ".bold().fontsize(2.8) + d.probName + "<BR/>" + 
 			"</p>");
 			return;
 		}
 		var action = "none";
-		if (d.children) {
+		if (d.children || d._children) {
 			action = "mix";
 		}
 		var equation = "";
@@ -523,13 +548,57 @@ loadTree = function(data) {
 				"vol: ".bold().fontsize(2.8) + d.information.volume + "<BR/>" + 
 				"action: ".bold().fontsize(2.8) + action + " <BR/>" + 
 		"</p>");
+
+	}
+
+	function mouseEnterUnknownAcid(d){
+		var size = $(document).height()*0.25;
+		//	$("#details").attr("style", "border:1px solid; background-color:  pink; " +
+		//			"max-height: " + size + "px; overflow: scroll;");
+		if ($("#detailsP") != null) 
+			$("#detailsP").remove();
+		if (d.name == "root"){
+			$("#details").append("<p id=detailsP> " +  
+					"Answer: ".bold().fontsize(2.8) + d.answer + "<BR/>" + 
+					"Problem Name: ".bold().fontsize(2.8) + d.probName + "<BR/>" + 
+			"</p>");
+			return;
+		}
+		var action = "none";
+		if (d.children || d._children) {
+			action = "mix";
+		}
+		var equation = "";
+		equation = 	d.name.bold().fontsize(3.5);
+
+
+		$("#details").append("<p id=detailsP> " + 
+				equation + "<BR/>" + 
+				"pos: ".bold().fontsize(2.8) + d.pos + "<BR/>" + 
+				"IDs: ".bold().fontsize(2.8) + d.IDs + "<BR/>" + 
+				"scd: ".bold().fontsize(2.8).fontcolor("blue") + d.scd + "<BR/>" + 
+				"dcd: ".bold().fontsize(2.8).fontcolor("orange") + d.dcd + "<BR/>" + 
+				"rcd: ".bold().fontsize(2.8).fontcolor("green") + d.rcd + "<BR/>" + 
+				"vol: ".bold().fontsize(2.8) + d.vol + "<BR/>" + 
+				"action: ".bold().fontsize(2.8) + action + " <BR/>" + 
+		"</p>");
+	}
+
+	function mouseenter(d) {
+		if (probName.toLowerCase() === "oracle.xml"){
+			mouseEnterOracle(d);
+		} else 
+			if (probName.toLowerCase() === "unknown acid problem"){
+				mouseEnterUnknownAcid(d);
+			} 
+
 	}
 
 	function mouseleave(d){
 
 	}
 
-		
+
 	function update(source) {
 		// Compute the new height, function counts total children of root node and sets tree height accordingly.
 		// This prevents the layout looking squashed when new nodes are made visible or looking sparse when nodes are removed
@@ -556,7 +625,7 @@ loadTree = function(data) {
 
 		// Set widths between levels based on maxLabelLength.
 		nodes.forEach(function(d) {
-			d.y = (d.depth * (maxLabelLength + 220)); //maxLabelLength * 10px
+			d.y = (d.depth * (maxLabelLength * 10)); //maxLabelLength * 10px
 			// alternatively to keep a fixed scale one can set a fixed depth per level
 			// Normalize for fixed-depth by commenting out below line
 			// d.y = (d.depth * 500); //500px per level.
@@ -614,6 +683,7 @@ loadTree = function(data) {
 //		outCircle(node);
 //		});
 
+
 		// Update the text to reflect whether node has children or not.
 		node.select('text')
 		.attr("x", function(d) {
@@ -657,20 +727,40 @@ loadTree = function(data) {
 		.style("fill-opacity", 1);
 		nodeUpdate.select("text")
 		.style("fill", function(d){
-			if (d && d.information){
-				switch(d.information.color){
-				case "Green":
-					return "green";
-				case "Orange":
-					return "orange";
-				case "Red":
-					return "red";
+			if (probName.toLowerCase() === "oracle.xml"){
+				if (d && d.information){
+					switch(d.information.color){
+					case "Green":
+						return "green";
+					case "Orange":
+						return "orange";
+					case "Red":
+						return "red";
 
-				default: // default color is black
-					return "black";
+					default: // default color is black
+						return "black";
+					}
 				}
-			}
-		})
+			} else 
+				if (probName.toLowerCase() === "unknown acid problem"){
+					//the colors:
+					var amount = d.ph;
+					var color = "black";
+					if (amount <= 3) {
+						color = "red"; //red
+					} else if (amount <= 6) {
+						color = "orange"; //orange
+					} else if (amount <= 8) {
+						color = "green"; //green
+					} else if (amount <= 11) {
+						color = "blue"; //blue
+					} else if (amount <= 14) {
+						color = "purple"; //purple
+					}
+					return color;
+				}
+
+		});
 		// Transition exiting nodes to the parent's new position.
 		var nodeExit = node.exit().transition()
 		.duration(duration)
@@ -739,6 +829,7 @@ loadTree = function(data) {
 	root = treeData;
 	root.x0 = viewerHeight / 2;
 	root.y0 = 0;
+
 
 	// Layout the tree initially and left it on the root node.
 	update(root);

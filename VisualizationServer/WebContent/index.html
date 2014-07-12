@@ -26,10 +26,11 @@
 		$('form').submit(function(event) {
 			noop(event);
 			var files = $("#chooseFile")[0].files;
+			
 			dropUpload(files);
 		});
-
 	});
+
 </script>
 <script src="jquery.tipsy.js" type="text/javascript" charset="utf-8"></script>
 </head>
@@ -37,7 +38,7 @@
 
 <body class="backgroundColor">
 	<div id="mainScreenContainer">
-		<img src="img/flask.png" id="title">
+		<img src="img/flask.png" id="flask">
 		<div id="subTitle">
 			<a href="javascript:void(0)" onclick="chooseFileButton()">
 				<div style="display: inline-block;">

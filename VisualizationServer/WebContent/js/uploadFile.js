@@ -38,6 +38,7 @@ function upload(file) {
 		async : false,
 		type: 'POST',
 		success : function(data, textStatus, request){
+			document.title = file.name;
 			var fileExt = request.getResponseHeader('fileExt');
 			switch(fileExt){
 			case "xml":
@@ -135,7 +136,7 @@ var styleAfterLoading = function(){
 		.css('top', '0%')
 		.css('left', '0%')
 		.addClass("backgroundColor");
-	$("#title")
+	$("#flask")
 			.css('display', 'inline-block')
 			.css('margin', '0px')
 			.css('height', '100px');
