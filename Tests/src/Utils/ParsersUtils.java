@@ -10,7 +10,7 @@ import parsers.temporalParser.Species;
 
 public class ParsersUtils {
 	
-	public static String path = "C:/Users/snir/Documents/GitHub/visualiZation_to_virtUal_laB_Interface/Tests/src/files/";
+	public static String path = "src/files/";
 	
 	public static Flask generateFlask(String name) {
 		Flask flaskToReturn = new Flask();

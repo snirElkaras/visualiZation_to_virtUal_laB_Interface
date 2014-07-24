@@ -1,7 +1,7 @@
 package parsers.planParser;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.assertNull;
 
 import org.json.JSONObject;
 import org.junit.Before;
@@ -31,12 +31,9 @@ public class PlanViewParserTest {
 	public void testParseBadInput() {
 
 		PlanViewParser parser = new PlanViewParser();
-		try{
-			parser.parse("bad");
-		}catch(Exception e){
-			return;
-		}
-		fail("suppose to throw exception");
+		JSONObject supposeToReturnNull;
+		supposeToReturnNull = parser.parse("bad");
+		assertNull(supposeToReturnNull);
 	}
 
 }

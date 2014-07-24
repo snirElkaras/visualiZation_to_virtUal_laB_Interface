@@ -25,7 +25,7 @@ public class BadInputTest {
 	@Test
 	public void corruptedFileNotificationTest() {
 		WebElement chooseFile = Settings.driver.findElement(By.id("chooseFile"));
-		chooseFile.sendKeys(UIUtils.path + "corruptedFile.xml");
+		chooseFile.sendKeys(UIUtils.pathUI + "corruptedFile.xml");
 		chooseFile.submit();
 		WebElement errorNotification = Settings.driver.findElement(By.id("errorNotification"));
 		String actual = errorNotification.getText();
@@ -34,7 +34,7 @@ public class BadInputTest {
 	@Test
 	public void InvalidFileTypeTest() {
 		WebElement chooseFile = Settings.driver.findElement(By.id("chooseFile"));
-		chooseFile.sendKeys(UIUtils.path + "badSuffix.bad");
+		chooseFile.sendKeys(UIUtils.pathUI + "badSuffix.bad");
 		chooseFile.submit();
 		WebElement errorNotification = Settings.driver.findElement(By.id("errorNotification"));
 		String actual = errorNotification.getText();
@@ -44,9 +44,9 @@ public class BadInputTest {
 	@Test
 	public void errorNotDisplayedAfterValidFileUploadedTest() {
 		WebElement chooseFile = Settings.driver.findElement(By.id("chooseFile"));
-		chooseFile.sendKeys(UIUtils.path + "badSuffix.bad");
+		chooseFile.sendKeys(UIUtils.pathUI + "badSuffix.bad");
 		chooseFile.submit();
-		chooseFile.sendKeys(UIUtils.path + "plan.xml");
+		chooseFile.sendKeys(UIUtils.pathUI + "plan.xml");
 		chooseFile.submit();
 		WebElement errorNotification = Settings.driver.findElement(By.id("errorNotification"));
 		String actual = errorNotification.getText();

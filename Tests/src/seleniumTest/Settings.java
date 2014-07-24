@@ -13,7 +13,8 @@ public class Settings  {
 	public static void init(){
 		try {
 			driver = new RemoteWebDriver(new URL("http://localhost:9515"), DesiredCapabilities.chrome());
-			driver.get("http://localhost/VisualizationServer/");
+//			driver.get("http://localhost/VisualizationServer/");
+			driver.get("http://hdm.ise.bgu.ac.il:8070/VisualizationServer/");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

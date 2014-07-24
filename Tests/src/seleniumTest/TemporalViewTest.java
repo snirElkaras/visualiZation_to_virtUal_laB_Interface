@@ -17,7 +17,7 @@ public class TemporalViewTest {
 	public static void setUpBeforeClass() throws Exception {
 		Settings.init();
 		WebElement chooseFile = Settings.driver.findElement(By.id("chooseFile"));
-		chooseFile.sendKeys(UIUtils.path + "temporal.log");
+		chooseFile.sendKeys(UIUtils.pathUI + "temporal.log");
 		chooseFile.submit();
 	}
 
@@ -28,7 +28,7 @@ public class TemporalViewTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		UIUtils.hoverAnElement("title");
+		UIUtils.hoverAnElement("flask");
 	}
 
 	@Test
@@ -41,7 +41,7 @@ public class TemporalViewTest {
 	@Test
 	public void displayedDetailsWhenNotHoveringAnymoreOnTheNodeAndNotHoveringOnOtherNodesTest() {
 		UIUtils.hoverAnElement("10");
-		UIUtils.hoverAnElement("title");
+		UIUtils.hoverAnElement("flask");
 		WebElement details= Settings.driver.findElement(By.id("details"));
 		String expected = "Amount :\n0.001L\nSource Flask : (ID:6)\nDisposable Pipet (0.0 moles of H2O, 1.0048138305734868E-10 moles of H+, 1.0048138305734868E-10 moles of OH-, 0.001 moles of A)\n250mL\nRecipient Flask : (ID:10)\n250mL Beaker\nResult : (ID:10)\n250mL Beaker (0.0 moles of H2O, 1.0048138305734868E-10 moles of H+, 1.0048138305734868E-10 moles of OH-, 0.001 moles of A)";
 		assertEquals(expected, details.getText());
