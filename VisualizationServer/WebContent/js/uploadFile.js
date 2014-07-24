@@ -24,11 +24,6 @@ function upload(file) {
 	var formData = new FormData();
 	formData.append("file", file);
 
-	/*var xhr = new XMLHttpRequest();
-        xhr.upload.addEventListener("progress", uploadProgress, false);
-        xhr.addEventListener("load", uploadComplete, false);
-        xhr.open("POST", "UploadServlet", true); // If async=false, then you'll miss progress bar support.
-        xhr.send(formData);*/
 	$.ajax({
 		url : 'UploadServlet',
 		data: formData,
@@ -70,16 +65,6 @@ function uploadFailed(text){
 
 function removeErrorNotification(){
 	$("#errorNotification").css("display", "none");
-}
-
-function uploadProgress(event) {
-	// Note: doesn't work with async=false.
-	var progress = Math.round(event.loaded / event.total * 100);
-	document.getElementById("status").innerHTML = "Progress " + progress + "%";
-}
-
-function uploadComplete(event) {
-	document.getElementById("status").innerHTML = event.target.responseText;
 }
 
 var cleanView = function (){
