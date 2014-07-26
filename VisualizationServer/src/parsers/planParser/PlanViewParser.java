@@ -151,11 +151,13 @@ public class PlanViewParser implements IParse {
 		XMLTranslate.TranslateTree(root, "Unknown Acid Problem");
 		GlobalVariables.init_IDs_states();
 		NodeList nodeLst = root.getChildNodes();
+		int num = 0;
 		for (int i = 0; i < nodeLst.getLength(); i++) {
 			if (i % 2 != 0) {
+				GlobalVariables.num_of_leafs_analyzed = 0;
 				Node node = nodeLst.item(i);
-				XMLReader.InOrder_Accumulate_Tree_rec(node, 0, GlobalVariables.m_material_Unknown_Acid);
-				System.out.println(1);
+				XMLReader.InOrder_Accumulate_Tree_rec(node, num, GlobalVariables.m_material_Unknown_Acid);
+				num += 10000;
 			}
 		}
 		

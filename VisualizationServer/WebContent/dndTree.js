@@ -1,5 +1,7 @@
 
 loadTree = function(data) {
+	
+	// update all labels in order to get the maximum length
 	var updateLabels = function(d){
 		d.name = getNodeName(d);
 		if (d.children){
@@ -7,6 +9,7 @@ loadTree = function(data) {
 		}
 	}
 
+	
 	var treeData = data;
 	var probName = treeData.probName;
 	treeData.children.forEach(updateLabels);
@@ -14,9 +17,11 @@ loadTree = function(data) {
 	// Calculate total nodes, max label length
 	var totalNodes = 0;
 	var maxLabelLength = 0;
+	
 	// variables for drag/drop
 	var selectedNode = null;
 	var draggingNode = null;
+	
 	// panning variables
 	var panSpeed = 200;
 	var panBoundary = 2; // Within 20px from edges will pan when dragging.
@@ -668,6 +673,8 @@ loadTree = function(data) {
 			return d.name;
 		})
 		.style("fill-opacity", 0);
+		
+		
 
 		// phantom node to give us mouseover in a radius around it
 //		nodeEnter.append("circle")
@@ -725,6 +732,21 @@ loadTree = function(data) {
 		// Fade the text in
 		nodeUpdate.select("text")
 		.style("fill-opacity", 1);
+		nodeUpdate.select("text")
+		.style("font-weight", function(d){
+			if (probName.toLowerCase() === "unknown acid problem"){
+				if (d.end_point){
+					return "bold";
+				}
+			}
+		})
+		.style("text-decoration", function(d){
+			if (probName.toLowerCase() === "unknown acid problem"){
+				if (d.end_point){
+					return "underline";
+				}
+			}
+		});
 		nodeUpdate.select("text")
 		.style("fill", function(d){
 			if (probName.toLowerCase() === "oracle.xml"){

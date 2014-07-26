@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,8 @@ public class XMLReader {
 	public static String m_attribute_equation = "equation";
 	public static String m_attribute_end_point = "end_point";
 	private static boolean firstReactionOccured = false;
+    public static Map<String, String> m_nodes_details = new HashMap<String, String>(); //<node_num,node_equation>
+
 
 	public static CheckReasonableResult checkReasonable(Node root) {
 		try {
@@ -477,19 +480,19 @@ public class XMLReader {
             Node left_node = node.getChildNodes().item(3);
             InOrder_Accumulate_Tree_rec(right_node, num, problem_type);
             num++;
-            InOrder_Accumulate_Tree_rec(left_node, num+1000, problem_type);
+            InOrder_Accumulate_Tree_rec(left_node, num+100, problem_type);
 //            InOrder_Accumulate_Tree_rec(left_node, Form_StudentPresentation.JPanel_CurrentTab.m_number_of_nodes, problem_type);
             if (problem_type.contains(GlobalVariables.m_material_Unknown_Acid)) { // unknown acid
                 node_equation = Update_Node(node);
-//                Form_StudentPresentation.JPanel_CurrentTab.m_nodes_details.put(((Element) node).getAttribute("node_number"), node_equation);
+                m_nodes_details.put(((Element) node).getAttribute("node_number"), node_equation);
                 //update_m_vis(item, num, update_node(node));
                 //CHECK END POINT P.H - if there is a jump in P.H between left child to right child, Set an attribute "End Point" = "YES" in nodes MAP.
                 if (is_End_Point(left_node, right_node)) {
                     ((Element) node).setAttribute(m_attribute_end_point, "YES");
-//                    Form_StudentPresentation.JPanel_CurrentTab.m_nodes_details.put(((Element) node).getAttribute("node_number") + "_end_point", "1");
+                    m_nodes_details.put(((Element) node).getAttribute("node_number") + "_end_point", "1");
                 } else {
                     ((Element) node).setAttribute(m_attribute_end_point, "NO");
-//                    Form_StudentPresentation.JPanel_CurrentTab.m_nodes_details.put(((Element) node).getAttribute("node_number") + "_end_point", "0");
+                    m_nodes_details.put(((Element) node).getAttribute("node_number") + "_end_point", "0");
                 }
             } 
 //            else {
@@ -504,8 +507,8 @@ public class XMLReader {
             InOrder_Accumulate_Tree_rec(one_node, num, problem_type);
             if (problem_type.contains(GlobalVariables.m_material_Unknown_Acid)) {
                 node_equation = Update_Node(node);
-//                Form_StudentPresentation.JPanel_CurrentTab.m_nodes_details.put(((Element) node).getAttribute("node_number"), node_equation);
-//                Form_StudentPresentation.JPanel_CurrentTab.m_nodes_details.put(((Element) node).getAttribute("node_number") + "_end_point", "0");
+                m_nodes_details.put(((Element) node).getAttribute("node_number"), node_equation);
+                m_nodes_details.put(((Element) node).getAttribute("node_number") + "_end_point", "0");
             } 
 //            else {
 //                if (problem_type.contains("Oracle problem")) {
@@ -516,15 +519,15 @@ public class XMLReader {
         } else if (!node.hasChildNodes()) { //has no child
             if (problem_type.contains(GlobalVariables.m_material_Unknown_Acid)) {
                 node_equation = Update_Leaf(node);
-//                Form_StudentPresentation.JPanel_CurrentTab.m_nodes_details.put(((Element) node).getAttribute("node_number"), node_equation);
-//                Form_StudentPresentation.JPanel_CurrentTab.m_nodes_details.put(((Element) node).getAttribute("node_number") + "_end_point", "0");
+                m_nodes_details.put(((Element) node).getAttribute("node_number"), node_equation);
+                m_nodes_details.put(((Element) node).getAttribute("node_number") + "_end_point", "0");
                 //CHECK END POINT P.H - if there is a jump in P.H between left child to right child, Set an attribute "End Point" = "YES" in nodes MAP.
                 if (is_End_Point(node)) {
                     ((Element) node).setAttribute(m_attribute_end_point, "YES");
-//                    Form_StudentPresentation.JPanel_CurrentTab.m_nodes_details.put(((Element) node).getAttribute("node_number") + "_end_point", "1");
+                    m_nodes_details.put(((Element) node).getAttribute("node_number") + "_end_point", "1");
                 } else {
                     ((Element) node).setAttribute(m_attribute_end_point, "NO");
-//                    Form_StudentPresentation.JPanel_CurrentTab.m_nodes_details.put(((Element) node).getAttribute("node_number") + "_end_point", "0");
+                    m_nodes_details.put(((Element) node).getAttribute("node_number") + "_end_point", "0");
                 }
             } 
 //            else {

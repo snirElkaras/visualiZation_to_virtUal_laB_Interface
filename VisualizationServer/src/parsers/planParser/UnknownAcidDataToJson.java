@@ -105,7 +105,8 @@ public class UnknownAcidDataToJson implements DataStructure{
 			this.source_content = "";
 		}
 		
-		this.name = this.ph + " PH; " + this.equation + "; " + this.source_content;
+		
+		this.name = this.ph + " PH; " + XMLReader.m_nodes_details.get(node_number + "");
 	} 
     
     
