@@ -6,27 +6,31 @@ import java.util.List;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-public class UnknownAcidDataToJson implements DataStructure{
-	String name;
-	
-	String IDs;
-	String scd;
-	String dcd;
-	String rcd;
-	String vol;
-	String source_content;
-	String equation;
-	Boolean end_point;
-	int node_number;
-	int pos;
-	
-    List<UnknownAcidDataToJson> children;
-	String side;
+/**
+ * 
 
-	private Object ph; 
+ * @author Aviel and Chen
+ *	This class responsible for holding the unknown acid Data before converting it to JSON *
+ */
+public class UnknownAcidDataToJson implements DataStructure{
+	private String name;
+	private String IDs;
+	private String scd;
+	private String dcd;
+	private String rcd;
+	private String vol;
+	private String source_content;
+	private String equation;
+	private Boolean end_point;
+	private int node_number;
+	private int pos;
+	private List<UnknownAcidDataToJson> children;
+	private String side;
+
+	private double ph; 
   
     public UnknownAcidDataToJson(NamedNodeMap attributeMap, String side) { 
-        children = new ArrayList<UnknownAcidDataToJson>();
+        setChildren(new ArrayList<UnknownAcidDataToJson>());
         this.side = side;
 		getAllFields(attributeMap);
     }
@@ -35,31 +39,31 @@ public class UnknownAcidDataToJson implements DataStructure{
 		Node currNode;
 		currNode = attributeMap.getNamedItem("IDs");
 		if (currNode != null){
-			this.IDs = currNode.getNodeValue();
+			this.setIDs(currNode.getNodeValue());
 		} else {
-			this.IDs = "";
+			this.setIDs("");
 		}
 				
 		currNode = attributeMap.getNamedItem("end_point");
 		if (currNode != null){
-			this.end_point = currNode.getNodeValue().equals("YES") ? true : false;
+			this.setEnd_point(currNode.getNodeValue().equals("YES") ? true : false);
 		} else {
-			this.end_point = null;
+			this.setEnd_point(null);
 		}
 		
 		currNode = attributeMap.getNamedItem("equation");
 		if (currNode != null){
-			this.equation = currNode.getNodeValue();
+			this.setEquation(currNode.getNodeValue());
 		} else {
-			this.equation = "";
+			this.setEquation("");
 		}
 		
 		
 		currNode = attributeMap.getNamedItem("pos");
 		if (currNode != null){
-			this.pos = Integer.parseInt(currNode.getNodeValue());
+			this.setPos(Integer.parseInt(currNode.getNodeValue()));
 		} else {
-			this.pos = -1;
+			this.setPos(-1);
 		}
 		
 		currNode = attributeMap.getNamedItem("rcd");
@@ -72,16 +76,16 @@ public class UnknownAcidDataToJson implements DataStructure{
 		
 		currNode = attributeMap.getNamedItem("scd");
 		if (currNode != null){
-			this.scd = currNode.getNodeValue();
+			this.setScd(currNode.getNodeValue());
 		} else {
-			this.scd = "";
+			this.setScd("");
 		}
 		
 		currNode = attributeMap.getNamedItem("dcd");
 		if (currNode != null){
-			this.dcd = currNode.getNodeValue();
+			this.setDcd(currNode.getNodeValue());
 		} else {
-			this.dcd = "";
+			this.setDcd("");
 		}
 		
 		currNode = attributeMap.getNamedItem("node_number");
@@ -93,20 +97,100 @@ public class UnknownAcidDataToJson implements DataStructure{
 		
 		currNode = attributeMap.getNamedItem("vol");
 		if (currNode != null){
-			this.vol = currNode.getNodeValue();
+			this.setVol(currNode.getNodeValue());
 		} else {
-			this.vol = "";
+			this.setVol("");
 		}
 		
 		currNode = attributeMap.getNamedItem("source_content");
 		if (currNode != null){
-			this.source_content = currNode.getNodeValue();
+			this.setSource_content(currNode.getNodeValue());
 		} else {
-			this.source_content = "";
+			this.setSource_content("");
 		}
 		
 		
-		this.name = this.ph + " PH; " + XMLReader.m_nodes_details.get(node_number + "");
+		this.setName(this.ph + " PH; " + XMLReader.m_nodes_details.get(node_number + ""));
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getIDs() {
+		return IDs;
+	}
+
+	public void setIDs(String iDs) {
+		IDs = iDs;
+	}
+
+	public String getScd() {
+		return scd;
+	}
+
+	public void setScd(String scd) {
+		this.scd = scd;
+	}
+
+	public String getDcd() {
+		return dcd;
+	}
+
+	public void setDcd(String dcd) {
+		this.dcd = dcd;
+	}
+
+	public String getVol() {
+		return vol;
+	}
+
+	public void setVol(String vol) {
+		this.vol = vol;
+	}
+
+	public String getSource_content() {
+		return source_content;
+	}
+
+	public void setSource_content(String source_content) {
+		this.source_content = source_content;
+	}
+
+	public String getEquation() {
+		return equation;
+	}
+
+	public void setEquation(String equation) {
+		this.equation = equation;
+	}
+
+	public Boolean getEnd_point() {
+		return end_point;
+	}
+
+	public void setEnd_point(Boolean end_point) {
+		this.end_point = end_point;
+	}
+
+	public int getPos() {
+		return pos;
+	}
+
+	public void setPos(int pos) {
+		this.pos = pos;
+	}
+
+	public List<UnknownAcidDataToJson> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<UnknownAcidDataToJson> children) {
+		this.children = children;
 	} 
     
     

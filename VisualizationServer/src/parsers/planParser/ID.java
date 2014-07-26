@@ -1,28 +1,25 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package parsers.planParser;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
- * @author gyosef2
+ * 
+ * @author Aviel and Chen
+ *	class that holds the materials types and the quantity
  */
 public class ID {
-    Map<String, Double> m_materials;
-    //double m_Unknown_acid_vol;
-    //double m_NaoH_vol;
-    //double m_Unknown_acid_ratio;
-    //double m_NaoH_ratio;
+    private Map<String, Double> m_materials;
 
     public ID() {
-        m_materials = new HashMap<String, Double>(); //<material,material_vol>
-        //m_Unknown_acid_ratio = 0;
-        //m_NaoH_ratio = 0;
-        //m_NaoH_vol = 0;
-        //m_Unknown_acid_vol = 0;
+        this.m_materials = new HashMap<String, Double>(); //<material,material_vol>
     }
+
+	public Map<String, Double> getM_materials() {
+		return m_materials;
+	}
+
+	public void setM_materials(Map<String, Double> m_materials) {
+		this.m_materials = m_materials;
+	}
 }

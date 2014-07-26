@@ -28,24 +28,13 @@ import parsers.temporalParser.TemporalViewParser;
 @WebServlet("/UploadServlet")
 public class UploadServlet extends HttpServlet {
 
-	private boolean isMultipart;
-	private String filePath;
-	private int maxFileSize = 50 * 1024;
-	private int maxMemSize = 4 * 1024;
-	private File file;
 	private IParse parser;
 
-	public void init( ){
-		// Get the file location where it would be stored.
-		filePath = 
-				getServletContext().getInitParameter("file-upload"); 
-	}
 	public void doPost(HttpServletRequest request, 
 			HttpServletResponse response)
 					throws ServletException, java.io.IOException {
 		// Check that we have a file upload request
 		request.getInputStream();
-		isMultipart = ServletFileUpload.isMultipartContent(request);
 		response.setContentType("text/html");
 
 		java.io.PrintWriter out = response.getWriter( );
@@ -104,6 +93,7 @@ public class UploadServlet extends HttpServlet {
 			out.println(jsonAns.toString());		
 		}
 	}
+	
 	public void doGet(HttpServletRequest request, 
 			HttpServletResponse response)
 					throws ServletException, java.io.IOException {

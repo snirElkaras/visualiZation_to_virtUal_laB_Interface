@@ -1,45 +1,36 @@
 package parsers.planParser;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
-
-import javax.naming.NameNotFoundException;
-import javax.smartcardio.ATR;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Attr;
-import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
 
+/**
+ * 
+ * @author Aviel and Chen
+ * This class is responsible for translating the xml file into a format that can be parsed
+ */
 public class XMLTranslate {
 
     public static void TranslateTree(Node root, String probName) {
         NodeList nodeLst = root.getChildNodes();
-        //ArrayList<Node> newNodeList = new ArrayList<Node>();
         for (int i = 0; i < nodeLst.getLength(); i++) {
             if (i % 2 != 0) {
                 Node node = nodeLst.item(i);
                 node = TranslateTreeRec(node, probName);
                 root.replaceChild(node, nodeLst.item(i));
-                //newNodeList.add(node);
             }
         }
     }
 
-    public static Node TranslateTreeRec(Node node, String probName) {
+    private static Node TranslateTreeRec(Node node, String probName) {
 
         NodeList nodeLst = node.getChildNodes();
         //parse the node
@@ -114,7 +105,7 @@ public class XMLTranslate {
             ((Element) node).setAttribute("dcd", dcd);
             ((Element) node).setAttribute("rcd", rcd);
             ((Element) node).setAttribute("pos", pos);
-            if (probName.equalsIgnoreCase("Unknown Acid Problem")) {
+            if (probName.equalsIgnoreCase(GlobalVariables.unknown_acid_probName)) {
                 ((Element) node).setAttribute("source_content", sc);
             }
 
@@ -134,7 +125,7 @@ public class XMLTranslate {
         return node;
     }
 
-    public static String nodeToString(Node node) {
+    private static String nodeToString(Node node) {
         try {
             // Set up the output transformer
             TransformerFactory transfac = TransformerFactory.newInstance();
@@ -143,7 +134,6 @@ public class XMLTranslate {
             trans.setOutputProperty(OutputKeys.INDENT, "yes");
 
             // Print the DOM node
-
             StringWriter sw = new StringWriter();
             StreamResult result = new StreamResult(sw);
             DOMSource source = new DOMSource(node);
@@ -156,30 +146,5 @@ public class XMLTranslate {
             e.printStackTrace();
             return "";
         }
-    }
-
-    public static void ToXMLFile(Node root, String fileName) {
-        try {
-            // Create file 
-            FileWriter fstream = new FileWriter(fileName);
-            BufferedWriter out = new BufferedWriter(fstream);
-            //out.write("<ROOT>\n");
-            out.write(nodeToString(root));
-            //NodeList nodeLst = root.getChildNodes();
-
-            /*for (int i = 0; i < nodeLst.getLength(); i++) {
-             if (i%2 != 0)
-             {
-             Node node = nodeLst.item(i);
-             out.write(nodeToString(node));
-             }
-             }	
-             out.write("</ROOT>");*/
-            //Close the output stream
-            out.close();
-        } catch (Exception e) {//Catch exception if any
-            System.err.println("Error: " + e.getMessage());
-        }
-
     }
 }

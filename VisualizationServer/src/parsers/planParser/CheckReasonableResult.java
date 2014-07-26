@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 import org.w3c.dom.Node;
 
+/**
+ * 
+ * @author Aviel and Chen
+ * 			this class wraps list of states and the root node
+ *
+ */
 public class CheckReasonableResult {
 	private Node root;
 	private ArrayList<State> listOfStates;

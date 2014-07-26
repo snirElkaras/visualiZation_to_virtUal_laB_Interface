@@ -1,7 +1,5 @@
 package parsers.planParser;
 
-import java.io.File;
-import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,11 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -22,7 +15,11 @@ import org.w3c.dom.NodeList;
 
 
 
-
+/**
+ * 
+ * @author Aviel and Chen
+ * This class is responsible for reading the XML and analyze the root node
+ */
 public class XMLReader {
 
 	public static String m_attribute_equation = "equation";
@@ -34,35 +31,30 @@ public class XMLReader {
 	public static CheckReasonableResult checkReasonable(Node root) {
 		try {
 
-			XMLTranslate.TranslateTree(root, "oracle.xml");
+			XMLTranslate.TranslateTree(root, GlobalVariables.oracle_name);
 			NodeList nodeLst = root.getChildNodes();
-			int length = nodeLst.getLength();
 
 			ArrayList<State> listOfStates = new ArrayList<State>();
 			boolean firstReaction = false;
 			for (int i = 0; i < nodeLst.getLength(); i++) {
 				if (i % 2 != 0) {
 					Node node = nodeLst.item(i);
-					//System.out.println(node.getNodeName());
-//					NamedNodeMap attributeMap = node.getAttributes();
-
-					//System.out.println(node.getAttributes().getLength());
 
 					State s = buildDataStructure(node);
-					s.information.isHigherCompAct = true;
+					s.information.setHigherCompAct(true);
 
 					//let's check which of the states are reasonable
 					firstReaction = checkReasonableAndReaction(s, firstReaction);
-					s.information.isDirectChildOfRoot = true;
+					s.information.setDirectChildOfRoot(true);
 					
-					if (s.information.hasReaction == true) {
+					if (s.information.isHasReaction() == true) {
 						if (firstReaction == false) {
 							firstReaction = true;
 						}
-						s.information.isReasonable = true;
+						s.information.setReasonable(true);
 					} else {
 						if (firstReaction == false) {
-							s.information.isReasonable = true;
+							s.information.setReasonable(true);
 						}
 					}
 
@@ -79,169 +71,55 @@ public class XMLReader {
 	}
 
 
+	// paint the tree according to the reaction and the node's place
+	// if didn't paint it then the node will be black
 	private static void paintTreeNodes(State s) {
-
-
-		if (s.information.hasReaction == true){
-			s.information.color = "Green";
+		if (s.information.isHasReaction() == true){
+			s.information.setColor("Green");
 		} else
-			if (s.information.hasChildrenWithReaction){
-				s.information.color = "Orange";
+			if (s.information.isHasChildrenWithReaction()){
+				s.information.setColor("Orange");
 			} else
 				if (firstReactionOccured) {
-					s.information.color = "Red";
+					s.information.setColor("Red");
 				}
-/*		if (s.hasFirstChild()){
-			paintTreeNodes(s.getFirstChild());
-		}
-		if (s.hasSecondChild()){
-			paintTreeNodes(s.getSecondChild());
-		} */
-
 	}
 
 
+	// from a given node, build the State data structure
 	public static State buildDataStructure(Node node) {
 		State ans = new State();
 		NodeList nodeLst = node.getChildNodes();
+
 		//check if there are some children
 		if (nodeLst.getLength() > 1) {
 			//there are children
 			if (nodeLst.getLength() <= 3) {
 				//there is one child
 				ans.firstChild = buildDataStructure(nodeLst.item(1));
-				//ans.information.hasReaction = ans.firstChild.information.hasReaction; 
 
-				/*
-				 * String nodeName = node.getNodeName(); //check if the node is C
-				 */
+				setFirstChildInformation(ans);
 
-				ans.information.totalVol = ans.firstChild.information.totalVol;
+				setVolume(node, ans);
 
-				ans.information.amount_A = ans.firstChild.information.amount_A;
-				ans.information.amount_B = ans.firstChild.information.amount_B;
-				ans.information.amount_C = ans.firstChild.information.amount_C;
-				ans.information.amount_D = ans.firstChild.information.amount_D;
-
-				ans.information.actualAmount_A = ans.firstChild.information.actualAmount_A;
-				ans.information.actualAmount_B = ans.firstChild.information.actualAmount_B;
-				ans.information.actualAmount_C = ans.firstChild.information.actualAmount_C;
-				ans.information.actualAmount_D = ans.firstChild.information.actualAmount_D;
-
-				ans.information.srcAmount_A = ans.firstChild.information.srcAmount_A;
-				ans.information.srcAmount_B = ans.firstChild.information.srcAmount_B;
-				ans.information.srcAmount_C = ans.firstChild.information.srcAmount_C;
-				ans.information.srcAmount_D = ans.firstChild.information.srcAmount_D;
-
-				ans.information.pos = ans.firstChild.information.pos;
-
-				ans.information.ids = ans.firstChild.information.ids;
-
-				ans.information.scdDesc = ans.firstChild.information.scdDesc;
-				ans.information.dcdDesc = ans.firstChild.information.dcdDesc;
-				ans.information.rcdDesc = ans.firstChild.information.rcdDesc;
-
-				//let's extract the information about this state
-				NamedNodeMap attributeMap = node.getAttributes();
-				for (int i = 0; i < attributeMap.getLength(); i++) {
-					Node att = attributeMap.item(i);
-					String attName = att.getNodeName();
-					String attValue = att.getNodeValue();
-
-					if (attName == "vol"){
-						ans.information.volume = attValue;
-					}
-					//if (attName == "pos")
-					//ans.information.pos = Integer.parseInt(attValue);
-				}
-
-				ans.information.hasReaction = checkReacion(ans);
-				if (ans.information.hasReaction){
-					ans.information.reactionEquation = ans.get_reaction_equation();
-				}
+				setReactionEquation(ans);
 
 			} else {
 				//there are two children
 				ans.firstChild = buildDataStructure(nodeLst.item(1));
 				ans.secondChild = buildDataStructure(nodeLst.item(3));
-				//ans.information.hasReaction = ans.firstChild.information.hasReaction || ans.secondChild.information.hasReaction;
 
-				/*
-				 * String nodeName = node.getNodeName(); //check if the node is C
-				 */
-
-				if (ans.firstChild.information.pos > ans.secondChild.information.pos) {
-					ans.information.totalVol = ans.firstChild.information.totalVol;
-
-					ans.information.amount_A = ans.firstChild.information.amount_A;
-					ans.information.amount_B = ans.firstChild.information.amount_B;
-					ans.information.amount_C = ans.firstChild.information.amount_C;
-					ans.information.amount_D = ans.firstChild.information.amount_D;
-
-					ans.information.actualAmount_A = ans.firstChild.information.actualAmount_A;
-					ans.information.actualAmount_B = ans.firstChild.information.actualAmount_B;
-					ans.information.actualAmount_C = ans.firstChild.information.actualAmount_C;
-					ans.information.actualAmount_D = ans.firstChild.information.actualAmount_D;
-
-					ans.information.srcAmount_A = ans.firstChild.information.srcAmount_A;
-					ans.information.srcAmount_B = ans.firstChild.information.srcAmount_B;
-					ans.information.srcAmount_C = ans.firstChild.information.srcAmount_C;
-					ans.information.srcAmount_D = ans.firstChild.information.srcAmount_D;
-
-					ans.information.pos = ans.firstChild.information.pos;
-
-					ans.information.ids = ans.firstChild.information.ids;
-
-					ans.information.scdDesc = ans.firstChild.information.scdDesc;
-					ans.information.dcdDesc = ans.firstChild.information.dcdDesc;
-					ans.information.rcdDesc = ans.firstChild.information.rcdDesc;
+				if (ans.firstChild.information.getPos() > ans.secondChild.information.getPos()) {
+					setFirstChildInformation(ans);
 				} else {
-					ans.information.totalVol = ans.secondChild.information.totalVol;
-
-					ans.information.amount_A = ans.secondChild.information.amount_A;
-					ans.information.amount_B = ans.secondChild.information.amount_B;
-					ans.information.amount_C = ans.secondChild.information.amount_C;
-					ans.information.amount_D = ans.secondChild.information.amount_D;
-
-					ans.information.actualAmount_A = ans.secondChild.information.actualAmount_A;
-					ans.information.actualAmount_B = ans.secondChild.information.actualAmount_B;
-					ans.information.actualAmount_C = ans.secondChild.information.actualAmount_C;
-					ans.information.actualAmount_D = ans.secondChild.information.actualAmount_D;
-
-					ans.information.srcAmount_A = ans.secondChild.information.srcAmount_A;
-					ans.information.srcAmount_B = ans.secondChild.information.srcAmount_B;
-					ans.information.srcAmount_C = ans.secondChild.information.srcAmount_C;
-					ans.information.srcAmount_D = ans.secondChild.information.srcAmount_D;
-
-					ans.information.pos = ans.secondChild.information.pos;
-
-					ans.information.ids = ans.secondChild.information.ids;
-
-					ans.information.scdDesc = ans.secondChild.information.scdDesc;
-					ans.information.dcdDesc = ans.secondChild.information.dcdDesc;
-					ans.information.rcdDesc = ans.secondChild.information.rcdDesc;
+					setSecondChildInformation(ans);
 				}
 
 
 
-				//let's extract the information about this state
-				NamedNodeMap attributeMap = node.getAttributes();
-				for (int i = 0; i < attributeMap.getLength(); i++) {
-					Node att = attributeMap.item(i);
-					String attName = att.getNodeName();
-					String attValue = att.getNodeValue();
+				setVolume(node, ans);
 
-					if (attName == "vol"){
-						ans.information.volume = attValue;
-					}
-					//if (attName == "pos")
-					//ans.information.pos = Integer.parseInt(attValue);
-				}
-
-				ans.information.hasReaction = checkReacion(ans);
-				if (ans.information.hasReaction){
-					ans.information.reactionEquation = ans.get_reaction_equation();
-				}
+				setReactionEquation(ans);
 			}
 		} else {
 			//there is no children
@@ -264,35 +142,35 @@ public class XMLReader {
 				if (attName == "vol") {
 					int indexOfCreate = attValue.indexOf("create");
 					if (indexOfCreate == -1){
-						ans.information.totalVol = Double.parseDouble(attValue);
+						ans.information.setTotalVol(Double.parseDouble(attValue));
 						volFromSource = Double.parseDouble(attValue);
 					} else {
-						ans.information.totalVol = Double.parseDouble(attValue.substring(indexOfCreate + 7));
+						ans.information.setTotalVol(Double.parseDouble(attValue.substring(indexOfCreate + 7)));
 						volFromSource = Double.parseDouble(attValue.substring(0, attValue.indexOf(" /")));
 					}
-					ans.information.volume = attValue;
+					ans.information.setVolume(attValue);
 				}
 
 
 				if (attName == "rcd") {
-					ans.information.actualAmount_A = getAmount(attValue, "A");
-					ans.information.actualAmount_B = getAmount(attValue, "B");
-					ans.information.actualAmount_C = getAmount(attValue, "C");
-					ans.information.actualAmount_D = getAmount(attValue, "D");
-					ans.information.rcdDesc = attValue;
+					ans.information.setActualAmount_A(getAmount(attValue, "A"));
+					ans.information.setActualAmount_B(getAmount(attValue, "B"));
+					ans.information.setActualAmount_C(getAmount(attValue, "C"));
+					ans.information.setActualAmount_D(getAmount(attValue, "D"));
+					ans.information.setRcdDesc(attValue);
 				}
 
 				if (attName == "scd") {
-					ans.information.amount_A = getAmount(attValue, "A");
-					ans.information.amount_B = getAmount(attValue, "B");
-					ans.information.amount_C = getAmount(attValue, "C");
-					ans.information.amount_D = getAmount(attValue, "D");
+					ans.information.setAmount_A(getAmount(attValue, "A"));
+					ans.information.setAmount_B(getAmount(attValue, "B"));
+					ans.information.setAmount_C(getAmount(attValue, "C"));
+					ans.information.setAmount_D(getAmount(attValue, "D"));
 
-					ans.information.srcAmount_A = ans.information.amount_A;
-					ans.information.srcAmount_B = ans.information.amount_B;
-					ans.information.srcAmount_C = ans.information.amount_C;
-					ans.information.srcAmount_D = ans.information.amount_D;
-					ans.information.scdDesc = attValue;
+					ans.information.setSrcAmount_A(ans.information.getAmount_A());
+					ans.information.setSrcAmount_B(ans.information.getAmount_B());
+					ans.information.setSrcAmount_C(ans.information.getAmount_C());
+					ans.information.setSrcAmount_D(ans.information.getAmount_D());
+					ans.information.setScdDesc(attValue);
 				}
 
 				if (attName == "dcd") {
@@ -300,49 +178,122 @@ public class XMLReader {
 					destVolB = getAmount(attValue, "B");
 					destVolC = getAmount(attValue, "C");
 					destVolD = getAmount(attValue, "D");
-					ans.information.dcdDesc = attValue;
+					ans.information.setDcdDesc(attValue);
 				}
 
 
 				if (attName == "pos") {
 					if (attValue.equals("")){
-						ans.information.pos = 999;
+						ans.information.setPos(999);
 					} else {
-						ans.information.pos = Integer.parseInt(attValue);
+						ans.information.setPos(Integer.parseInt(attValue));
 					}
 				}
 
 				if (attName == "IDs") {
-					ans.information.ids = attValue;
+					ans.information.setIds(attValue);
 				}
 			}
 
 
 			double totalDestVol = destVolA + destVolB + destVolC + destVolD;
 			if (totalDestVol != 0) {
-				ans.information.amount_A = ans.information.amount_A * volFromSource + (destVolA) * (ans.information.totalVol - volFromSource);
-				ans.information.amount_B = ans.information.amount_B * volFromSource + (destVolB) * (ans.information.totalVol - volFromSource);
-				ans.information.amount_C = ans.information.amount_C * volFromSource + (destVolC) * (ans.information.totalVol - volFromSource);
-				ans.information.amount_D = ans.information.amount_D * volFromSource + (destVolD) * (ans.information.totalVol - volFromSource);
+				ans.information.setAmount_A(ans.information.getAmount_A() * volFromSource + (destVolA) * (ans.information.getTotalVol() - volFromSource));
+				ans.information.setAmount_B(ans.information.getAmount_B() * volFromSource + (destVolB) * (ans.information.getTotalVol() - volFromSource));
+				ans.information.setAmount_C(ans.information.getAmount_C() * volFromSource + (destVolC) * (ans.information.getTotalVol() - volFromSource));
+				ans.information.setAmount_D(ans.information.getAmount_D() * volFromSource + (destVolD) * (ans.information.getTotalVol() - volFromSource));
 			} else {
-				ans.information.amount_A = ans.information.amount_A * volFromSource;
-				ans.information.amount_B = ans.information.amount_B * volFromSource;
-				ans.information.amount_C = ans.information.amount_C * volFromSource;
-				ans.information.amount_D = ans.information.amount_D * volFromSource;
+				ans.information.setAmount_A(ans.information.getAmount_A() * volFromSource);
+				ans.information.setAmount_B(ans.information.getAmount_B() * volFromSource);
+				ans.information.setAmount_C(ans.information.getAmount_C() * volFromSource);
+				ans.information.setAmount_D(ans.information.getAmount_D() * volFromSource);
 			}
 
-			//check if there was a reaction
-			ans.information.hasReaction = checkReacion(ans);
-			if (ans.information.hasReaction){
-				ans.information.reactionEquation = ans.get_reaction_equation();
-			}
-			//System.out.println(node.getNodeName());
+			setReactionEquation(ans);
 		}
 
 		return ans;
 	}
 
-	public static double getAmount(String strVol, String solType) {
+
+	private static void setReactionEquation(State ans) {
+		ans.information.setHasReaction(checkReacion(ans));
+		if (ans.information.isHasReaction()){
+			ans.information.setReactionEquation(ans.get_reaction_equation());
+		}
+	}
+
+
+	private static void setVolume(Node node, State ans) {
+		NamedNodeMap attributeMap = node.getAttributes();
+		for (int i = 0; i < attributeMap.getLength(); i++) {
+			Node att = attributeMap.item(i);
+			String attName = att.getNodeName();
+			String attValue = att.getNodeValue();
+
+			if (attName == "vol"){
+				ans.information.setVolume(attValue);
+			}
+		}
+	}
+
+
+	private static void setSecondChildInformation(State ans) {
+		ans.information.setTotalVol(ans.secondChild.information.getTotalVol());
+
+		ans.information.setAmount_A(ans.secondChild.information.getAmount_A());
+		ans.information.setAmount_B(ans.secondChild.information.getAmount_B());
+		ans.information.setAmount_C(ans.secondChild.information.getAmount_C());
+		ans.information.setAmount_D(ans.secondChild.information.getAmount_D());
+
+		ans.information.setActualAmount_A(ans.secondChild.information.getActualAmount_A());
+		ans.information.setActualAmount_B(ans.secondChild.information.getActualAmount_B());
+		ans.information.setActualAmount_C(ans.secondChild.information.getActualAmount_C());
+		ans.information.setActualAmount_D(ans.secondChild.information.getActualAmount_D());
+
+		ans.information.setSrcAmount_A(ans.secondChild.information.getSrcAmount_A());
+		ans.information.setSrcAmount_B(ans.secondChild.information.getSrcAmount_B());
+		ans.information.setSrcAmount_C(ans.secondChild.information.getSrcAmount_C());
+		ans.information.setSrcAmount_D(ans.secondChild.information.getSrcAmount_D());
+
+		ans.information.setPos(ans.secondChild.information.getPos());
+
+		ans.information.setIds(ans.secondChild.information.getIds());
+
+		ans.information.setScdDesc(ans.secondChild.information.getScdDesc());
+		ans.information.setDcdDesc(ans.secondChild.information.getDcdDesc());
+		ans.information.setRcdDesc(ans.secondChild.information.getRcdDesc());
+	}
+
+
+	private static void setFirstChildInformation(State ans) {
+		ans.information.setTotalVol(ans.firstChild.information.getTotalVol());
+
+		ans.information.setAmount_A(ans.firstChild.information.getAmount_A());
+		ans.information.setAmount_B(ans.firstChild.information.getAmount_B());
+		ans.information.setAmount_C(ans.firstChild.information.getAmount_C());
+		ans.information.setAmount_D(ans.firstChild.information.getAmount_D());
+
+		ans.information.setActualAmount_A(ans.firstChild.information.getActualAmount_A());
+		ans.information.setActualAmount_B(ans.firstChild.information.getActualAmount_B());
+		ans.information.setActualAmount_C(ans.firstChild.information.getActualAmount_C());
+		ans.information.setActualAmount_D(ans.firstChild.information.getActualAmount_D());
+
+		ans.information.setSrcAmount_A(ans.firstChild.information.getSrcAmount_A());
+		ans.information.setSrcAmount_B(ans.firstChild.information.getSrcAmount_B());
+		ans.information.setSrcAmount_C(ans.firstChild.information.getSrcAmount_C());
+		ans.information.setSrcAmount_D(ans.firstChild.information.getSrcAmount_D());
+
+		ans.information.setPos(ans.firstChild.information.getPos());
+
+		ans.information.setIds(ans.firstChild.information.getIds());
+
+		ans.information.setScdDesc(ans.firstChild.information.getScdDesc());
+		ans.information.setDcdDesc(ans.firstChild.information.getDcdDesc());
+		ans.information.setRcdDesc(ans.firstChild.information.getRcdDesc());
+	}
+
+	private static double getAmount(String strVol, String solType) {
 		double ans = 0;
 		int endIndex = strVol.indexOf("of " + solType) - 1;
 		//check if the solType is exist in the strVol
@@ -377,20 +328,20 @@ public class XMLReader {
 	}
 
 
-	public static boolean checkReasonableAndReaction(State s, boolean firstReaction) {
+	private static boolean checkReasonableAndReaction(State s, boolean firstReaction) {
 		
 		if (!s.hasFirstChild() && !s.hasSecondChild()) {
-			if (s.information.hasReaction) {
+			if (s.information.isHasReaction()) {
 				if (firstReactionOccured == false) {
 					firstReactionOccured = true;
 				}
-				s.information.isReasonable = true;
-				s.information.hasChildrenWithReaction = true;
+				s.information.setReasonable(true);
+				s.information.setHasChildrenWithReaction(true);
 			} else {
 				if (firstReactionOccured == false) {
-					s.information.isReasonable = true;
+					s.information.setReasonable(true);
 				}
-				s.information.hasChildrenWithReaction = false;
+				s.information.setHasChildrenWithReaction(false);
 			}
 		} else {
 			boolean firstReasonable = false;
@@ -399,35 +350,35 @@ public class XMLReader {
 			boolean secondhasChildrenWithReaction = false;
 			if (s.hasFirstChild()) {
 				firstReaction = checkReasonableAndReaction(s.firstChild, firstReaction);
-				firstReasonable = s.firstChild.information.isReasonable;
-				firsthasChildrenWithReaction = s.firstChild.information.hasChildrenWithReaction;
+				firstReasonable = s.firstChild.information.isReasonable();
+				firsthasChildrenWithReaction = s.firstChild.information.isHasChildrenWithReaction();
 			}
 			if (s.hasSecondChild()) {
 				firstReaction = checkReasonableAndReaction(s.secondChild, firstReaction);
-				secondReasonable = s.secondChild.information.isReasonable;
-				secondhasChildrenWithReaction = s.secondChild.information.hasChildrenWithReaction;
+				secondReasonable = s.secondChild.information.isReasonable();
+				secondhasChildrenWithReaction = s.secondChild.information.isHasChildrenWithReaction();
 			}
-			s.information.isReasonable = firstReasonable || secondReasonable;
-			s.information.hasChildrenWithReaction = firsthasChildrenWithReaction || secondhasChildrenWithReaction;
+			s.information.setReasonable(firstReasonable || secondReasonable);
+			s.information.setHasChildrenWithReaction(firsthasChildrenWithReaction || secondhasChildrenWithReaction);
 		}
 		paintTreeNodes(s);
 		return firstReactionOccured;
 	}
 
-	public static boolean checkReacion(State s) {
+	private static boolean checkReacion(State s) {
 		boolean ans = false;
 
 		//check if there was a reaction
-		double aVol = s.information.amount_A;
-		double bVol = s.information.amount_B;
-		double cVol = s.information.amount_C;
-		double dVol = s.information.amount_D;
+		double aVol = s.information.getAmount_A();
+		double bVol = s.information.getAmount_B();
+		double cVol = s.information.getAmount_C();
+		double dVol = s.information.getAmount_D();
 		double allVol = aVol + bVol + cVol + dVol;
 
-		double aActVol = s.information.actualAmount_A;
-		double bActVol = s.information.actualAmount_B;
-		double cActVol = s.information.actualAmount_C;
-		double dActVol = s.information.actualAmount_D;
+		double aActVol = s.information.getActualAmount_A();
+		double bActVol = s.information.getActualAmount_B();
+		double cActVol = s.information.getActualAmount_C();
+		double dActVol = s.information.getActualAmount_D();
 		double allActVol = aActVol + bActVol + cActVol + dActVol;
 
 		DecimalFormat df = new DecimalFormat("####0.00");
@@ -454,39 +405,20 @@ public class XMLReader {
 		return ans;
 	}
 
-//    public static void InOrder_Accummulate_Tree_Main_rec(Node node, String problem_type) {
-//        //Iterator It = vis.items();
-//        //VisualItem item = (VisualItem) It.next();
-//        InOrder_Accumulate_Tree_rec(node, Form_StudentPresentation.JPanel_CurrentTab.m_number_of_nodes, problem_type);
-//    }
-
     public static void InOrder_Accumulate_Tree_rec(Node node, int num, String problem_type) {
         String node_equation = "";
 
-        //WHY USE  "GlobalVariables.m_number_of_nodes" AND ALSO "num" we get from function invoke?
-        //******************************************************************************************
-
-        num++;
-        if (num == 168) {
-            String a = "";
-        }
-//        Form_StudentPresentation.JPanel_CurrentTab.m_number_of_nodes++;
-//        Form_StudentPresentation.JPanel_CurrentTab.m_curr_nodes.put(Form_StudentPresentation.JPanel_CurrentTab.m_number_of_nodes, node);
         ((Element) node).setAttribute("node_number", num + "");
 
         if (node.hasChildNodes() && node.getChildNodes().getLength() > 0) { //has two childs
-            //int max_number_left, max_number_right;
             Node right_node = node.getChildNodes().item(1);
             Node left_node = node.getChildNodes().item(3);
             InOrder_Accumulate_Tree_rec(right_node, num, problem_type);
             num++;
-            InOrder_Accumulate_Tree_rec(left_node, num+100, problem_type);
-//            InOrder_Accumulate_Tree_rec(left_node, Form_StudentPresentation.JPanel_CurrentTab.m_number_of_nodes, problem_type);
+            InOrder_Accumulate_Tree_rec(left_node, num + 100, problem_type);
             if (problem_type.contains(GlobalVariables.m_material_Unknown_Acid)) { // unknown acid
                 node_equation = Update_Node(node);
                 m_nodes_details.put(((Element) node).getAttribute("node_number"), node_equation);
-                //update_m_vis(item, num, update_node(node));
-                //CHECK END POINT P.H - if there is a jump in P.H between left child to right child, Set an attribute "End Point" = "YES" in nodes MAP.
                 if (is_End_Point(left_node, right_node)) {
                     ((Element) node).setAttribute(m_attribute_end_point, "YES");
                     m_nodes_details.put(((Element) node).getAttribute("node_number") + "_end_point", "1");
@@ -495,13 +427,6 @@ public class XMLReader {
                     m_nodes_details.put(((Element) node).getAttribute("node_number") + "_end_point", "0");
                 }
             } 
-//            else {
-//                if (problem_type.contains("Oracle problem")) {
-//                    int[] source_destination_IDs = Get_Source_And_Destination_IDs_Nums(node);
-//                    int[] substances = Get_ID_Substances(source_destination_IDs[1]);
-//                    //((Element) node).setAttribute(m_attribute_equation, res);
-//                }
-//            }
         } else if (node.hasChildNodes() && node.getChildNodes().getLength() < 2) { //has one child
             Node one_node = node.getChildNodes().item(1);
             InOrder_Accumulate_Tree_rec(one_node, num, problem_type);
@@ -510,18 +435,11 @@ public class XMLReader {
                 m_nodes_details.put(((Element) node).getAttribute("node_number"), node_equation);
                 m_nodes_details.put(((Element) node).getAttribute("node_number") + "_end_point", "0");
             } 
-//            else {
-//                if (problem_type.contains("Oracle problem")) {
-//                    int iii = 0;
-//                }
-//            }
-            //update_m_vis(item, num, update_node(node));
         } else if (!node.hasChildNodes()) { //has no child
             if (problem_type.contains(GlobalVariables.m_material_Unknown_Acid)) {
                 node_equation = Update_Leaf(node);
                 m_nodes_details.put(((Element) node).getAttribute("node_number"), node_equation);
                 m_nodes_details.put(((Element) node).getAttribute("node_number") + "_end_point", "0");
-                //CHECK END POINT P.H - if there is a jump in P.H between left child to right child, Set an attribute "End Point" = "YES" in nodes MAP.
                 if (is_End_Point(node)) {
                     ((Element) node).setAttribute(m_attribute_end_point, "YES");
                     m_nodes_details.put(((Element) node).getAttribute("node_number") + "_end_point", "1");
@@ -530,55 +448,10 @@ public class XMLReader {
                     m_nodes_details.put(((Element) node).getAttribute("node_number") + "_end_point", "0");
                 }
             } 
-//            else {
-//                if (problem_type.contains("Oracle problem")) {
-//                    int[] source_destination_IDs = Get_Source_And_Destination_IDs_Nums(node);
-//                    int[] scdCont = Get_Pouring_Substances(node, "scd");
-//                    int[] dcdCont = Get_Pouring_Substances(node, "dcd");
-//
-//                    int[] srcSubstances = Get_ID_Substances(source_destination_IDs[0]);
-//                    int[] destSubstances = Get_ID_Substances(source_destination_IDs[1]);
-//
-//                    //check if it is the first time to see the flasks.
-//                    if (srcSubstances[0] == -1) {
-//                        Update_IDs_Substances(source_destination_IDs[0], scdCont);
-//                    }
-//                    if (destSubstances[0] == -1) {
-//                        Update_IDs_Substances(source_destination_IDs[1], dcdCont);
-//                    }
-//
-//                    srcSubstances = Get_ID_Substances(source_destination_IDs[0]);
-//                    destSubstances = Get_ID_Substances(source_destination_IDs[1]);
-//
-//                    int[] resCont = new int[4];
-//                    if (srcSubstances[0] == 1 || destSubstances[0] == 1) {
-//                        resCont[0] = 1;
-//                    } else {
-//                        resCont[0] = 0;
-//                    }
-//                    if (srcSubstances[1] == 1 || destSubstances[1] == 1) {
-//                        resCont[1] = 1;
-//                    } else {
-//                        resCont[1] = 0;
-//                    }
-//                    if (srcSubstances[2] == 1 || destSubstances[2] == 1) {
-//                        resCont[2] = 1;
-//                    } else {
-//                        resCont[2] = 0;
-//                    }
-//                    if (srcSubstances[3] == 1 || destSubstances[3] == 1) {
-//                        resCont[3] = 1;
-//                    } else {
-//                        resCont[3] = 0;
-//                    }
-//                    Update_IDs_Substances(source_destination_IDs[1], resCont);
-//                }
-//            }
-            //update_m_vis(item, num, update_leaf(node));           
         }
     }
 
-    public static boolean is_End_Point(Node left_node, Node right_node) {
+    private static boolean is_End_Point(Node left_node, Node right_node) {
         String left_node_rcd = Get_Node_Vol_String(left_node, "rcd");
         String right_node_rcd = Get_Node_Vol_String(right_node, "rcd");
         double left_node_PH = Get_PH_From_rcd(left_node_rcd, "H+");
@@ -591,7 +464,7 @@ public class XMLReader {
         return false;
     }
 
-    public static boolean is_End_Point(Node current_node) {
+    private static boolean is_End_Point(Node current_node) {
         String node_rcd = Get_Node_Vol_String(current_node, "rcd");
         String node_dcd = Get_Node_Vol_String(current_node, "dcd");
         String vol = Get_Node_Vol_String(current_node, "vol");
@@ -636,19 +509,14 @@ public class XMLReader {
 
     }
 
-//    public static void Update_m_vis(VisualItem item, int num, String sComp) {
-//        item.set("newName", "{" + num + "} " + sComp);
-//        item.set("nameForNodes", sComp);
-//    }
-
-    public static String Update_Node(Node node) {
+    private static String Update_Node(Node node) {
         int[] source_destination_IDs = Get_Source_And_Destination_IDs_Nums(node);
         String res = Get_ID_Content_String(source_destination_IDs[1]);
         ((Element) node).setAttribute(m_attribute_equation, res);
         return res;
     }
 
-    public static String Update_Leaf(Node node) {
+    private static String Update_Leaf(Node node) {
         int[] source_destination_IDs = Get_Source_And_Destination_IDs_Nums(node);
         String[] type_and_vols = Get_Pouring_Material_Types_And_Vols(node);
         update_IDs(source_destination_IDs, type_and_vols);
@@ -657,9 +525,9 @@ public class XMLReader {
         return res;
     }
 
-    public static String Get_ID_Content_String(int id) {
+    private static String Get_ID_Content_String(int id) {
         String res = "";
-        Iterator it = IDsStatus.m_IDs[id].m_materials.entrySet().iterator();
+        Iterator it = IDsStatus.m_IDs[id].getM_materials().entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pairs = (Map.Entry) it.next();
             String material_type = pairs.getKey().toString();
@@ -684,11 +552,10 @@ public class XMLReader {
         return res;
     }
 
-    public static void update_IDs(int[] source_destination_IDs, String[] types_and_vols) {
+    private static void update_IDs(int[] source_destination_IDs, String[] types_and_vols) {
         String source_materials_type = types_and_vols[0];
         String destination_materials_type = types_and_vols[4];
         double source_id_vol = Double.parseDouble(types_and_vols[1]);
-        double dest_id_vol = Double.parseDouble(types_and_vols[2]);
         double dest_before_vol = Double.parseDouble(types_and_vols[5]);
         double passed_vol = Double.parseDouble(types_and_vols[3]);
 
@@ -696,14 +563,13 @@ public class XMLReader {
         String[] destination_material_type = destination_materials_type.split("::");
 
         int num_of_materials_from_scd = 0;
-        int total_source_material_vol = 0;
-        int num_of_materials_source_m_IDs = IDsStatus.m_IDs[source_destination_IDs[0]].m_materials.size();
+        int num_of_materials_source_m_IDs = IDsStatus.m_IDs[source_destination_IDs[0]].getM_materials().size();
 
         //When the m_IDs source data structure is not empty - usually at the middle of work 
         if (num_of_materials_source_m_IDs > 0)//Has materials
         {
             passed_vol = passed_vol / num_of_materials_source_m_IDs;
-            for (Map.Entry<String, Double> entry : IDsStatus.m_IDs[source_destination_IDs[0]].m_materials.entrySet()) {
+            for (Map.Entry<String, Double> entry : IDsStatus.m_IDs[source_destination_IDs[0]].getM_materials().entrySet()) {
                 Update_ID(source_destination_IDs[0], source_id_vol, entry.getKey(), false);
                 Update_ID(source_destination_IDs[1], passed_vol, entry.getKey(), true);
             }
@@ -723,7 +589,7 @@ public class XMLReader {
         if (GlobalVariables.num_of_leafs_analyzed == 0) {
             for (int i = 0; i < destination_material_type.length; i++) {
                 if (destination_material_type[i].compareTo("") != 0) {
-                    if (!IDsStatus.m_IDs[source_destination_IDs[1]].m_materials.containsKey(destination_material_type[i])) {
+                    if (!IDsStatus.m_IDs[source_destination_IDs[1]].getM_materials().containsKey(destination_material_type[i])) {
                         Update_ID(source_destination_IDs[1], dest_before_vol, destination_material_type[i], false);
                     }
                 }
@@ -732,18 +598,18 @@ public class XMLReader {
         GlobalVariables.num_of_leafs_analyzed++;
     }
 
-    public static void Update_ID(int ID_num, double ID_vol, String material_type, boolean destination) {
+    private static void Update_ID(int ID_num, double ID_vol, String material_type, boolean destination) {
         double res;
         int dup = (destination) ? 1 : 0;
-        if (!IDsStatus.m_IDs[ID_num].m_materials.containsKey(material_type)) {
-        	IDsStatus.m_IDs[ID_num].m_materials.put(material_type, ID_vol);
+        if (!IDsStatus.m_IDs[ID_num].getM_materials().containsKey(material_type)) {
+        	IDsStatus.m_IDs[ID_num].getM_materials().put(material_type, ID_vol);
         } else {
-            res = ID_vol + dup * IDsStatus.m_IDs[ID_num].m_materials.get(material_type); //what_pass + what the ID has already
-            IDsStatus.m_IDs[ID_num].m_materials.put(material_type, res);
+            res = ID_vol + dup * IDsStatus.m_IDs[ID_num].getM_materials().get(material_type); //what_pass + what the ID has already
+            IDsStatus.m_IDs[ID_num].getM_materials().put(material_type, res);
         }
     }
 
-    public static String Get_Decimal_Number(String number_expression) {
+    private static String Get_Decimal_Number(String number_expression) {
         Pattern r = Pattern.compile("(\\d{1,3})(\\.|)(\\d{1,3}|)E(\\-|)(\\d{1,3})");
         Matcher m = r.matcher(number_expression);
         String res = "";
@@ -761,7 +627,7 @@ public class XMLReader {
         return res;
     }
 
-    public static String[] Get_Pouring_Material_Types_And_Vols(Node node) {
+    private static String[] Get_Pouring_Material_Types_And_Vols(Node node) {
         String[] res = new String[6];
         String scd = Get_Node_Vol_String(node, "scd");
         String dcd = Get_Node_Vol_String(node, "dcd");
@@ -773,11 +639,6 @@ public class XMLReader {
 
         double[] vols = Get_Node_Vol_Values(vol);
 
-        //vols[0] = amount that was removed from Source ID 
-        //vols[1] = Source ID Full amound
-        //vols[2] = Destination ID original amound
-        //vols[3] = Destination ID amound after adding the amount from source ID
-
         res[1] = vols[1] - vols[0] + ""; //Source vol after passing metrial - ASK ORIEL
         res[2] = vols[3] + ""; //Destination vol after passing metrial
         res[3] = vols[3] - vols[2] + ""; //How match material we passed to the destination ID
@@ -785,7 +646,7 @@ public class XMLReader {
         return res;
     }
 
-    public static String Get_Material_Types_From_ID(String toAnalysis) {
+    private static String Get_Material_Types_From_ID(String toAnalysis) {
         //FIX REGEX - regex avoid point sign "."
         String pattern = "((\\d{1,3}(\\.|)(\\d{1,3}|)E(\\-|)\\d{1,3}M of )(Na|Unknown))"; //returns Molar ratio and Acid Type
         // Create a Pattern object
@@ -822,40 +683,13 @@ public class XMLReader {
         return res;
     }
 
-    public static void Update_IDs_States(Node node) {
-        double[] vols = Get_Node_Vol_Values(Get_Node_Vol_String(node, "vol"));
-        int[] source_destination_IDs = Get_Source_And_Destination_IDs_Nums(node);
-        //GlobalVariables.IDs_states[ids[0]].m_NaoH_vol = GlobalVariables.IDs_states[0].m_NaoH_vol - values[0]; // values[0] = amound that was removed from Source ID 
-        double source_id_value_2 = Math.abs(vols[0] - vols[1]);
-        //GlobalVariables.IDs_states[ids[1]].m_NaoH_vol = GlobalVariables.IDs_states[ids[1]].m_NaoH_vol + values[0];
-        //JOptionPane.showMessageDialog(null, GlobalVariables.IDs_states[ids[1]].m_NaoH_vol);
-        double destination_id_value_2 = vols[3];
-        //((Element) node).setAttribute("NaoH_Vol", GlobalVariables.IDs_states[ids[1]].m_NaoH_vol+"");
-        ((Element) node).setAttribute("NaoH_Vol", destination_id_value_2 + "");
-    }
-
-    public static String[] Get_Vols(Node node, String node_data) {
-        String[] Vols = new String[2];
-        String[] parsing_data = new String[2];
-        parsing_data = node_data.split(",");
-        Vols[0] = (parsing_data[0].split(":"))[1] + Get_Node_Vol(node, "Unknown_Acid_Vol");
-        Vols[1] = (parsing_data[1].split(":"))[1] + Get_Node_Vol(node, "NaoH_Vol");
-        return Vols;
-    }
-
-    public static int Get_Node_Vol(Node node, String attributeName) {
-        NamedNodeMap att_leaf = node.getAttributes();
-        Node c_node = att_leaf.getNamedItem(attributeName);
-        return Integer.parseInt(c_node.getNodeValue());
-    }
-
-    public static String Get_Node_Vol_String(Node node, String attributeName) {
+    private static String Get_Node_Vol_String(Node node, String attributeName) {
         NamedNodeMap att_leaf = node.getAttributes();
         Node c_node = att_leaf.getNamedItem(attributeName);
         return c_node.getNodeValue();
     }
 
-    public static double[] Get_Node_Vol_Values(String node_vol) {
+    private static double[] Get_Node_Vol_Values(String node_vol) {
         double[] values = new double[4];
         String[] split_by_plus = node_vol.split("\\+");
         String[] split_by_slash = split_by_plus[0].split("/");
@@ -868,17 +702,7 @@ public class XMLReader {
         return values;
     }
 
-    public static String[] Sum_Vols(String[] Vols_right, String[] Vols_left) {
-        String[] sums_Vols = new String[2];
-        for (int i = 0; i < sums_Vols.length; i++) {
-            //double sum = Double.parseDouble(Vols_left[i]) + Double.parseDouble(Vols_right[i]);
-            int sum = Integer.parseInt(Vols_left[i]) + Integer.parseInt(Vols_left[i]);
-            sums_Vols[i] = sum + "";
-        }
-        return sums_Vols;
-    }
-
-    public static int[] Get_Source_And_Destination_IDs_Nums(Node node) {
+    private static int[] Get_Source_And_Destination_IDs_Nums(Node node) {
         int[] source_destination_IDs = new int[2];
         String ids = Get_Node_Vol_String(node, "IDs");
         String[] split_by_to = ids.split("to");
@@ -887,130 +711,6 @@ public class XMLReader {
         source_destination_IDs[1] = Integer.parseInt(split_by_to[1].replace("ID", "").trim()); // 
         return source_destination_IDs;
     }
-
- 
- 
-    public static Document Get_XML_Document_From_Disc(String xml_file_path) {
-        File file;
-        Document xml_doc = null;
-        // TODO code application logic here 
-        try {
-            file = new File(xml_file_path);
-            if (file.exists()) {
-                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-                DocumentBuilder db = dbf.newDocumentBuilder();
-                xml_doc = db.parse(file);
-            } else {
-                System.out.println("Error: XML File not found!");
-            }
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
-        return xml_doc;
-    }
-
-    public static Document Get_XML_Document_From_Jar(String xml_file_path) {
-        Document xml_doc = null;
-
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        InputStream is = classLoader.getResourceAsStream(xml_file_path);
-        try {
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            xml_doc = db.parse(is);
-            xml_doc.getDocumentElement().normalize();
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
-        return xml_doc;
-    }
-
-    public static String Get_XML_DOC_Node_TextContent(Document doc, String node_name) {
-        return doc.getElementsByTagName(node_name).item(0).getTextContent().trim();
-    }
-
-    //for oracle problem
-//    public static String Update_Node_Oracle(Node node) {
-//        int[] source_destination_IDs = Get_Source_And_Destination_IDs_Nums(node);
-//        String res = Get_ID_Content_String(source_destination_IDs[1]);
-//        ((Element) node).setAttribute(m_attribute_equation, res);
-//        return res;
-//    }
-//
-//    public static String Update_Leaf_Oracle(Node node) {
-//        int[] source_destination_IDs = Get_Source_And_Destination_IDs_Nums(node);
-//        String[] type_and_vols = Get_Pouring_Material_Types_And_Vols(node);
-//        update_IDs(source_destination_IDs, type_and_vols);
-//        String res = Get_ID_Content_String(source_destination_IDs[1]); //Get Destination ID content in string
-//        ((Element) node).setAttribute(m_attribute_equation, res);
-//        return res;
-//    }
-
-    //values in array: (-1): not seen yet. 0 - not poured. 1 - poured.
-//    public static int[] Get_ID_Substances(int id) {
-//        int[] retVal = new int[4]; //for A, B, C and D.
-//        retVal[0] = -1;
-//        retVal[1] = -1;
-//        retVal[2] = -1;
-//        retVal[3] = -1;
-//        Iterator it = Form_StudentPresentation.JPanel_CurrentTab.m_IDs[id].m_materials.entrySet().iterator();
-//        while (it.hasNext()) {
-//            Map.Entry pairs = (Map.Entry) it.next();
-//            String material_type = pairs.getKey().toString();
-//            Object material_exist = pairs.getValue();
-//
-//            double tmpExist = (Double) Double.valueOf(new DecimalFormat("#.###").format(material_exist));
-//            int exist = (int) tmpExist;
-//
-//            if (material_type.trim().compareTo("A") == 0) {
-//                retVal[0] = exist;
-//            }
-//            if (material_type.trim().compareTo("B") == 0) {
-//                retVal[1] = exist;
-//            }
-//            if (material_type.trim().compareTo("C") == 0) {
-//                retVal[2] = exist;
-//            }
-//            if (material_type.trim().compareTo("D") == 0) {
-//                retVal[3] = exist;
-//            }
-//        }
-//        return retVal;
-//    }
-//
-//    public static void Update_IDs_Substances(int ID_num, int[] substances) {
-//        Form_StudentPresentation.JPanel_CurrentTab.m_IDs[ID_num].m_materials.put("A", (double) substances[0]);
-//        Form_StudentPresentation.JPanel_CurrentTab.m_IDs[ID_num].m_materials.put("B", (double) substances[1]);
-//        Form_StudentPresentation.JPanel_CurrentTab.m_IDs[ID_num].m_materials.put("C", (double) substances[2]);
-//        Form_StudentPresentation.JPanel_CurrentTab.m_IDs[ID_num].m_materials.put("D", (double) substances[3]);
-//    }
-//
-//    public static int[] Get_Pouring_Substances(Node node, String fromFlask) { //fromFlask is "scd" or "dcd"
-//        int[] retVal = new int[4];
-//        String contents = Get_Node_Vol_String(node, fromFlask);
-//        if (getAmount(contents, "A") == 0) {
-//            retVal[0] = 0;
-//        } else {
-//            retVal[0] = 1;
-//        }
-//        if (getAmount(contents, "B") == 0) {
-//            retVal[1] = 0;
-//        } else {
-//            retVal[1] = 1;
-//        }
-//        if (getAmount(contents, "C") == 0) {
-//            retVal[2] = 0;
-//        } else {
-//            retVal[2] = 1;
-//        }
-//        if (getAmount(contents, "D") == 0) {
-//            retVal[3] = 0;
-//        } else {
-//            retVal[3] = 1;
-//        }
-//
-//        return retVal;
-//    } 
 }
 
 	

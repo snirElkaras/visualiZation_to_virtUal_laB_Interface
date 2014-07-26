@@ -1,26 +1,27 @@
 package parsers.planParser;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 import parsers.IParse;
-
 import com.google.gson.Gson;
 
 
 
-
+/**
+ * 
+ * @author Aviel and Chen
+ * 
+ */
 public class PlanViewParser implements IParse {
 	
 
@@ -29,25 +30,22 @@ public class PlanViewParser implements IParse {
 	}
 
 	private static int index = 0;
-	/**
-	 * @param args
-	 */
+
 	@Override
 	public JSONObject parse(String fileContent) {
 		Gson gson = new Gson();
-		CheckReasonableResult crResult = null;
 		String probName = null;
 		Node root = null;
 		List<DataStructure> dataStructure = null;
+		
+		// get root from the file content
 		try {
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			InputStream is = new ByteArrayInputStream(fileContent.getBytes("UTF-8"));
 			Document doc = db.parse(is);
 			doc.getDocumentElement().normalize();
-			//System.out.println("Root element " + doc.getDocumentElement().getNodeName());
 			NodeList nodeLstRoot = doc.getElementsByTagName("ROOT");
-			//System.out.println("Information of all ROOT");
 
 			root = nodeLstRoot.item(0);
 			NamedNodeMap attributeMap = root.getAttributes();
@@ -57,15 +55,29 @@ public class PlanViewParser implements IParse {
 			return null;
 		}
 		
-		if (probName.toLowerCase().contains("unknown acid")){
+		if (probName.toLowerCase().contains(GlobalVariables.unknown_acid_probName)){
 			dataStructure = (List<DataStructure>) handleUnknownAcidProblem(root);
 		} else 
-			if (probName.toLowerCase().contains("oracle")){
+			if (probName.toLowerCase().contains(GlobalVariables.oracle_probName)){
 				dataStructure = (List<DataStructure>) handleOracleProblem(root);
 			}
 		
+		
+		String dataStructureAsJson = gson.toJson(dataStructure);
+		
+		StringBuilder sb = indentJson(root, dataStructureAsJson);
+		JSONObject jsonAns = null;
+		try {
+			jsonAns = new JSONObject(sb.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return jsonAns;
+
+	}
+
+	private StringBuilder indentJson(Node root, String dataStructureAsJson) {
 		boolean inQuote = false;
-		String s = gson.toJson(dataStructure);
 		StringBuilder sb = new StringBuilder();
 		sb.append("{\n");
 		sb.append("\t\"name\": \"root\",\n");
@@ -78,10 +90,10 @@ public class PlanViewParser implements IParse {
 		}
 		sb.append("\t\"children\": ");
 		int indent = 1;
-		for (int i = 0; i < s.length(); i++) {
-			switch (s.charAt(i)) {
+		for (int i = 0; i < dataStructureAsJson.length(); i++) {
+			switch (dataStructureAsJson.charAt(i)) {
 			case '{':
-				sb.append(s.charAt(i));
+				sb.append(dataStructureAsJson.charAt(i));
 				sb.append("\n");
 				indent++;
 			
@@ -92,7 +104,7 @@ public class PlanViewParser implements IParse {
 			case ',':
 				if (inQuote) 
 					break;
-				sb.append(s.charAt(i));
+				sb.append(dataStructureAsJson.charAt(i));
 				sb.append("\n");
 				for (int j = 0; j < indent; j++) {
 					sb.append("\t");
@@ -104,27 +116,17 @@ public class PlanViewParser implements IParse {
 				for (int j = 0; j < indent; j++) {
 					sb.append("\t");
 				}
-				sb.append(s.charAt(i));
+				sb.append(dataStructureAsJson.charAt(i));
 				break;
 			case '"':
 				inQuote = !inQuote;
 			default:
-				sb.append(s.charAt(i));
+				sb.append(dataStructureAsJson.charAt(i));
 				break;
 			}		
 		}
 		sb.append("\n}\n");
-		String s111 = sb.toString();
-		System.out.println(s111);
-		JSONObject jsonAns = null;
-		try {
-			jsonAns = new JSONObject(sb.toString());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return jsonAns;
-
+		return sb;
 	}
 
 	private List<? extends DataStructure> handleOracleProblem(Node root) {
@@ -148,8 +150,8 @@ public class PlanViewParser implements IParse {
 	}
 
 	private List<? extends DataStructure> handleUnknownAcidProblem(Node root) {
-		XMLTranslate.TranslateTree(root, "Unknown Acid Problem");
-		GlobalVariables.init_IDs_states();
+		XMLTranslate.TranslateTree(root, GlobalVariables.unknown_acid_probName);
+		IDsStatus.init_IDs_states();
 		NodeList nodeLst = root.getChildNodes();
 		int num = 0;
 		for (int i = 0; i < nodeLst.getLength(); i++) {
@@ -188,13 +190,13 @@ public class PlanViewParser implements IParse {
         UnknownAcidDataToJson left = null;
         if (left_node != null){
         	left = buildUnknownAcidData(left_node, "first");
-            currDataNode.children.add(left);
+            currDataNode.getChildren().add(left);
         }
         Node right_node = node.getChildNodes().item(3);
         UnknownAcidDataToJson right = null;
         if (right_node != null){
         	right = buildUnknownAcidData(right_node, "second");
-            currDataNode.children.add(right);
+            currDataNode.getChildren().add(right);
 
         }
         
@@ -204,16 +206,16 @@ public class PlanViewParser implements IParse {
 	private static  OracleDataToJson convertStateToJsonState(State state, String side) {
 		OracleDataToJson ans = new OracleDataToJson();
 		if (state.firstChild != null){
-			ans.children.add(convertStateToJsonState(state.firstChild, "first"));
+			ans.getChildren().add(convertStateToJsonState(state.firstChild, "first"));
 		}
 		if (state.secondChild != null){
-			ans.children.add(convertStateToJsonState(state.secondChild, "second"));
+			ans.getChildren().add(convertStateToJsonState(state.secondChild, "second"));
 		}
 		
-		ans.information = state.information;
-		ans.epsilon = state.epsilon;
-		ans.name = "name" + index;
-		ans.side = side;
+		ans.setInformation(state.information);
+		ans.setEpsilon(state.epsilon);
+		ans.setName("name" + index);
+		ans.setSide(side);
 		index++;
 		return ans;		
 	}
