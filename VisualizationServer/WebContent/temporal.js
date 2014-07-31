@@ -20,7 +20,7 @@ var loadTemporal = function (jsonData){
 			t : 30,
 			r : 200,
 			b : 20,
-			l : 40
+			l : 140
 	},
 
 	w = 1500 - margin.l - margin.r, 
@@ -79,6 +79,7 @@ var loadTemporal = function (jsonData){
 
 
 	/*****************/
+	// Calculates the first and last timestamp of the log - the range
 	var findFirstAndLastSolMix = function(){
 		var candidateFirst = solutionMixAsJson[0];
 		var candidateLast = solutionMixAsJson[0];
@@ -344,10 +345,10 @@ var loadTemporal = function (jsonData){
 			"translate(" + margin.l + "," + margin.t + ")").call(yAxis);
 
 	svg.append("text").attr("class", "x label").attr("text-anchor", "end")
-	.attr("x", w + 50).attr("y", h - margin.t - 5).text("Timeline");
+	.attr("x", w + 150).attr("y", h - margin.t - 5).text("Timeline");
 
 	svg.append("text").attr("class", "y label").attr("text-anchor", "end")
-	.attr("x", -20).attr("y", 45).attr("dy", ".75em").attr("transform",
+	.attr("x", -20).attr("y", 145).attr("dy", ".75em").attr("transform",
 	"rotate(-90)").text("Flasks");
 
 	svg.append("g")         

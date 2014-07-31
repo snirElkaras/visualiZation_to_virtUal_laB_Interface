@@ -74,7 +74,7 @@ public class Flask {
 		JSONObject flaskJson = new JSONObject();
 		try {
 			flaskJson.put("vesselVolume", vesselVolume);
-			flaskJson.put("id", id);
+			flaskJson.put("id", id + " " + name);
 			flaskJson.put("name", name);
 			flaskJson.put("temp", temp);
 			flaskJson.put("volume", volume);

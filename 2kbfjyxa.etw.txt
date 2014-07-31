@@ -1,0 +1,23 @@
+﻿working on colors
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is ahead of 'origin/master' by 1 commit.
+#   (use "git push" to publish your local commits)
+#
+# Changes to be committed:
+#   (use "git reset HEAD^1 <file>..." to unstage)
+#
+#	modified:   VisualizationServer/WebContent/dndTree.js
+#	modified:   VisualizationServer/src/parsers/planParser/InformationState.java
+#	modified:   VisualizationServer/src/parsers/planParser/PlanViewParser.java
+#	modified:   VisualizationServer/src/parsers/planParser/XMLReader.java
+#
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#
+#	.metadata/.plugins/org.eclipse.wst.server.core/tmp0/
+#	TemporalParser/bin/.gitignore
+#	VisualizationServer/build/classes/.gitignore
+
