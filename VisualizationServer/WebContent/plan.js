@@ -17,7 +17,7 @@ loadTree = function(data) {
 	// Calculate total nodes, max label length
 	var totalNodes = 0;
 	var maxLabelLength = 0;
-
+	var sourceArr = null;
 	// Misc. variables
 	var i = 0;
 	var duration = 750;
@@ -57,6 +57,7 @@ loadTree = function(data) {
 			node.children = null;
 		}
 		if(node.name == "root"){
+			toggleChildren(node);
 			update(node);
 			centerNode(node);
 		}
@@ -82,6 +83,7 @@ loadTree = function(data) {
 	// added functionality to the collapse button
 	$("#collapseButton").click(function() {
 		collapseTree(root);
+
 	});
 
 	function visit(parent, visitFn, childrenFn) {
@@ -146,16 +148,95 @@ loadTree = function(data) {
 		if (!d.children && !d._children){
 			nodeName = getLeafName(d);
 		} else
-			// not a leaf - check if the node represent a reaction in order to name it as a reaction node
-			if (d.information.hasReaction) {
-				nodeName = getReactionNodeName(d);
+			// not a leaf - check if the node is a direct child of the root
+			// and has a reaction in order to name it properly 
+			if (d.information.isDirectChildOfRoot && d.information.hasReaction) {
+				nodeName = getReactionDirectRootChildName(d);
 			} else 
-			{
-				// not a leaf and not a reaction node.
-				nodeName = getRegularNodeName(d);
-			} 
+				// not a leaf - check if the node represent a reaction in order to name it as a reaction node
+				if (d.information.hasReaction){
+					nodeName = getReactionNodeName(d);
+				} else
+				{
+					// not a leaf and not a reaction node.
+					nodeName = getRegularNodeName(d);
+				} 
 		return nodeName;
 
+	}
+
+	function getLeafsMaterials(d){
+		if (!d.children && !d._children){
+			var leafName = getLeafName(d);
+			sourceArr[leafName] = leafName;
+			return;
+		}
+		if (d.children){
+			d.children.forEach(function(child) {
+				getLeafsMaterials(child);
+			});	
+		}
+		if (d._children){
+			d._children.forEach(function(child) {
+				getLeafsMaterials(child);
+			});	
+		}
+	}
+
+	function getReactionDirectRootChildName(d){
+		sourceArr = {};
+		getLeafsMaterials(d);
+		var equationLeftSide = "{";
+		var hasMaterials = false;
+
+		function keys(obj)
+		{
+			var keys = [];
+			for(var key in obj)
+			{
+				if(obj.hasOwnProperty(key))
+				{
+					keys.push(key);
+				}
+			}
+			return keys;
+		}
+		sourceArr = keys(sourceArr).sort(); 
+
+		for (i=0; i<sourceArr.length; i++){
+			equationLeftSide = equationLeftSide + sourceArr[i];
+			equationLeftSide = equationLeftSide + "+";
+			hasMaterials = true;
+		}
+		if (hasMaterials){
+			equationLeftSide = equationLeftSide.substring(0, equationLeftSide.length - 1);
+		}
+		equationLeftSide = equationLeftSide + "}";
+		var nodeName = equationLeftSide + " -> {";
+		var hasPlus = false;
+		if (d.information.actualAmount_A > 0){
+			nodeName = nodeName + "A+";
+			hasPlus = true;
+		}
+		if (d.information.actualAmount_B > 0){
+			nodeName = nodeName + "B+";
+			hasPlus = true;
+		}           		
+		if (d.information.actualAmount_C > 0){
+			nodeName = nodeName + "C+";
+			hasPlus = true;
+		}     
+		if (d.information.actualAmount_D > 0){
+			nodeName = nodeName + "D+";
+			hasPlus = true;
+		}     
+		// delete the unnecessary "plus" char 
+		if (hasPlus == true) {
+			nodeName = nodeName.substring(0, nodeName.length-1);
+		}      
+		nodeName = nodeName + "}";
+
+		return nodeName;
 	}
 
 	function getRegularNodeName(d){
@@ -183,7 +264,7 @@ loadTree = function(data) {
 		}
 		return nodeName;
 	}
-	
+
 	function getReactionNodeName(d){
 		var nodeName = "";
 		var hasPlus = false;
@@ -232,7 +313,7 @@ loadTree = function(data) {
 
 		return nodeName;
 	}
-	
+
 	function getLeafName(d){
 		var nodeName = "";
 		var hasPlus = false;
@@ -287,7 +368,7 @@ loadTree = function(data) {
 		zoomListener.scale(scale);
 		zoomListener.translate([x, y]);
 	}
-	
+
 	// Toggle children function
 	function toggleChildren(d) {
 		if (d.children) {
@@ -302,19 +383,19 @@ loadTree = function(data) {
 
 	// Toggle children on click.
 	function click(d) {
-		if (d3.event.defaultPrevented) return; // click suppressed
+		//if (d3.event.defaultPrevented) return; // click suppressed
 		d = toggleChildren(d);
 		update(d);
 		centerNode(d);
 	}
 
-	
+
 	function mouseHoverOracle(d){
 
 		// deletes the old information bar
 		if ($("#detailsP") != null) 
 			$("#detailsP").remove();
-		
+
 		// if root node - present the problem name and the answer
 		if (d.name == "root"){
 			$("#details").append("<p id=detailsP> " +  
@@ -323,7 +404,7 @@ loadTree = function(data) {
 			"</p>");
 			return;
 		}
-		
+
 		var action = "none";
 		if (d.children || d._children) {
 			action = "mix";
@@ -348,11 +429,11 @@ loadTree = function(data) {
 	}
 
 	function mouseHoverUnknownAcid(d){
-		
+
 		// deletes the old information bar
 		if ($("#detailsP") != null) 
 			$("#detailsP").remove();
-		
+
 		// if root node - present the problem name and the answer
 		if (d.name == "root"){
 			$("#details").append("<p id=detailsP> " +  
@@ -392,7 +473,7 @@ loadTree = function(data) {
 	}
 
 	function mouseleave(d){
-		
+
 	}
 
 	function update(source) {
@@ -506,7 +587,7 @@ loadTree = function(data) {
 		// set the text with the right color and font
 		nodeUpdate.select("text")
 		.style("fill-opacity", 1);
-		
+
 		// if a node is end_point
 		nodeUpdate.select("text")
 		.style("font-weight", function(d){
@@ -559,7 +640,7 @@ loadTree = function(data) {
 				}
 
 		});
-		
+
 		// Transition exiting nodes to the parent's new position.
 		var nodeExit = node.exit().transition()
 		.duration(duration)

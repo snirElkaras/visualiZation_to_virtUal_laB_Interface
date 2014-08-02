@@ -87,7 +87,7 @@ public class XMLReader {
 
 
 	// from a given node, build the State data structure
-	public static State buildDataStructure(Node node) {
+	private static State buildDataStructure(Node node) {
 		State ans = new State();
 		NodeList nodeLst = node.getChildNodes();
 

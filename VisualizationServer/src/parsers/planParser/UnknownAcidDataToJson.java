@@ -110,7 +110,7 @@ public class UnknownAcidDataToJson implements DataStructure{
 		}
 		
 		
-		this.setName(this.ph + " PH; " + XMLReader.m_nodes_details.get(node_number + ""));
+		this.setName(this.ph + " PH; " + this.equation);
 	}
 
 	public String getName() {
