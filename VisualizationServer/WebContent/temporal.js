@@ -253,8 +253,8 @@ var loadTemporal = function (jsonData){
 
 
 		
-		cx1 = parseInt(srcLoc.getAttribute("cx"));
-		cx2 = parseInt(trgLoc.getAttribute("cx"));
+		cx1 = parseInt(srcLoc.getAttribute("cx"))+100;
+		cx2 = parseInt(trgLoc.getAttribute("cx"))+100;
 		cy1 = parseInt(srcLoc.getAttribute("cy"));
 		cy2 = parseInt(trgLoc.getAttribute("cy"));
 		

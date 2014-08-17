@@ -27,7 +27,7 @@ public class FlaskTest {
 	public void testToJson() {
 		JSONObject json = flask.toJson();
 		String actual = json.toString();
-		String expected = "{\"id\":\"MyFlask\",\"vesselType\":\"vesselTypeMyFlask\",\"species\":[{\"mass\":\"1namemass\",\"id\":\"1nameid\",\"name\":\"1namename\",\"state\":\"1namestate\",\"moles\":\"1namemoles\"},{\"mass\":\"2namemass\",\"id\":\"2nameid\",\"name\":\"2namename\",\"state\":\"2namestate\",\"moles\":\"2namemoles\"},{\"mass\":\"3namemass\",\"id\":\"3nameid\",\"name\":\"3namename\",\"state\":\"3namestate\",\"moles\":\"3namemoles\"}],\"name\":\"flaskMyFlask\",\"vesselVolume\":\"vesselVolumeMyFlask\",\"volume\":\"volumeMyFlask\",\"temp\":\"tempMyFlask\"}";
+		String expected = "{\"id\":\"MyFlask flaskMyFlask\",\"vesselType\":\"vesselTypeMyFlask\",\"species\":[{\"mass\":\"1namemass\",\"id\":\"1nameid\",\"name\":\"1namename\",\"state\":\"1namestate\",\"moles\":\"1namemoles\"},{\"mass\":\"2namemass\",\"id\":\"2nameid\",\"name\":\"2namename\",\"state\":\"2namestate\",\"moles\":\"2namemoles\"},{\"mass\":\"3namemass\",\"id\":\"3nameid\",\"name\":\"3namename\",\"state\":\"3namestate\",\"moles\":\"3namemoles\"}],\"name\":\"flaskMyFlask\",\"vesselVolume\":\"vesselVolumeMyFlask\",\"volume\":\"volumeMyFlask\",\"temp\":\"tempMyFlask\"}";
 		assertEquals(expected, actual);
 	}
 	
@@ -44,7 +44,7 @@ public class FlaskTest {
 		flask.setId(null);
 		JSONObject json = flask.toJson();
 		String actual = json.toString();
-		String expected = "{\"vesselType\":\"vesselTypeMyFlask\",\"species\":[{\"mass\":\"1namemass\",\"id\":\"1nameid\",\"name\":\"1namename\",\"state\":\"1namestate\",\"moles\":\"1namemoles\"},{\"mass\":\"2namemass\",\"id\":\"2nameid\",\"name\":\"2namename\",\"state\":\"2namestate\",\"moles\":\"2namemoles\"},{\"mass\":\"3namemass\",\"id\":\"3nameid\",\"name\":\"3namename\",\"state\":\"3namestate\",\"moles\":\"3namemoles\"}],\"name\":\"flaskMyFlask\",\"vesselVolume\":\"vesselVolumeMyFlask\",\"volume\":\"volumeMyFlask\",\"temp\":\"tempMyFlask\"}";
+		String expected = "{\"id\":\"null flaskMyFlask\",\"vesselType\":\"vesselTypeMyFlask\",\"species\":[{\"mass\":\"1namemass\",\"id\":\"1nameid\",\"name\":\"1namename\",\"state\":\"1namestate\",\"moles\":\"1namemoles\"},{\"mass\":\"2namemass\",\"id\":\"2nameid\",\"name\":\"2namename\",\"state\":\"2namestate\",\"moles\":\"2namemoles\"},{\"mass\":\"3namemass\",\"id\":\"3nameid\",\"name\":\"3namename\",\"state\":\"3namestate\",\"moles\":\"3namemoles\"}],\"name\":\"flaskMyFlask\",\"vesselVolume\":\"vesselVolumeMyFlask\",\"volume\":\"volumeMyFlask\",\"temp\":\"tempMyFlask\"}";
 		assertEquals(expected, actual);
 	}
 

@@ -9,7 +9,7 @@ import seleniumTest.Settings;
 public class UIUtils {
 
 	public static String pathParser = "src/files/";
-	public static String pathUI = "C:/Users/snir/Documents/GitHub/visualiZation_to_virtUal_laB_Interface/Tests/src/files/";
+	public static String pathUI = "C:/Users/samanta/Documents/GitHub/visualiZation_to_virtUal_laB_Interface/Tests/src/files/";
 	public static void hoverAnElement(String id){
 		WebElement node= Settings.driver.findElement(By.id(id));
 		hoverAnElement(node);

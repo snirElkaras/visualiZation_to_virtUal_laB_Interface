@@ -41,7 +41,7 @@ public class PlanViewTest {
 		collapseAll();
 		WebElement circle = root.findElement(By.className("nodeCircle"));
 		String actual = circle.getAttribute("style");
-		String expected = "fill: rgb(255, 0, 0);";//red
+		String expected = "fill: rgb(255, 255, 255);";
 		assertEquals(expected, actual);
 	}
 	
